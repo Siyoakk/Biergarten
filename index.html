@@ -647,8 +647,8 @@
     }
     .kontakt-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 60px;
       align-items: start;
     }
     .kontakt-info { }
@@ -681,57 +681,19 @@
       color: var(--cream);
       line-height: 1.5;
     }
-    .kontakt-form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+
+    /* Calendly Widget Wrapper */
+    .calendly-wrap {
+      background: rgba(245,240,232,0.04);
+      border: 1px solid rgba(200,168,75,0.25);
+      border-radius: 10px;
+      overflow: hidden;
+      min-height: 700px;
     }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+    .calendly-inline-widget {
+      min-width: 100%;
+      min-height: 700px;
     }
-    .kontakt-form input,
-    .kontakt-form textarea,
-    .kontakt-form select {
-      width: 100%;
-      padding: 14px 18px;
-      background: rgba(245,240,232,0.07);
-      border: 1px solid rgba(200,168,75,0.3);
-      border-radius: var(--radius);
-      color: var(--cream);
-      font-family: 'Lato', sans-serif;
-      font-size: 14px;
-      transition: border-color 0.3s;
-      outline: none;
-    }
-    .kontakt-form input::placeholder,
-    .kontakt-form textarea::placeholder {
-      color: rgba(245,240,232,0.4);
-    }
-    .kontakt-form input:focus,
-    .kontakt-form textarea:focus,
-    .kontakt-form select:focus {
-      border-color: var(--gold);
-    }
-    .kontakt-form textarea { resize: vertical; min-height: 120px; }
-    .kontakt-form select option { background: var(--brown-dark); }
-    .kontakt-form button {
-      padding: 16px 36px;
-      background: var(--gold);
-      color: var(--green-dark);
-      border: none;
-      border-radius: var(--radius);
-      font-family: 'Lato', sans-serif;
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-      align-self: flex-start;
-    }
-    .kontakt-form button:hover { background: var(--gold-light); transform: translateY(-2px); }
 
     /* ===== IMPRESSUM ===== */
     #impressum {
@@ -798,7 +760,8 @@
       .about-grid,
       .hours-grid,
       .kontakt-grid,
-      .impressum-grid { grid-template-columns: 1fr; gap: 50px; }
+      .impressum-grid { grid-template-columns: 1fr; gap: 40px; }
+      .calendly-wrap, .calendly-inline-widget { min-height: 600px !important; height: 600px !important; }
       .features-grid { grid-template-columns: 1fr 1fr; }
       .menu-grid { grid-template-columns: 1fr; }
       .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
@@ -1122,15 +1085,31 @@
     </div>
   </section>
 
+  <!-- Calendly Widget Script -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
   <!-- KONTAKT -->
   <section id="kontakt">
     <div class="container" style="position:relative;z-index:1">
+
+      <!-- Intro Header zentriert -->
+      <div class="reveal" style="text-align:center; margin-bottom: 60px;">
+        <span class="section-label" style="color: var(--gold-light)">Tisch reservieren</span>
+        <h2 class="section-title light" style="color:#fff;">Jetzt direkt online buchen</h2>
+        <div class="section-divider" style="margin: 0 auto 24px;"></div>
+        <p class="section-text light" style="margin: 0 auto; text-align:center; max-width:560px;">
+          Wähle einfach Datum und Uhrzeit – deine Reservierung wird sofort bestätigt und unser Team sieht sie direkt in unserem System.
+        </p>
+      </div>
+
       <div class="kontakt-grid">
+
+        <!-- Linke Spalte: Kontaktinfos -->
         <div class="reveal-left">
-          <span class="section-label" style="color: var(--gold-light)">Kontakt & Reservierung</span>
+          <span class="section-label" style="color: var(--gold-light)">Kontakt & Anfahrt</span>
           <h2 class="section-title light">Wir freuen uns<br>auf Sie!</h2>
           <div class="section-divider"></div>
-          <p class="section-text light">Reservieren Sie Ihren Tisch oder schreiben Sie uns – wir sind gerne für Sie da.</p>
           <div class="kontakt-details">
             <div class="kontakt-detail">
               <span class="kontakt-detail-icon">📍</span>
@@ -1143,46 +1122,62 @@
               <span class="kontakt-detail-icon">📞</span>
               <div class="kontakt-detail-text">
                 <p class="kontakt-detail-label">Telefon</p>
-                <p class="kontakt-detail-value"><a href="tel:+4989123456" style="color:var(--cream);text-decoration:none">+49 89 123 456</a></p>
+                <p class="kontakt-detail-value">
+                  <a href="tel:+4989123456" style="color:var(--cream);text-decoration:none">+49 89 123 456</a>
+                </p>
               </div>
             </div>
             <div class="kontakt-detail">
               <span class="kontakt-detail-icon">✉️</span>
               <div class="kontakt-detail-text">
                 <p class="kontakt-detail-label">E-Mail</p>
-                <p class="kontakt-detail-value"><a href="mailto:info@goldener-hopfen.de" style="color:var(--cream);text-decoration:none">info@goldener-hopfen.de</a></p>
+                <p class="kontakt-detail-value">
+                  <a href="mailto:siyo_99@hotmail.de" style="color:var(--cream);text-decoration:none">siyo_99@hotmail.de</a>
+                </p>
+              </div>
+            </div>
+            <div class="kontakt-detail">
+              <span class="kontakt-detail-icon">🕐</span>
+              <div class="kontakt-detail-text">
+                <p class="kontakt-detail-label">Öffnungszeiten</p>
+                <p class="kontakt-detail-value">
+                  Di – Do: 11–22 Uhr<br>
+                  Fr – Sa: 10–23 Uhr<br>
+                  So & Feiertage: 10–22 Uhr<br>
+                  <span style="color:rgba(245,240,232,0.5); font-size:12px;">Mo: Ruhetag</span>
+                </p>
               </div>
             </div>
           </div>
-        </div>
-        <div class="reveal-right">
-          <div class="kontakt-form">
-            <div class="form-row">
-              <input type="text" placeholder="Ihr Name" />
-              <input type="email" placeholder="E-Mail-Adresse" />
-            </div>
-            <div class="form-row">
-              <input type="tel" placeholder="Telefonnummer" />
-              <input type="date" style="color:rgba(245,240,232,0.6)" />
-            </div>
-            <div class="form-row">
-              <input type="number" placeholder="Anzahl Personen" min="1" max="100" />
-              <select>
-                <option value="" disabled selected>Uhrzeit wählen</option>
-                <option>11:00 Uhr</option>
-                <option>12:00 Uhr</option>
-                <option>13:00 Uhr</option>
-                <option>14:00 Uhr</option>
-                <option>17:00 Uhr</option>
-                <option>18:00 Uhr</option>
-                <option>19:00 Uhr</option>
-                <option>20:00 Uhr</option>
-              </select>
-            </div>
-            <textarea placeholder="Besondere Wünsche oder Nachricht..."></textarea>
-            <button type="button" onclick="handleForm(this)">Reservierung anfragen →</button>
+
+          <!-- Hinweis-Box -->
+          <div style="
+            margin-top: 36px;
+            padding: 20px 22px;
+            background: rgba(200,168,75,0.1);
+            border-left: 3px solid var(--gold);
+            border-radius: var(--radius);
+          ">
+            <p style="color: var(--gold); font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">
+              ✅ Sofortbestätigung
+            </p>
+            <p style="color:rgba(245,240,232,0.75); font-size:13px; line-height:1.7;">
+              Nach deiner Buchung erhältst du automatisch eine Bestätigungs-E-Mail. Unser Team sieht deine Reservierung sofort in unserem Kalender.
+            </p>
           </div>
         </div>
+
+        <!-- Rechte Spalte: Calendly Widget -->
+        <div class="reveal-right">
+          <div class="calendly-wrap">
+            <div
+              class="calendly-inline-widget"
+              data-url="https://calendly.com/siyo_99/tischreservierung?hide_gdpr_banner=1&primary_color=c8a84b&text_color=2c1a0e&background_color=f5f0e8"
+              style="min-width:100%; height:700px;">
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -1306,17 +1301,16 @@
       });
     }
 
-    // --- Contact Form ---
-    function handleForm(btn) {
-      btn.textContent = '✓ Anfrage gesendet!';
-      btn.style.background = 'var(--green-light)';
-      btn.disabled = true;
-      setTimeout(() => {
-        btn.textContent = 'Reservierung anfragen →';
-        btn.style.background = '';
-        btn.disabled = false;
-      }, 3500);
-    }
+    // Calendly: make widget re-observe scroll reveal after load
+    window.addEventListener('message', function(e) {
+      if (e.data.event && e.data.event === 'calendly.event_scheduled') {
+        const wrap = document.querySelector('.calendly-wrap');
+        if (wrap) {
+          wrap.style.borderColor = 'rgba(200,168,75,0.6)';
+          wrap.style.boxShadow = '0 0 30px rgba(200,168,75,0.15)';
+        }
+      }
+    });
   </script>
 </body>
 </html>
