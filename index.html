@@ -1176,9 +1176,9 @@
         <div class="reveal-right" id="today-overview"></div>
       </div>
       <!-- Schedule-X Kalender -->
-      <div class="reveal">
-        <div id="sx-calendar"></div>
-      </div>
+       <div class="reveal-scale">
+         <div id="sx-calendar"></div>
+       </div>
     </div>
   </section>
 
@@ -1467,7 +1467,17 @@
   }
 
   document.getElementById('res-overlay').addEventListener('click', function(e){ if(e.target===this) closeResModal(); });
-  initCalendar();
+  const calEl = document.getElementById('sx-calendar');
+
+const calObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !calInst) {
+      initCalendar();
+    }
+  });
+}, { threshold: 0.2 });
+
+calObserver.observe(calEl);
   </script>
 </body>
 </html>
