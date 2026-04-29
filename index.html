@@ -776,6 +776,35 @@
       .footer-inner { flex-direction: column; text-align: center; }
       .nav-cta { display: none; }
     }
+
+    /* Kalender-spezifische Styles (neu) */
+    #kontakt { background:var(--green-dark); position:relative; overflow:hidden; }
+    #kontakt::before { content:''; position:absolute; inset:0; background:url('https://www.transparenttextures.com/patterns/dark-wood.png'); opacity:0.1; }
+    .kalender-wrap { position:relative; z-index:1; }
+    .kalender-header { text-align:center; margin-bottom:50px; }
+    .kalender-header .section-divider { margin:0 auto 24px; }
+    #sx-calendar { width:100%; height:750px; max-height:90vh; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:1px solid rgba(200,168,75,0.3); }
+    .cap-bar-wrap { display:flex; gap:16px; padding:14px 20px; background:rgba(200,168,75,0.08); border:1px solid rgba(200,168,75,0.2); border-radius:8px; flex-wrap:wrap; margin-bottom:20px; }
+    .cap-stat { display:flex; align-items:center; gap:6px; font-size:13px; color:rgba(245,240,232,0.8); }
+    .cap-stat strong { color:var(--gold); font-size:16px; }
+    .res-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center; }
+    .res-overlay.open { display:flex; }
+    .res-modal { background:var(--cream); border-radius:12px; padding:36px; max-width:500px; width:92%; position:relative; border-top:4px solid var(--gold); box-shadow:0 24px 70px rgba(0,0,0,0.5); animation:popIn .3s ease; }
+    @keyframes popIn { from{opacity:0;transform:scale(.95) translateY(-16px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    .res-modal h3 { font-family:'Playfair Display',serif; font-size:22px; color:var(--green-dark); margin-bottom:4px; }
+    .res-modal-sub { color:var(--gold); font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
+    .res-close { position:absolute; top:14px; right:18px; background:none; border:none; font-size:22px; cursor:pointer; color:#999; }
+    .res-close:hover { color:var(--brown-dark); }
+    .res-field { margin-bottom:13px; }
+    .res-field label { display:block; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:5px; }
+    .res-field input, .res-field select { width:100%; padding:11px 14px; border:1px solid #d0ccc0; border-radius:6px; font-family:'Lato',sans-serif; font-size:14px; color:var(--brown-dark); background:#fff; outline:none; transition:border-color .2s; }
+    .res-field input:focus, .res-field select:focus { border-color:var(--gold); }
+    .res-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .res-cap-info { background:rgba(200,168,75,0.1); border:1px solid rgba(200,168,75,0.3); border-radius:6px; padding:10px 14px; font-size:13px; color:#5a3a10; margin-bottom:14px; }
+    .res-cap-info.full { background:rgba(200,0,0,0.08); border-color:rgba(200,0,0,0.3); color:#7a0000; }
+    .res-submit { width:100%; padding:14px; background:var(--green-dark); color:var(--gold); border:none; border-radius:6px; font-family:'Lato',sans-serif; font-weight:700; font-size:14px; letter-spacing:1px; cursor:pointer; transition:background .2s; margin-top:6px; }
+    .res-submit:hover { background:var(--green-mid); }
+    .res-submit:disabled { background:#aaa; color:#fff; cursor:not-allowed; }
   </style>
 </head>
 <body>
@@ -1067,7 +1096,6 @@
           <h2 class="section-title">Anfahrt</h2>
           <div class="section-divider"></div>
           <div class="map-placeholder">
-            <!-- Replace with real Google Maps embed src for your location -->
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2660.1231!2d11.5753!3d48.1371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDjCsDA4JzEzLjYiTiAxMcKwMzQnMzEuMSJF!5e0!3m2!1sde!2sde!4v1600000000000!5m2!1sde!2sde"
               title="Standort Biergarten"
@@ -1085,41 +1113,8 @@
     </div>
   </section>
 
-
-  <!-- Schedule-X Kalender CSS -->
+  <!-- Schedule-X CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@schedule-x/theme-default@2/dist/index.css" />
-  <style>
-    #kontakt { background:var(--green-dark); position:relative; overflow:hidden; }
-    #kontakt::before { content:''; position:absolute; inset:0; background:url('https://www.transparenttextures.com/patterns/dark-wood.png'); opacity:0.1; }
-    .kalender-wrap { position:relative; z-index:1; }
-    .kalender-header { text-align:center; margin-bottom:50px; }
-    .kalender-header .section-divider { margin:0 auto 24px; }
-    #sx-calendar { width:100%; height:750px; max-height:90vh; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:1px solid rgba(200,168,75,0.3); }
-    .cap-bar-wrap { display:flex; gap:16px; padding:14px 20px; background:rgba(200,168,75,0.08); border:1px solid rgba(200,168,75,0.2); border-radius:8px; flex-wrap:wrap; margin-bottom:20px; }
-    .cap-stat { display:flex; align-items:center; gap:6px; font-size:13px; color:rgba(245,240,232,0.8); }
-    .cap-stat strong { color:var(--gold); font-size:16px; }
-    .res-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center; }
-    .res-overlay.open { display:flex; }
-    .res-modal { background:var(--cream); border-radius:12px; padding:36px; max-width:500px; width:92%; position:relative; border-top:4px solid var(--gold); box-shadow:0 24px 70px rgba(0,0,0,0.5); animation:popIn .3s ease; }
-    @keyframes popIn { from{opacity:0;transform:scale(.95) translateY(-16px)} to{opacity:1;transform:scale(1) translateY(0)} }
-    .res-modal h3 { font-family:'Playfair Display',serif; font-size:22px; color:var(--green-dark); margin-bottom:4px; }
-    .res-modal-sub { color:var(--gold); font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
-    .res-close { position:absolute; top:14px; right:18px; background:none; border:none; font-size:22px; cursor:pointer; color:#999; }
-    .res-close:hover { color:var(--brown-dark); }
-    .res-field { margin-bottom:13px; }
-    .res-field label { display:block; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:5px; }
-    .res-field input, .res-field select { width:100%; padding:11px 14px; border:1px solid #d0ccc0; border-radius:6px; font-family:'Lato',sans-serif; font-size:14px; color:var(--brown-dark); background:#fff; outline:none; transition:border-color .2s; }
-    .res-field input:focus, .res-field select:focus { border-color:var(--gold); }
-    .res-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    .res-cap-info { background:rgba(200,168,75,0.1); border:1px solid rgba(200,168,75,0.3); border-radius:6px; padding:10px 14px; font-size:13px; color:#5a3a10; margin-bottom:14px; }
-    .res-cap-info.full { background:rgba(200,0,0,0.08); border-color:rgba(200,0,0,0.3); color:#7a0000; }
-    .res-submit { width:100%; padding:14px; background:var(--green-dark); color:var(--gold); border:none; border-radius:6px; font-family:'Lato',sans-serif; font-weight:700; font-size:14px; letter-spacing:1px; cursor:pointer; transition:background .2s; margin-top:6px; }
-    .res-submit:hover { background:var(--green-mid); }
-    .res-submit:disabled { background:#aaa; color:#fff; cursor:not-allowed; }
-  </style>
-
-  <!-- Schedule-X JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/@schedule-x/bundle@2/dist/index.global.js"></script>
 
   <!-- KONTAKT / RESERVIERUNG -->
   <section id="kontakt">
@@ -1282,7 +1277,10 @@
     }
   </script>
 
-   <!-- KALENDER JAVASCRIPT -->
+  <!-- Schedule-X JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/@schedule-x/bundle@2/dist/index.global.js"></script>
+
+  <!-- KALENDER JAVASCRIPT (robust) -->
   <script>
   (function() {
     const DB_KEY   = 'biergarten_reservations_v2';
@@ -1293,7 +1291,6 @@
     const WDAYS    = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
 
     let reservations = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
-    let modalDateStr = null;
     let calInst = null;
 
     function save() { localStorage.setItem(DB_KEY, JSON.stringify(reservations)); }
@@ -1321,17 +1318,16 @@
       });
     }
 
-    // Wartet aktiv darauf, dass scheduleX global verfügbar wird
-    function waitForScheduleX(callback, maxTries = 50) {
+    function waitForScheduleX(callback, maxTries = 80) {
       let tries = 0;
       function check() {
         if (window.scheduleX) {
-          console.log('✅ scheduleX gefunden, initialisiere Kalender...');
+          console.log('✅ scheduleX geladen, initialisiere Kalender');
           callback();
         } else if (tries++ < maxTries) {
-          setTimeout(check, 100);
+          setTimeout(check, 150);
         } else {
-          console.error('❌ scheduleX konnte nicht geladen werden. Bitte Konsole prüfen.');
+          console.error('❌ scheduleX nicht geladen – Kalender kann nicht angezeigt werden.');
         }
       }
       check();
@@ -1339,7 +1335,6 @@
 
     function initCalendar() {
       const SX = scheduleX;
-      // Nur initialisieren, wenn das DOM-Element vorhanden ist
       const container = document.getElementById('sx-calendar');
       if (!container) return;
 
@@ -1429,9 +1424,8 @@
       el.innerHTML = html;
     }
 
-    // Res Modal
+    // Res Modal (global zugänglich machen)
     window.openResModal = function(dateStr, preSlot) {
-      modalDateStr = dateStr;
       const parts = dateStr.split('-');
       const d = new Date(parts[0], parts[1]-1, parts[2]);
       document.getElementById('res-modal-sub').textContent = `${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
@@ -1491,7 +1485,7 @@
 
     document.getElementById('res-overlay').addEventListener('click', function(e){ if(e.target===this) closeResModal(); });
 
-    // Kalender starten, sobald scheduleX da ist
+    // Starte die Kalenderinitialisierung, sobald scheduleX da ist
     waitForScheduleX(initCalendar);
   })();
   </script>
