@@ -5,9 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mitarbeiterportal – Zum Goldenen Hopfen</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@schedule-x/theme-default@2/dist/index.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@schedule-x/bundle@2/dist/index.global.js"></script>
   <style>
+    /* ===== CUSTOM STAFF CALENDAR ===== */
+    #cal-container {
+      border-radius: 10px; overflow: hidden;
+      height: calc(100vh - 200px); min-height: 500px;
+      display: flex; flex-direction: column;
+      background: #fff; font-family: 'Lato', sans-serif;
+      border: 1px solid rgba(200,168,75,0.2);
+    }
+    .scal-toolbar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 16px; background:#2a3d1e; flex-shrink:0; flex-wrap:wrap; gap:8px;
+    }
+    .scal-toolbar-center { display:flex; align-items:center; gap:8px; }
+    .scal-nav-btn {
+      background:rgba(200,168,75,0.15); border:1px solid rgba(200,168,75,0.4);
+      color:#c8a84b; border-radius:5px; padding:5px 10px; cursor:pointer; font-size:13px;
+    }
+    .scal-nav-btn:hover { background:rgba(200,168,75,0.35); }
+    .scal-title { color:#fff; font-family:'Playfair Display',serif; font-size:16px; min-width:200px; text-align:center; }
+    .scal-view-btns { display:flex; gap:5px; }
+    .scal-view-btn {
+      background:rgba(200,168,75,0.1); border:1px solid rgba(200,168,75,0.25);
+      color:rgba(245,240,232,0.65); border-radius:5px; padding:5px 12px;
+      cursor:pointer; font-size:12px; font-family:'Lato',sans-serif; transition:all .2s;
+    }
+    .scal-view-btn.active, .scal-view-btn:hover { background:#c8a84b; color:#2a3d1e; font-weight:700; border-color:#c8a84b; }
+    /* Month */
+    .scal-month { flex:1; overflow-y:auto; display:flex; flex-direction:column; }
+    .scal-month-head { display:grid; grid-template-columns:repeat(7,1fr); background:#1a2a0e; flex-shrink:0; }
+    .scal-month-head-cell { padding:7px 0; text-align:center; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#c8a84b; }
+    .scal-month-body { display:grid; grid-template-columns:repeat(7,1fr); flex:1; }
+    .scal-month-day {
+      min-height:80px; border-right:1px solid #333; border-bottom:1px solid #333;
+      padding:5px; cursor:pointer; transition:background .15s; position:relative; background:#1e1e1e;
+    }
+    .scal-month-day:hover { background:#252525; }
+    .scal-month-day.today { background:#1a2a0e; }
+    .scal-month-day.other-month { background:#1a1a1a; opacity:.5; }
+    .scal-day-num { font-size:12px; font-weight:700; color:#eee; margin-bottom:3px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
+    .scal-month-day.today .scal-day-num { background:#c8a84b; color:#2a3d1e; }
+    .scal-day-event { font-size:10px; padding:2px 4px; border-radius:3px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .scal-day-event.booked { background:#d4f7d4; color:#1a3d10; border-left:2px solid #2a5f1e; }
+    .scal-day-event.partial { background:#fff0b3; color:#5c3800; border-left:2px solid #7a5000; }
+    .scal-day-event.full { background:#ffd0d0; color:#5a0000; border-left:2px solid #8b0000; }
+    /* Week/Day */
+    .scal-week { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    .scal-week-head { display:flex; border-bottom:2px solid #333; flex-shrink:0; }
+    .scal-week-head-gutter { width:50px; flex-shrink:0; border-right:1px solid #333; background:#111; }
+    .scal-week-head-col { flex:1; padding:7px 4px; text-align:center; font-size:12px; color:#c8a84b; border-right:1px solid #333; background:#1a1a1a; }
+    .scal-week-head-col.today { background:#2a3d1e; color:#fff; font-weight:700; }
+    .scal-week-body { flex:1; display:flex; overflow-y:auto; }
+    .scal-time-gutter { width:50px; flex-shrink:0; border-right:1px solid #333; }
+    .scal-time-label { height:48px; display:flex; align-items:flex-start; justify-content:center; font-size:10px; color:#666; padding-top:2px; }
+    .scal-day-col { flex:1; position:relative; border-right:1px solid #333; }
+    .scal-hour-line { height:48px; border-bottom:1px solid #2a2a2a; cursor:pointer; }
+    .scal-hour-line:hover { background:rgba(200,168,75,0.06); }
+    .scal-half-line { position:absolute; left:0; right:0; border-bottom:1px dashed #222; pointer-events:none; }
+    .scal-week-event {
+      position:absolute; left:2px; right:2px; border-radius:3px; padding:2px 4px;
+      font-size:10px; cursor:pointer; overflow:hidden; z-index:2; line-height:1.3;
+    }
+    .scal-week-event:hover { filter:brightness(.88); }
+    .scal-week-event.booked { background:#d4f7d4; color:#1a3d10; border-left:3px solid #2a5f1e; }
+    .scal-week-event.partial { background:#fff0b3; color:#5c3800; border-left:3px solid #7a5000; }
+    .scal-week-event.full { background:#ffd0d0; color:#5a0000; border-left:3px solid #8b0000; }
     :root {
       --gold: #c8a84b;
       --gold-light: #e8c96a;
@@ -298,7 +361,12 @@
     </div>
     <button class="login-btn" onclick="doLogin()">Einloggen →</button>
     <p class="login-error" id="login-error">❌ Falscher Benutzername oder Passwort.</p>
-  
+    <div class="login-hint">
+      <strong>Test-Zugänge:</strong><br>
+      👤 <strong>admin</strong> / <strong>hopfen2024</strong> (Administrator)<br>
+      👤 <strong>kellner1</strong> / <strong>bier123</strong> (Mitarbeiter)<br>
+      👤 <strong>chef</strong> / <strong>goldener</strong> (Küche)
+    </div>
   </div>
 </div>
 
@@ -490,24 +558,32 @@ const USERS = [
   { id:3, username:'chef',     password:'goldener',   name:'Maria Schmidt',  role:'Küche',         roleKey:'staff' },
 ];
 
-const DB_KEY   = 'biergarten_reservations_v2';
+const DB_KEY      = 'biergarten_reservations_v2';
+const SESSION_KEY = 'biergarten_session_user';
 const MAX_SLOT = 6;
 const OPEN_H   = 10;
 const CLOSE_H  = 23;
 const MONTHS   = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
 const MONTHS_F = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
-const WDAYS    = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+const WDAYS_S  = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+const WDAYS_F  = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
 
 let currentUser = null;
 let reservations = [];
-let staffCal = null;
+// Staff calendar state
+let sCalView = 'week';
+let sCalDate = new Date(); sCalDate.setHours(0,0,0,0);
 
 function loadRes() { reservations = JSON.parse(localStorage.getItem(DB_KEY) || '[]'); }
 function saveRes() { localStorage.setItem(DB_KEY, JSON.stringify(reservations)); }
 function slotKey(date, h, m) { return `${date} ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
 function countSlot(key) { return reservations.filter(r => r.slotKey === key).length; }
+function sAddDays(d, n) { const r = new Date(d); r.setDate(r.getDate()+n); return r; }
+function sDateStr(d) { return d.toISOString().slice(0,10); }
+function sEventClass(cnt) { return cnt >= MAX_SLOT ? 'full' : cnt >= 4 ? 'partial' : 'booked'; }
+function sGetGroups() { const g={}; reservations.forEach(r=>{g[r.slotKey]=(g[r.slotKey]||0)+1;}); return g; }
 
-// ---- LOGIN ----
+// ---- LOGIN + SESSION PERSISTENCE ----
 function doLogin() {
   const u = document.getElementById('login-user').value.trim().toLowerCase();
   const p = document.getElementById('login-pass').value;
@@ -516,6 +592,12 @@ function doLogin() {
     document.getElementById('login-error').style.display = 'block';
     return;
   }
+  // Persist session across page reloads (sessionStorage = same tab/window)
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify({ id: user.id }));
+  activateUser(user);
+}
+
+function activateUser(user) {
   currentUser = user;
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
@@ -527,6 +609,7 @@ function doLogin() {
 }
 
 function doLogout() {
+  sessionStorage.removeItem(SESSION_KEY);
   currentUser = null;
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
@@ -534,6 +617,17 @@ function doLogout() {
   document.getElementById('login-pass').value = '';
   document.getElementById('login-error').style.display = 'none';
 }
+
+// Auto-restore session on page load
+(function restoreSession() {
+  const saved = sessionStorage.getItem(SESSION_KEY);
+  if (!saved) return;
+  try {
+    const { id } = JSON.parse(saved);
+    const user = USERS.find(u => u.id === id);
+    if (user) activateUser(user);
+  } catch(e) { sessionStorage.removeItem(SESSION_KEY); }
+})();
 
 // ---- APP INIT ----
 function initApp() {
@@ -638,41 +732,135 @@ function renderDashboard() {
 
 // ---- STAFF CALENDAR ----
 function renderStaffCalendar() {
-  if (!window.ScheduleX) { setTimeout(renderStaffCalendar, 300); return; }
-  const SX = ScheduleX;
-  const container = document.getElementById('cal-container');
-  container.innerHTML = '';
+  loadRes();
+  renderSCal();
+}
 
-  const groups = {};
-  reservations.forEach(r => { if (!groups[r.slotKey]) groups[r.slotKey]=0; groups[r.slotKey]++; });
-  const events = Object.entries(groups).map(([key, cnt]) => {
-    const [date, time] = key.split(' ');
-    const [h, m] = time.split(':').map(Number);
-    const endH = m===30?h+1:h, endM = m===30?0:30;
-    return {
-      id: key,
-      title: `${cnt}/${MAX_SLOT} Tische${cnt>=MAX_SLOT?' · VOLL':''}`,
-      start: key,
-      end: `${date} ${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`,
-      calendarId: cnt>=MAX_SLOT?'full':cnt>=4?'partial':'booked',
-    };
-  });
+function renderSCal() {
+  const wrap = document.getElementById('cal-container');
+  wrap.innerHTML = '';
 
-  staffCal = SX.createCalendar({
-    locale: 'de-DE',
-    selectedDate: new Date().toISOString().slice(0,10),
-    defaultView: SX.viewWeek.name,
-    views: [SX.viewDay, SX.viewWeek, SX.viewMonthGrid, SX.viewMonthAgenda],
-    dayBoundaries: { start:'10:00', end:'23:00' },
-    plugins: [SX.createEventModalPlugin()],
-    calendars: {
-      booked:  { colorName:'booked',  lightColors:{ main:'#2a5f1e', container:'#d4f7d4', onContainer:'#1a3d10' } },
-      partial: { colorName:'partial', lightColors:{ main:'#7a5000', container:'#fff0b3', onContainer:'#5c3800' } },
-      full:    { colorName:'full',    lightColors:{ main:'#8b0000', container:'#ffd0d0', onContainer:'#5a0000' } },
-    },
-    events,
+  // Toolbar
+  const bar = document.createElement('div');
+  bar.className = 'scal-toolbar';
+  const left = document.createElement('div');
+  left.className = 'scal-toolbar-center';
+  left.innerHTML = `
+    <button class="scal-nav-btn" id="scal-prev">◀</button>
+    <span class="scal-title" id="scal-title"></span>
+    <button class="scal-nav-btn" id="scal-next">▶</button>
+    <button class="scal-nav-btn" id="scal-today" style="font-size:11px;">Heute</button>`;
+  const right = document.createElement('div');
+  right.className = 'scal-view-btns';
+  ['month','week','day'].forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'scal-view-btn' + (sCalView===v?' active':'');
+    b.textContent = v==='month'?'Monat':v==='week'?'Woche':'Tag';
+    b.onclick = () => { sCalView=v; renderSCal(); };
+    right.appendChild(b);
   });
-  staffCal.render(container);
+  bar.appendChild(left); bar.appendChild(right);
+  wrap.appendChild(bar);
+
+  document.getElementById('scal-prev').onclick = () => sNavigate(-1);
+  document.getElementById('scal-next').onclick = () => sNavigate(1);
+  document.getElementById('scal-today').onclick = () => { sCalDate=new Date(); sCalDate.setHours(0,0,0,0); renderSCal(); };
+
+  if (sCalView==='month') sSMonth(wrap);
+  else sSWeek(wrap, sCalView==='week'?7:1);
+}
+
+function sNavigate(dir) {
+  if (sCalView==='month') sCalDate.setMonth(sCalDate.getMonth()+dir);
+  else if (sCalView==='week') sCalDate.setDate(sCalDate.getDate()+7*dir);
+  else sCalDate.setDate(sCalDate.getDate()+dir);
+  renderSCal();
+}
+
+function sSMonth(wrap) {
+  document.getElementById('scal-title').textContent = MONTHS_F[sCalDate.getMonth()]+' '+sCalDate.getFullYear();
+  const div = document.createElement('div'); div.className='scal-month';
+  const head = document.createElement('div'); head.className='scal-month-head';
+  WDAYS_S.forEach(d => { const c=document.createElement('div');c.className='scal-month-head-cell';c.textContent=d;head.appendChild(c); });
+  div.appendChild(head);
+  const body = document.createElement('div'); body.className='scal-month-body';
+  const first=new Date(sCalDate.getFullYear(),sCalDate.getMonth(),1);
+  const last=new Date(sCalDate.getFullYear(),sCalDate.getMonth()+1,0);
+  const today=sDateStr(new Date());
+  const groups=sGetGroups();
+  const startWD=first.getDay();
+  for(let i=0;i<startWD;i++) body.appendChild(sBuildMonthDay(sAddDays(first,i-startWD),groups,today,true));
+  for(let d=1;d<=last.getDate();d++) body.appendChild(sBuildMonthDay(new Date(sCalDate.getFullYear(),sCalDate.getMonth(),d),groups,today,false));
+  const endWD=last.getDay();
+  for(let i=1;i<7-endWD;i++) body.appendChild(sBuildMonthDay(sAddDays(last,i),groups,today,true));
+  div.appendChild(body); wrap.appendChild(div);
+}
+
+function sBuildMonthDay(day, groups, today, other) {
+  const ds=sDateStr(day);
+  const cell=document.createElement('div');
+  cell.className='scal-month-day'+(other?' other-month':'')+(ds===today?' today':'');
+  const num=document.createElement('div'); num.className='scal-day-num'; num.textContent=day.getDate();
+  cell.appendChild(num);
+  Object.entries(groups).filter(([k])=>k.startsWith(ds)).sort().forEach(([k,cnt])=>{
+    const ev=document.createElement('div');
+    ev.className='scal-day-event '+sEventClass(cnt);
+    ev.textContent=`${k.split(' ')[1]} – ${cnt}/${MAX_SLOT}${cnt>=MAX_SLOT?' VOLL':''}`;
+    cell.appendChild(ev);
+  });
+  return cell;
+}
+
+function sSWeek(wrap, cols) {
+  let start;
+  if(cols===7){ const wd=sCalDate.getDay(); start=sAddDays(sCalDate,wd===0?-6:1-wd); }
+  else start=new Date(sCalDate);
+  const days=[]; for(let i=0;i<cols;i++) days.push(sAddDays(start,i));
+  const today=sDateStr(new Date());
+  const groups=sGetGroups();
+  if(cols===7){
+    const end=days[6];
+    document.getElementById('scal-title').textContent=`${start.getDate()}. ${MONTHS_F[start.getMonth()]} – ${end.getDate()}. ${MONTHS_F[end.getMonth()]} ${end.getFullYear()}`;
+  } else {
+    document.getElementById('scal-title').textContent=`${WDAYS_F[sCalDate.getDay()]}, ${sCalDate.getDate()}. ${MONTHS_F[sCalDate.getMonth()]} ${sCalDate.getFullYear()}`;
+  }
+  const cont=document.createElement('div'); cont.className='scal-week';
+  const headRow=document.createElement('div'); headRow.className='scal-week-head';
+  const g0=document.createElement('div'); g0.className='scal-week-head-gutter'; headRow.appendChild(g0);
+  days.forEach(d=>{
+    const c=document.createElement('div');
+    c.className='scal-week-head-col'+(sDateStr(d)===today?' today':'');
+    c.innerHTML=`<strong>${WDAYS_S[d.getDay()]}</strong><br>${d.getDate()}. ${MONTHS[d.getMonth()]}`;
+    headRow.appendChild(c);
+  });
+  cont.appendChild(headRow);
+  const body=document.createElement('div'); body.className='scal-week-body';
+  const gutter=document.createElement('div'); gutter.className='scal-time-gutter';
+  for(let h=OPEN_H;h<CLOSE_H;h++){
+    const lbl=document.createElement('div');lbl.className='scal-time-label';lbl.textContent=`${String(h).padStart(2,'0')}:00`;gutter.appendChild(lbl);
+  }
+  body.appendChild(gutter);
+  const totalH=CLOSE_H-OPEN_H;
+  days.forEach(d=>{
+    const ds=sDateStr(d);
+    const col=document.createElement('div'); col.className='scal-day-col'; col.style.minHeight=(totalH*48)+'px';
+    for(let h=OPEN_H;h<CLOSE_H;h++){
+      const half=document.createElement('div'); half.className='scal-half-line'; half.style.top=((h-OPEN_H)*48+24)+'px'; col.appendChild(half);
+      const line=document.createElement('div'); line.className='scal-hour-line'; col.appendChild(line);
+    }
+    Object.entries(groups).filter(([k])=>k.startsWith(ds)).forEach(([k,cnt])=>{
+      const [,time]=k.split(' '); const [h,m]=time.split(':').map(Number);
+      const top=((h-OPEN_H)*48)+(m===30?24:0);
+      const ev=document.createElement('div');
+      ev.className='scal-week-event '+sEventClass(cnt);
+      ev.style.top=top+'px'; ev.style.height='22px';
+      ev.innerHTML=`<strong>${time}</strong> ${cnt}/${MAX_SLOT}${cnt>=MAX_SLOT?' VOLL':''}`;
+      col.appendChild(ev);
+    });
+    body.appendChild(col);
+  });
+  body.scrollTop=(Math.max(OPEN_H,Math.min(new Date().getHours(),CLOSE_H-2))-OPEN_H)*48;
+  cont.appendChild(body); wrap.appendChild(cont);
 }
 
 // ---- RESERVATIONS LIST ----

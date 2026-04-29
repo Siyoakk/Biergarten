@@ -776,35 +776,6 @@
       .footer-inner { flex-direction: column; text-align: center; }
       .nav-cta { display: none; }
     }
-
-    /* Kalender-spezifische Styles (neu) */
-    #kontakt { background:var(--green-dark); position:relative; overflow:hidden; }
-    #kontakt::before { content:''; position:absolute; inset:0; background:url('https://www.transparenttextures.com/patterns/dark-wood.png'); opacity:0.1; }
-    .kalender-wrap { position:relative; z-index:1; }
-    .kalender-header { text-align:center; margin-bottom:50px; }
-    .kalender-header .section-divider { margin:0 auto 24px; }
-    #sx-calendar { width:100%; height:750px; max-height:90vh; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:1px solid rgba(200,168,75,0.3); }
-    .cap-bar-wrap { display:flex; gap:16px; padding:14px 20px; background:rgba(200,168,75,0.08); border:1px solid rgba(200,168,75,0.2); border-radius:8px; flex-wrap:wrap; margin-bottom:20px; }
-    .cap-stat { display:flex; align-items:center; gap:6px; font-size:13px; color:rgba(245,240,232,0.8); }
-    .cap-stat strong { color:var(--gold); font-size:16px; }
-    .res-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center; }
-    .res-overlay.open { display:flex; }
-    .res-modal { background:var(--cream); border-radius:12px; padding:36px; max-width:500px; width:92%; position:relative; border-top:4px solid var(--gold); box-shadow:0 24px 70px rgba(0,0,0,0.5); animation:popIn .3s ease; }
-    @keyframes popIn { from{opacity:0;transform:scale(.95) translateY(-16px)} to{opacity:1;transform:scale(1) translateY(0)} }
-    .res-modal h3 { font-family:'Playfair Display',serif; font-size:22px; color:var(--green-dark); margin-bottom:4px; }
-    .res-modal-sub { color:var(--gold); font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
-    .res-close { position:absolute; top:14px; right:18px; background:none; border:none; font-size:22px; cursor:pointer; color:#999; }
-    .res-close:hover { color:var(--brown-dark); }
-    .res-field { margin-bottom:13px; }
-    .res-field label { display:block; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:5px; }
-    .res-field input, .res-field select { width:100%; padding:11px 14px; border:1px solid #d0ccc0; border-radius:6px; font-family:'Lato',sans-serif; font-size:14px; color:var(--brown-dark); background:#fff; outline:none; transition:border-color .2s; }
-    .res-field input:focus, .res-field select:focus { border-color:var(--gold); }
-    .res-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    .res-cap-info { background:rgba(200,168,75,0.1); border:1px solid rgba(200,168,75,0.3); border-radius:6px; padding:10px 14px; font-size:13px; color:#5a3a10; margin-bottom:14px; }
-    .res-cap-info.full { background:rgba(200,0,0,0.08); border-color:rgba(200,0,0,0.3); color:#7a0000; }
-    .res-submit { width:100%; padding:14px; background:var(--green-dark); color:var(--gold); border:none; border-radius:6px; font-family:'Lato',sans-serif; font-weight:700; font-size:14px; letter-spacing:1px; cursor:pointer; transition:background .2s; margin-top:6px; }
-    .res-submit:hover { background:var(--green-mid); }
-    .res-submit:disabled { background:#aaa; color:#fff; cursor:not-allowed; }
   </style>
 </head>
 <body>
@@ -1096,6 +1067,7 @@
           <h2 class="section-title">Anfahrt</h2>
           <div class="section-divider"></div>
           <div class="map-placeholder">
+            <!-- Replace with real Google Maps embed src for your location -->
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2660.1231!2d11.5753!3d48.1371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDjCsDA4JzEzLjYiTiAxMcKwMzQnMzEuMSJF!5e0!3m2!1sde!2sde!4v1600000000000!5m2!1sde!2sde"
               title="Standort Biergarten"
@@ -1113,8 +1085,136 @@
     </div>
   </section>
 
-  <!-- Schedule-X CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@schedule-x/theme-default@2/dist/index.css" />
+
+  <style>
+    /* ===== KONTAKT / KALENDER SECTION ===== */
+    #kontakt { background:var(--green-dark); position:relative; overflow:hidden; }
+    #kontakt::before { content:''; position:absolute; inset:0; background:url('https://www.transparenttextures.com/patterns/dark-wood.png'); opacity:0.1; }
+    .kalender-wrap { position:relative; z-index:1; }
+    .kalender-header { text-align:center; margin-bottom:50px; }
+    .kalender-header .section-divider { margin:0 auto 24px; }
+
+    /* ===== CUSTOM CALENDAR ===== */
+    #sx-calendar {
+      width:100%; border-radius:10px; overflow:hidden;
+      box-shadow:0 20px 60px rgba(0,0,0,0.4);
+      border:1px solid rgba(200,168,75,0.3);
+      background:#fff; font-family:'Lato',sans-serif;
+    }
+    .cal-toolbar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 18px; background:#2a3d1e; flex-wrap:wrap; gap:10px;
+    }
+    .cal-toolbar-center { display:flex; align-items:center; gap:10px; }
+    .cal-nav-btn {
+      background:rgba(200,168,75,0.15); border:1px solid rgba(200,168,75,0.4);
+      color:#c8a84b; border-radius:6px; padding:6px 12px; cursor:pointer;
+      font-size:14px; transition:background .2s;
+    }
+    .cal-nav-btn:hover { background:rgba(200,168,75,0.35); }
+    .cal-title { color:#fff; font-family:'Playfair Display',serif; font-size:18px; min-width:180px; text-align:center; }
+    .cal-view-btns { display:flex; gap:6px; }
+    .cal-view-btn {
+      background:rgba(200,168,75,0.1); border:1px solid rgba(200,168,75,0.25);
+      color:rgba(245,240,232,0.65); border-radius:6px; padding:6px 14px;
+      cursor:pointer; font-size:12px; letter-spacing:.5px; transition:all .2s;
+      font-family:'Lato',sans-serif;
+    }
+    .cal-view-btn.active, .cal-view-btn:hover {
+      background:#c8a84b; color:#2a3d1e; font-weight:700; border-color:#c8a84b;
+    }
+    /* Month grid */
+    .cal-month { padding:0; }
+    .cal-month-head {
+      display:grid; grid-template-columns:repeat(7,1fr);
+      background:#2a3d1e;
+    }
+    .cal-month-head-cell {
+      padding:8px 0; text-align:center; font-size:11px;
+      letter-spacing:1px; text-transform:uppercase; color:#c8a84b;
+    }
+    .cal-month-body { display:grid; grid-template-columns:repeat(7,1fr); }
+    .cal-month-day {
+      min-height:90px; border-right:1px solid #e8e0d0; border-bottom:1px solid #e8e0d0;
+      padding:6px; cursor:pointer; transition:background .15s; position:relative;
+    }
+    .cal-month-day:hover { background:#f9f5ed; }
+    .cal-month-day.today { background:#fff8ec; }
+    .cal-month-day.other-month { background:#f5f0e8; opacity:.55; }
+    .cal-day-num {
+      font-size:13px; font-weight:700; color:#2c1a0e; margin-bottom:4px;
+      width:24px; height:24px; display:flex; align-items:center; justify-content:center; border-radius:50%;
+    }
+    .cal-month-day.today .cal-day-num { background:#2a3d1e; color:#c8a84b; }
+    .cal-day-event {
+      font-size:11px; padding:2px 5px; border-radius:3px; margin-bottom:2px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer;
+    }
+    .cal-day-event.booked { background:#c8f0c8; color:#1a3010; border-left:3px solid #2a3d1e; }
+    .cal-day-event.partial { background:#ffe8a0; color:#5c3a00; border-left:3px solid #7a5000; }
+    .cal-day-event.full { background:#ffc0c0; color:#5a0000; border-left:3px solid #8b0000; }
+    /* Week / Day grid */
+    .cal-week { display:flex; flex-direction:column; }
+    .cal-week-head { display:flex; border-bottom:2px solid #e0d8c8; }
+    .cal-week-head-gutter { width:52px; flex-shrink:0; border-right:1px solid #e0d8c8; background:#f5f0e8; }
+    .cal-week-head-col {
+      flex:1; padding:8px 4px; text-align:center; font-size:12px;
+      color:#2a3d1e; border-right:1px solid #e0d8c8; background:#f5f0e8;
+    }
+    .cal-week-head-col.today { background:#2a3d1e; color:#c8a84b; font-weight:700; border-radius:0; }
+    .cal-week-body { display:flex; overflow-y:auto; max-height:600px; }
+    .cal-time-gutter { width:52px; flex-shrink:0; border-right:1px solid #e0d8c8; }
+    .cal-time-label {
+      height:48px; display:flex; align-items:flex-start; justify-content:center;
+      font-size:11px; color:#888; padding-top:2px;
+    }
+    .cal-day-col {
+      flex:1; position:relative; border-right:1px solid #e0d8c8; min-height:624px;
+    }
+    .cal-hour-line {
+      height:48px; border-bottom:1px solid #eee; cursor:pointer; transition:background .15s;
+    }
+    .cal-hour-line:hover { background:rgba(200,168,75,0.08); }
+    .cal-half-line {
+      position:absolute; left:0; right:0;
+      border-bottom:1px dashed #f0e8d8; pointer-events:none;
+    }
+    .cal-week-event {
+      position:absolute; left:2px; right:2px;
+      border-radius:4px; padding:2px 5px; font-size:11px;
+      cursor:pointer; overflow:hidden; z-index:2; line-height:1.3;
+      transition:filter .15s;
+    }
+    .cal-week-event:hover { filter:brightness(.92); }
+    .cal-week-event.booked { background:#c8f0c8; color:#1a3010; border-left:3px solid #2a3d1e; }
+    .cal-week-event.partial { background:#ffe8a0; color:#5c3a00; border-left:3px solid #7a5000; }
+    .cal-week-event.full { background:#ffc0c0; color:#5a0000; border-left:3px solid #8b0000; }
+
+    /* Stats bar */
+    .cap-bar-wrap { display:flex; gap:16px; padding:14px 20px; background:rgba(200,168,75,0.08); border:1px solid rgba(200,168,75,0.2); border-radius:8px; flex-wrap:wrap; margin-bottom:20px; }
+    .cap-stat { display:flex; align-items:center; gap:6px; font-size:13px; color:rgba(245,240,232,0.8); }
+    .cap-stat strong { color:var(--gold); font-size:16px; }
+
+    /* Reservation modal */
+    .res-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center; }
+    .res-overlay.open { display:flex; }
+    .res-modal { background:var(--cream); border-radius:12px; padding:36px; max-width:500px; width:92%; position:relative; border-top:4px solid var(--gold); box-shadow:0 24px 70px rgba(0,0,0,0.5); animation:popIn .3s ease; max-height:90vh; overflow-y:auto; }
+    @keyframes popIn { from{opacity:0;transform:scale(.95) translateY(-16px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    .res-modal h3 { font-family:'Playfair Display',serif; font-size:22px; color:var(--green-dark); margin-bottom:4px; }
+    .res-modal-sub { color:var(--gold); font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
+    .res-close { position:absolute; top:14px; right:18px; background:none; border:none; font-size:22px; cursor:pointer; color:#999; }
+    .res-close:hover { color:var(--brown-dark); }
+    .res-field { margin-bottom:13px; }
+    .res-field label { display:block; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:5px; }
+    .res-field input, .res-field select { width:100%; padding:11px 14px; border:1px solid #d0ccc0; border-radius:6px; font-family:'Lato',sans-serif; font-size:14px; color:var(--brown-dark); background:#fff; outline:none; transition:border-color .2s; }
+    .res-field input:focus, .res-field select:focus { border-color:var(--gold); }
+    .res-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .res-cap-info { background:rgba(200,168,75,0.1); border:1px solid rgba(200,168,75,0.3); border-radius:6px; padding:10px 14px; font-size:13px; color:#5a3a10; margin-bottom:14px; }
+    .res-cap-info.full { background:rgba(200,0,0,0.08); border-color:rgba(200,0,0,0.3); color:#7a0000; }
+    .res-submit { width:100%; padding:14px; background:var(--green-dark); color:var(--gold); border:none; border-radius:6px; font-family:'Lato',sans-serif; font-weight:700; font-size:14px; letter-spacing:1px; cursor:pointer; transition:background .2s; margin-top:6px; }
+    .res-submit:hover { background:var(--green-mid); }
+    .res-submit:disabled { background:#aaa; color:#fff; cursor:not-allowed; }
+  </style>
 
   <!-- KONTAKT / RESERVIERUNG -->
   <section id="kontakt">
@@ -1277,217 +1377,385 @@
     }
   </script>
 
-  <!-- Schedule-X JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/@schedule-x/bundle@2/dist/index.global.js"></script>
-
-  <!-- KALENDER JAVASCRIPT (robust) -->
+  <!-- KALENDER JAVASCRIPT -->
   <script>
-  (function() {
-    const DB_KEY   = 'biergarten_reservations_v2';
-    const MAX_SLOT = 6;
-    const OPEN_H   = 10;
-    const CLOSE_H  = 23;
-    const MONTHS   = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
-    const WDAYS    = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+  // ================================================================
+  //  Biergarten – Custom Vanilla Calendar + Reservation System
+  // ================================================================
+  const DB_KEY   = 'biergarten_reservations_v2';
+  const MAX_SLOT = 6;
+  const OPEN_H   = 10;
+  const CLOSE_H  = 23;
+  const MONTHS   = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  const WDAYS    = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+  const WDAYS_SHORT = ['So','Mo','Di','Mi','Do','Fr','Sa'];
 
-    let reservations = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
-    let calInst = null;
+  let reservations = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+  let modalDateStr = null;
+  // Calendar state
+  let calView = 'week'; // 'month' | 'week' | 'day'
+  let calDate = new Date(); // anchor date
+  calDate.setHours(0,0,0,0);
 
-    function save() { localStorage.setItem(DB_KEY, JSON.stringify(reservations)); }
-    function slotKey(date, h, m) { return `${date} ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
-    function countSlot(key) { return reservations.filter(r => r.slotKey === key).length; }
-    function isFull(key) { return countSlot(key) >= MAX_SLOT; }
+  function save() { localStorage.setItem(DB_KEY, JSON.stringify(reservations)); }
+  function dateStr(d) { return d.toISOString().slice(0,10); }
+  function slotKey(date, h, m) { return `${date} ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
+  function countSlot(key) { return reservations.filter(r => r.slotKey === key).length; }
+  function isFull(key) { return countSlot(key) >= MAX_SLOT; }
+  function eventClass(cnt) { return cnt >= MAX_SLOT ? 'full' : cnt >= 4 ? 'partial' : 'booked'; }
+  function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate()+n); return r; }
 
-    function buildCalEvents() {
-      const groups = {};
-      reservations.forEach(r => { if (!groups[r.slotKey]) groups[r.slotKey] = 0; groups[r.slotKey]++; });
-      return Object.entries(groups).map(([key, count]) => {
-        const [date, time] = key.split(' ');
-        const [h, m] = time.split(':').map(Number);
-        const endM = m === 30 ? 0 : 30;
-        const endH = m === 30 ? h + 1 : h;
-        const full = count >= MAX_SLOT;
-        const partial = count >= 4;
-        return {
-          id: key,
-          title: `${count}/${MAX_SLOT} Tische${full ? ' · VOLL' : ''}`,
-          start: key,
-          end: `${date} ${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`,
-          calendarId: full ? 'full' : partial ? 'partial' : 'booked',
-        };
-      });
+  // ---- Group reservations by slotKey ----
+  function getGroups() {
+    const g = {};
+    reservations.forEach(r => { g[r.slotKey] = (g[r.slotKey]||0)+1; });
+    return g;
+  }
+
+  // ---- RENDER CALENDAR ----
+  function renderCal() {
+    const wrap = document.getElementById('sx-calendar');
+    wrap.innerHTML = '';
+
+    // Toolbar
+    const bar = document.createElement('div');
+    bar.className = 'cal-toolbar';
+
+    const left = document.createElement('div');
+    left.className = 'cal-toolbar-center';
+    left.innerHTML = `
+      <button class="cal-nav-btn" id="cal-prev">◀</button>
+      <span class="cal-title" id="cal-title"></span>
+      <button class="cal-nav-btn" id="cal-next">▶</button>
+      <button class="cal-nav-btn" id="cal-today" style="font-size:12px;padding:5px 10px;">Heute</button>`;
+
+    const right = document.createElement('div');
+    right.className = 'cal-view-btns';
+    ['month','week','day'].forEach(v => {
+      const b = document.createElement('button');
+      b.className = 'cal-view-btn' + (calView===v?' active':'');
+      b.textContent = v==='month'?'Monat':v==='week'?'Woche':'Tag';
+      b.onclick = () => { calView = v; renderCal(); };
+      right.appendChild(b);
+    });
+
+    bar.appendChild(left);
+    bar.appendChild(right);
+    wrap.appendChild(bar);
+
+    document.getElementById('cal-prev').onclick = () => navigate(-1);
+    document.getElementById('cal-next').onclick = () => navigate(1);
+    document.getElementById('cal-today').onclick = () => { calDate = new Date(); calDate.setHours(0,0,0,0); renderCal(); };
+
+    if (calView === 'month') renderMonth(wrap);
+    else if (calView === 'week') renderWeek(wrap, 7);
+    else renderWeek(wrap, 1);
+  }
+
+  function navigate(dir) {
+    if (calView === 'month') calDate.setMonth(calDate.getMonth()+dir);
+    else if (calView === 'week') calDate.setDate(calDate.getDate()+7*dir);
+    else calDate.setDate(calDate.getDate()+dir);
+    renderCal();
+  }
+
+  // ---- MONTH VIEW ----
+  function renderMonth(wrap) {
+    const title = document.getElementById('cal-title');
+    title.textContent = MONTHS[calDate.getMonth()] + ' ' + calDate.getFullYear();
+
+    const grid = document.createElement('div');
+    grid.className = 'cal-month';
+
+    // Header
+    const head = document.createElement('div');
+    head.className = 'cal-month-head';
+    WDAYS_SHORT.forEach(d => {
+      const c = document.createElement('div');
+      c.className = 'cal-month-head-cell';
+      c.textContent = d;
+      head.appendChild(c);
+    });
+    grid.appendChild(head);
+
+    // Body
+    const body = document.createElement('div');
+    body.className = 'cal-month-body';
+
+    const first = new Date(calDate.getFullYear(), calDate.getMonth(), 1);
+    const last  = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0);
+    const startWD = first.getDay(); // 0=Sun
+    const today = dateStr(new Date());
+    const groups = getGroups();
+
+    // Fill blanks before month start
+    for (let i=0; i<startWD; i++) {
+      const prev = addDays(first, i - startWD);
+      body.appendChild(buildMonthDay(prev, groups, today, true));
+    }
+    // Month days
+    for (let d=1; d<=last.getDate(); d++) {
+      const day = new Date(calDate.getFullYear(), calDate.getMonth(), d);
+      body.appendChild(buildMonthDay(day, groups, today, false));
+    }
+    // Fill blanks after month end
+    const endWD = last.getDay();
+    for (let i=1; i<7-endWD; i++) {
+      const next = addDays(last, i);
+      body.appendChild(buildMonthDay(next, groups, today, true));
     }
 
-    function waitForScheduleX(callback, maxTries = 80) {
-      let tries = 0;
-      function check() {
-        if (window.scheduleX) {
-          console.log('✅ scheduleX geladen, initialisiere Kalender');
-          callback();
-        } else if (tries++ < maxTries) {
-          setTimeout(check, 150);
-        } else {
-          console.error('❌ scheduleX nicht geladen – Kalender kann nicht angezeigt werden.');
-        }
+    grid.appendChild(body);
+    wrap.appendChild(grid);
+  }
+
+  function buildMonthDay(day, groups, today, otherMonth) {
+    const ds = dateStr(day);
+    const cell = document.createElement('div');
+    cell.className = 'cal-month-day' + (otherMonth?' other-month':'') + (ds===today?' today':'');
+    cell.onclick = () => { calView='day'; calDate=new Date(day); renderCal(); };
+
+    const num = document.createElement('div');
+    num.className = 'cal-day-num';
+    num.textContent = day.getDate();
+    cell.appendChild(num);
+
+    // Show events for this day
+    Object.entries(groups).filter(([k]) => k.startsWith(ds)).sort().forEach(([k,cnt]) => {
+      const t = k.split(' ')[1];
+      const ev = document.createElement('div');
+      ev.className = 'cal-day-event ' + eventClass(cnt);
+      ev.textContent = `${t} – ${cnt}/${MAX_SLOT}${cnt>=MAX_SLOT?' VOLL':''}`;
+      ev.onclick = e => { e.stopPropagation(); openResModal(ds, k); };
+      cell.appendChild(ev);
+    });
+
+    // Click on empty area → open modal for this day
+    cell.addEventListener('click', function(e) {
+      if (e.target === cell || e.target === num) openResModal(ds, null);
+    });
+    return cell;
+  }
+
+  // ---- WEEK / DAY VIEW ----
+  function renderWeek(wrap, cols) {
+    const title = document.getElementById('cal-title');
+
+    // Compute start of week (Monday)
+    let start;
+    if (cols === 7) {
+      const wd = calDate.getDay(); // 0=Sun
+      start = addDays(calDate, wd === 0 ? -6 : 1 - wd);
+    } else {
+      start = new Date(calDate);
+    }
+
+    if (cols === 7) {
+      const end = addDays(start, 6);
+      title.textContent = `${start.getDate()}. ${MONTHS[start.getMonth()]} – ${end.getDate()}. ${MONTHS[end.getMonth()]} ${end.getFullYear()}`;
+    } else {
+      title.textContent = `${WDAYS[calDate.getDay()]}, ${calDate.getDate()}. ${MONTHS[calDate.getMonth()]} ${calDate.getFullYear()}`;
+    }
+
+    const days = [];
+    for (let i=0; i<cols; i++) days.push(addDays(start, i));
+
+    const today = dateStr(new Date());
+    const groups = getGroups();
+
+    // Build container
+    const container = document.createElement('div');
+    container.className = 'cal-week';
+
+    // Header row
+    const headRow = document.createElement('div');
+    headRow.className = 'cal-week-head';
+    const gutter0 = document.createElement('div');
+    gutter0.className = 'cal-week-head-gutter';
+    headRow.appendChild(gutter0);
+    days.forEach(d => {
+      const ds = dateStr(d);
+      const c = document.createElement('div');
+      c.className = 'cal-week-head-col' + (ds===today?' today':'');
+      c.innerHTML = `<strong>${WDAYS_SHORT[d.getDay()]}</strong><br>${d.getDate()}. ${MONTHS[d.getMonth()].slice(0,3)}`;
+      headRow.appendChild(c);
+    });
+    container.appendChild(headRow);
+
+    // Body: scrollable area
+    const body = document.createElement('div');
+    body.className = 'cal-week-body';
+
+    // Time gutter
+    const gutter = document.createElement('div');
+    gutter.className = 'cal-time-gutter';
+    for (let h=OPEN_H; h<CLOSE_H; h++) {
+      const lbl = document.createElement('div');
+      lbl.className = 'cal-time-label';
+      lbl.textContent = `${String(h).padStart(2,'0')}:00`;
+      gutter.appendChild(lbl);
+    }
+    body.appendChild(gutter);
+
+    const totalHours = CLOSE_H - OPEN_H;
+
+    days.forEach(d => {
+      const ds = dateStr(d);
+      const col = document.createElement('div');
+      col.className = 'cal-day-col';
+      col.style.minHeight = (totalHours * 48) + 'px';
+
+      // Hour lines + click
+      for (let h=OPEN_H; h<CLOSE_H; h++) {
+        const line = document.createElement('div');
+        line.className = 'cal-hour-line';
+        line.onclick = () => openResModal(ds, slotKey(ds, h, 0));
+        const half = document.createElement('div');
+        half.className = 'cal-half-line';
+        half.style.top = ((h - OPEN_H) * 48 + 24) + 'px';
+        col.appendChild(half);
+        col.appendChild(line);
       }
-      check();
-    }
 
-    function initCalendar() {
-      const SX = scheduleX;
-      const container = document.getElementById('sx-calendar');
-      if (!container) return;
-
-      calInst = SX.createCalendar({
-        locale: 'de-DE',
-        selectedDate: new Date().toISOString().slice(0,10),
-        defaultView: SX.viewWeek.name,
-        views: [SX.viewDay, SX.viewWeek, SX.viewMonthGrid, SX.viewMonthAgenda],
-        dayBoundaries: { start:'10:00', end:'23:00' },
-        plugins: [SX.createEventModalPlugin(), SX.createDragAndDropPlugin()],
-        calendars: {
-          booked:  { colorName:'booked',  lightColors: { main:'#2a3d1e', container:'#c8f0c8', onContainer:'#1a3010' } },
-          partial: { colorName:'partial', lightColors: { main:'#7a5000', container:'#ffe8a0', onContainer:'#5c3a00' } },
-          full:    { colorName:'full',    lightColors: { main:'#8b0000', container:'#ffc0c0', onContainer:'#5a0000' } },
-        },
-        events: buildCalEvents(),
-        callbacks: {
-          onClickDateTime(dt) { openResModal(dt.slice(0,10), snapSlot(dt)); },
-          onClickDate(date)   { calInst.setView(SX.viewDay.name); calInst.setDate(date); },
-          onEventClick(ev)    { if (!isFull(ev.id)) openResModal(ev.id.slice(0,10), ev.id); },
-        },
+      // Events
+      Object.entries(groups).filter(([k]) => k.startsWith(ds)).forEach(([k,cnt]) => {
+        const time = k.split(' ')[1];
+        const [h,m] = time.split(':').map(Number);
+        const topPx = ((h - OPEN_H) * 48) + (m === 30 ? 24 : 0);
+        const ev = document.createElement('div');
+        ev.className = 'cal-week-event ' + eventClass(cnt);
+        ev.style.top = topPx + 'px';
+        ev.style.height = '22px';
+        ev.innerHTML = `<strong>${time}</strong> ${cnt}/${MAX_SLOT}${cnt>=MAX_SLOT?' VOLL':''}`;
+        ev.onclick = e => { e.stopPropagation(); openResModal(ds, k); };
+        col.appendChild(ev);
       });
-      calInst.render(container);
-      renderStats();
-      renderTodayOverview();
-    }
 
-    function snapSlot(dt) {
-      const [date, time] = dt.split(' ');
-      if (!time) return slotKey(date, OPEN_H, 0);
-      const [h, mRaw] = time.split(':').map(Number);
-      return slotKey(date, h, mRaw < 30 ? 0 : 30);
-    }
+      body.appendChild(col);
+    });
 
-    function refreshCal() {
-      if (!calInst) return;
-      calInst.eventsService.getAll().forEach(e => calInst.eventsService.remove(e.id));
-      buildCalEvents().forEach(e => calInst.eventsService.add(e));
-      renderStats();
-      renderTodayOverview();
-    }
+    container.appendChild(body);
+    wrap.appendChild(container);
 
-    function renderStats() {
-      const today = new Date().toISOString().slice(0,10);
-      const todayN = reservations.filter(r => r.slotKey.startsWith(today)).length;
-      const now = new Date();
-      const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay()+6)%7)); mon.setHours(0,0,0,0);
-      const sun = new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59);
-      const weekN = reservations.filter(r => { const d=new Date(r.slotKey.slice(0,10)); return d>=mon&&d<=sun; }).length;
-      const el = document.getElementById('cap-stats');
-      if (!el) return;
-      el.innerHTML = `
-        <div class="cap-stat">🍺 Heute: <strong>${todayN}</strong></div>
-        <div class="cap-stat">📅 Woche: <strong>${weekN}</strong></div>
-        <div class="cap-stat">📊 Gesamt: <strong>${reservations.length}</strong></div>
-        <div class="cap-stat" style="margin-left:auto;display:flex;gap:12px;align-items:center;">
-          <span><span style="display:inline-block;width:10px;height:10px;background:#c8f0c8;border:2px solid #2a3d1e;border-radius:2px;margin-right:4px;"></span>Verfügbar</span>
-          <span><span style="display:inline-block;width:10px;height:10px;background:#ffe8a0;border:2px solid #7a5000;border-radius:2px;margin-right:4px;"></span>Belegt</span>
-          <span><span style="display:inline-block;width:10px;height:10px;background:#ffc0c0;border:2px solid #8b0000;border-radius:2px;margin-right:4px;"></span>Voll</span>
+    // Scroll to current/open hour
+    const scrollH = Math.max(OPEN_H, Math.min(new Date().getHours(), CLOSE_H - 2));
+    body.scrollTop = (scrollH - OPEN_H) * 48;
+  }
+
+  // ---- STATS BAR ----
+  function renderStats() {
+    const today = new Date().toISOString().slice(0,10);
+    const todayN = reservations.filter(r => r.slotKey.startsWith(today)).length;
+    const now = new Date();
+    const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay()+6)%7)); mon.setHours(0,0,0,0);
+    const sun = new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59);
+    const weekN = reservations.filter(r => { const d=new Date(r.slotKey.slice(0,10)); return d>=mon&&d<=sun; }).length;
+    document.getElementById('cap-stats').innerHTML = `
+      <div class="cap-stat">🍺 Heute: <strong>${todayN}</strong></div>
+      <div class="cap-stat">📅 Woche: <strong>${weekN}</strong></div>
+      <div class="cap-stat">📊 Gesamt: <strong>${reservations.length}</strong></div>
+      <div class="cap-stat" style="margin-left:auto;display:flex;gap:12px;align-items:center;">
+        <span><span style="display:inline-block;width:10px;height:10px;background:#c8f0c8;border:2px solid #2a3d1e;border-radius:2px;margin-right:4px;"></span>Verfügbar</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#ffe8a0;border:2px solid #7a5000;border-radius:2px;margin-right:4px;"></span>Belegt</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#ffc0c0;border:2px solid #8b0000;border-radius:2px;margin-right:4px;"></span>Voll</span>
+      </div>`;
+  }
+
+  // ---- TODAY OVERVIEW (sidebar) ----
+  function renderTodayOverview() {
+    const el = document.getElementById('today-overview');
+    if (!el) return;
+    const today = new Date().toISOString().slice(0,10);
+    const nowH = new Date().getHours(), nowM = new Date().getMinutes();
+    let html = `<div style="background:rgba(245,240,232,0.06);border:1px solid rgba(200,168,75,0.2);border-radius:10px;padding:24px;max-height:400px;overflow-y:auto;">
+      <p style="color:var(--gold);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;">Heute – Belegung</p>`;
+    for (let h = OPEN_H; h < CLOSE_H; h++) {
+      [0,30].forEach(m => {
+        const key = slotKey(today, h, m);
+        const cnt = countSlot(key);
+        const past = h < nowH || (h===nowH && m<=nowM);
+        const pct = (cnt/MAX_SLOT)*100;
+        const col = cnt>=MAX_SLOT?'#e55':cnt>=4?'#c8a84b':'#4caf50';
+        html += `<div style="display:flex;align-items:center;gap:10px;padding:4px 0;${past?'opacity:0.35;':''}cursor:pointer;" onclick="openResModal('${today}','${key}')">
+          <span style="color:rgba(245,240,232,0.6);font-size:11px;min-width:40px;">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}</span>
+          <div style="flex:1;height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:${pct}%;background:${col};border-radius:3px;"></div>
+          </div>
+          <span style="color:${col};font-size:11px;font-weight:700;min-width:48px;text-align:right;">${cnt>=MAX_SLOT?'Voll':`${MAX_SLOT-cnt} frei`}</span>
         </div>`;
+      });
     }
+    html += `</div>`;
+    el.innerHTML = html;
+  }
 
-    function renderTodayOverview() {
-      const el = document.getElementById('today-overview');
-      if (!el) return;
-      const today = new Date().toISOString().slice(0,10);
-      const nowH = new Date().getHours(), nowM = new Date().getMinutes();
-      let html = `<div style="background:rgba(245,240,232,0.06);border:1px solid rgba(200,168,75,0.2);border-radius:10px;padding:24px;max-height:400px;overflow-y:auto;">
-        <p style="color:var(--gold);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;">Heute – Belegung</p>`;
-      for (let h = OPEN_H; h < CLOSE_H; h++) {
-        [0,30].forEach(m => {
-          const key = slotKey(today, h, m);
-          const cnt = countSlot(key);
-          const past = h < nowH || (h===nowH && m<=nowM);
-          const pct = (cnt/MAX_SLOT)*100;
-          const col = cnt>=MAX_SLOT?'#e55':cnt>=4?'#c8a84b':'#4caf50';
-          html += `<div style="display:flex;align-items:center;gap:10px;padding:4px 0;${past?'opacity:0.35':''}cursor:pointer;" onclick="openResModal('${today}','${key}')">
-            <span style="color:rgba(245,240,232,0.6);font-size:11px;min-width:40px;">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}</span>
-            <div style="flex:1;height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;">
-              <div style="height:100%;width:${pct}%;background:${col};border-radius:3px;"></div>
-            </div>
-            <span style="color:${col};font-size:11px;font-weight:700;min-width:48px;text-align:right;">${cnt>=MAX_SLOT?'Voll':`${MAX_SLOT-cnt} frei`}</span>
-          </div>`;
-        });
-      }
-      html += `</div>`;
-      el.innerHTML = html;
+  // ---- RESERVATION MODAL ----
+  function openResModal(ds, preSlot) {
+    modalDateStr = ds;
+    const parts = ds.split('-');
+    const d = new Date(parts[0], parts[1]-1, parts[2]);
+    document.getElementById('res-modal-sub').textContent = `${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+
+    const sel = document.getElementById('f-time');
+    sel.innerHTML = '<option value="">Bitte wählen *</option>';
+    for (let h = OPEN_H; h < CLOSE_H; h++) {
+      [0,30].forEach(m => {
+        const sk = slotKey(ds, h, m);
+        const free = MAX_SLOT - countSlot(sk);
+        const dis = free<=0?'disabled':'';
+        sel.innerHTML += `<option value="${sk}" ${dis}>${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} – ${free<=0?'Ausgebucht':`${free}/${MAX_SLOT} frei`}</option>`;
+      });
     }
+    if (preSlot) for (const o of sel.options) { if (o.value===preSlot){o.selected=true;break;} }
+    updateCapInfo(sel.value);
+    sel.onchange = () => updateCapInfo(sel.value);
 
-    // Res Modal (global zugänglich machen)
-    window.openResModal = function(dateStr, preSlot) {
-      const parts = dateStr.split('-');
-      const d = new Date(parts[0], parts[1]-1, parts[2]);
-      document.getElementById('res-modal-sub').textContent = `${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    ['f-name','f-email','f-phone','f-wishes'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('f-persons').value='';
+    document.getElementById('res-overlay').classList.add('open');
+  }
 
-      const sel = document.getElementById('f-time');
-      sel.innerHTML = '<option value="">Bitte wählen *</option>';
-      for (let h = OPEN_H; h < CLOSE_H; h++) {
-        [0,30].forEach(m => {
-          const sk = slotKey(dateStr, h, m);
-          const free = MAX_SLOT - countSlot(sk);
-          const dis = free<=0?'disabled':'';
-          sel.innerHTML += `<option value="${sk}" ${dis}>${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} – ${free<=0?'Ausgebucht':`${free}/${MAX_SLOT} frei`}</option>`;
-        });
-      }
-      if (preSlot) for (const o of sel.options) { if (o.value===preSlot){o.selected=true;break;} }
-      updateCapInfo(sel.value);
-      sel.onchange = () => updateCapInfo(sel.value);
-
-      ['f-name','f-email','f-phone','f-wishes'].forEach(id => document.getElementById(id).value='');
-      document.getElementById('f-persons').value='';
-      document.getElementById('res-overlay').classList.add('open');
-    };
-
-    function updateCapInfo(key) {
-      const el = document.getElementById('res-cap-info');
-      if (!key) { el.innerHTML=''; return; }
-      const free = MAX_SLOT - countSlot(key);
-      const t = key.split(' ')[1];
-      if (free<=0) {
-        el.className='res-cap-info full';
-        el.innerHTML=`❌ ${t} Uhr – Dieser Slot ist vollständig ausgebucht.`;
-        document.getElementById('res-submit-btn').disabled=true;
-      } else {
-        el.className='res-cap-info';
-        el.innerHTML=`🍺 ${t} Uhr – <strong>${free} von ${MAX_SLOT} Tischen</strong> noch verfügbar`;
-        document.getElementById('res-submit-btn').disabled=false;
-      }
+  function updateCapInfo(key) {
+    const el = document.getElementById('res-cap-info');
+    if (!key) { el.innerHTML=''; return; }
+    const free = MAX_SLOT - countSlot(key);
+    const t = key.split(' ')[1];
+    if (free<=0) {
+      el.className='res-cap-info full';
+      el.innerHTML=`❌ ${t} Uhr – Dieser Slot ist vollständig ausgebucht.`;
+      document.getElementById('res-submit-btn').disabled=true;
+    } else {
+      el.className='res-cap-info';
+      el.innerHTML=`🍺 ${t} Uhr – <strong>${free} von ${MAX_SLOT} Tischen</strong> noch verfügbar`;
+      document.getElementById('res-submit-btn').disabled=false;
     }
+  }
 
-    window.closeResModal = function() {
-      document.getElementById('res-overlay').classList.remove('open');
-    };
+  function closeResModal() {
+    document.getElementById('res-overlay').classList.remove('open');
+  }
 
-    window.submitReservation = function() {
-      const name=document.getElementById('f-name').value.trim();
-      const email=document.getElementById('f-email').value.trim();
-      const persons=document.getElementById('f-persons').value;
-      const slot=document.getElementById('f-time').value;
-      if (!name||!email||!persons||!slot){alert('Bitte alle Pflichtfelder (*) ausfüllen.');return;}
-      if (isFull(slot)){alert('Dieser Slot ist ausgebucht. Bitte andere Uhrzeit wählen.');return;}
-      const r={id:Date.now().toString(),slotKey:slot,name,email,phone:document.getElementById('f-phone').value,persons,wishes:document.getElementById('f-wishes').value,createdAt:new Date().toISOString()};
-      reservations.push(r); save(); closeResModal(); refreshCal();
-      const [date,time]=slot.split(' ');
-      const parts=date.split('-'); const d=new Date(parts[0],parts[1]-1,parts[2]);
-      alert(`✅ Reservierung bestätigt!\n\n🍺 ${name}\n📅 ${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} um ${time} Uhr\n👥 ${persons}\n\nWir freuen uns auf Sie!`);
-    };
+  function submitReservation() {
+    const name=document.getElementById('f-name').value.trim();
+    const email=document.getElementById('f-email').value.trim();
+    const persons=document.getElementById('f-persons').value;
+    const slot=document.getElementById('f-time').value;
+    if (!name||!email||!persons||!slot){alert('Bitte alle Pflichtfelder (*) ausfüllen.');return;}
+    if (isFull(slot)){alert('Dieser Slot ist ausgebucht. Bitte andere Uhrzeit wählen.');return;}
+    const r={id:Date.now().toString(),slotKey:slot,name,email,phone:document.getElementById('f-phone').value,persons,wishes:document.getElementById('f-wishes').value,createdAt:new Date().toISOString()};
+    reservations.push(r); save(); closeResModal();
+    renderCal(); renderStats(); renderTodayOverview();
+    const [date,time]=slot.split(' ');
+    const parts=date.split('-'); const d=new Date(parts[0],parts[1]-1,parts[2]);
+    alert(`✅ Reservierung bestätigt!\n\n🍺 ${name}\n📅 ${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} um ${time} Uhr\n👥 ${persons}\n\nWir freuen uns auf Sie!`);
+  }
 
-    document.getElementById('res-overlay').addEventListener('click', function(e){ if(e.target===this) closeResModal(); });
+  document.getElementById('res-overlay').addEventListener('click', function(e){ if(e.target===this) closeResModal(); });
 
-    // Starte die Kalenderinitialisierung, sobald scheduleX da ist
-    waitForScheduleX(initCalendar);
-  })();
+  // Init
+  renderCal();
+  renderStats();
+  renderTodayOverview();
   </script>
 </body>
 </html>
