@@ -342,6 +342,19 @@
       .dash-grid { grid-template-columns: 1fr; }
       .settings-grid { grid-template-columns: 1fr; }
     }
+   @media (max-width: 600px) {
+     .sidebar { display: none; } /* Sidebar auf Handy ausblenden */
+     .main { margin-left: 0; padding: 20px 12px; }
+     .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+     .dash-grid { grid-template-columns: 1fr; }
+     .settings-grid { grid-template-columns: 1fr; }
+     .filter-bar { flex-direction: column; align-items: stretch; }
+     .res-table { display: block; overflow-x: auto; white-space: nowrap; }
+     .form-row { grid-template-columns: 1fr; gap: 12px; }
+     #cal-container { overflow-x: auto; }
+     .scal-toolbar { flex-direction: column; gap: 10px; align-items: stretch; }
+     .scal-week-body { overflow-x: auto; }
+   }
   </style>
 </head>
 <body>
