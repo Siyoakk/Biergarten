@@ -299,15 +299,18 @@
       gap: 8px;
       opacity: 0;
       animation: fadeUp 1s 1.2s forwards;
-    }
-    .scroll-arrow {
-      width: 24px;
-      height: 24px;
-      border-right: 2px solid var(--gold);
-      border-bottom: 2px solid var(--gold);
-      transform: rotate(45deg);
-      animation: bounce 1.5s infinite;
-    }
+      width: auto;
+      min-width: 80px;
+      text-align: center;
+      white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .hero-scroll-hint {
+    min-width: 100px;  /* etwas breiter, damit der Text nicht umbricht */
+    white-space: normal; /* bei sehr kleinen Geräten darf umbrochen werden */
+  }
+}
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(30px); }
