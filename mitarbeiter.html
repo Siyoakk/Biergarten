@@ -635,43 +635,55 @@ function renderDashboard() {
   slotsEl.innerHTML = shtml || '<p style="color:rgba(245,240,232,0.3);font-size:13px;padding:20px 0;">Keine Buchungen heute.</p>';
 }
 
-// ---- STAFF CALENDAR ----
 function renderStaffCalendar() {
-  if (!window.ScheduleX) { setTimeout(renderStaffCalendar, 300); return; }
-  const SX = ScheduleX;
   const container = document.getElementById('cal-container');
+  if (!container) return;
   container.innerHTML = '';
 
-  const groups = {};
-  reservations.forEach(r => { if (!groups[r.slotKey]) groups[r.slotKey]=0; groups[r.slotKey]++; });
-  const events = Object.entries(groups).map(([key, cnt]) => {
-    const [date, time] = key.split(' ');
-    const [h, m] = time.split(':').map(Number);
-    const endH = m===30?h+1:h, endM = m===30?0:30;
-    return {
-      id: key,
-      title: `${cnt}/${MAX_SLOT} Tische${cnt>=MAX_SLOT?' · VOLL':''}`,
-      start: key,
-      end: `${date} ${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`,
-      calendarId: cnt>=MAX_SLOT?'full':cnt>=4?'partial':'booked',
-    };
-  });
+  // Warten, bis scheduleX da ist
+  let tries = 0;
+  function init() {
+    if (window.scheduleX) {
+      const SX = scheduleX;
 
-  staffCal = SX.createCalendar({
-    locale: 'de-DE',
-    selectedDate: new Date().toISOString().slice(0,10),
-    defaultView: SX.viewWeek.name,
-    views: [SX.viewDay, SX.viewWeek, SX.viewMonthGrid, SX.viewMonthAgenda],
-    dayBoundaries: { start:'10:00', end:'23:00' },
-    plugins: [SX.createEventModalPlugin()],
-    calendars: {
-      booked:  { colorName:'booked',  lightColors:{ main:'#2a5f1e', container:'#d4f7d4', onContainer:'#1a3d10' } },
-      partial: { colorName:'partial', lightColors:{ main:'#7a5000', container:'#fff0b3', onContainer:'#5c3800' } },
-      full:    { colorName:'full',    lightColors:{ main:'#8b0000', container:'#ffd0d0', onContainer:'#5a0000' } },
-    },
-    events,
-  });
-  staffCal.render(container);
+      const groups = {};
+      reservations.forEach(r => { if (!groups[r.slotKey]) groups[r.slotKey]=0; groups[r.slotKey]++; });
+      const events = Object.entries(groups).map(([key, cnt]) => {
+        const [date, time] = key.split(' ');
+        const [h, m] = time.split(':').map(Number);
+        const endH = m===30?h+1:h, endM = m===30?0:30;
+        return {
+          id: key,
+          title: `${cnt}/${MAX_SLOT} Tische${cnt>=MAX_SLOT?' · VOLL':''}`,
+          start: key,
+          end: `${date} ${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`,
+          calendarId: cnt>=MAX_SLOT?'full':cnt>=4?'partial':'booked',
+        };
+      });
+
+      staffCal = SX.createCalendar({
+        locale: 'de-DE',
+        selectedDate: new Date().toISOString().slice(0,10),
+        defaultView: SX.viewWeek.name,
+        views: [SX.viewDay, SX.viewWeek, SX.viewMonthGrid, SX.viewMonthAgenda],
+        dayBoundaries: { start:'10:00', end:'23:00' },
+        plugins: [SX.createEventModalPlugin()],
+        calendars: {
+          booked:  { colorName:'booked',  lightColors:{ main:'#2a5f1e', container:'#d4f7d4', onContainer:'#1a3d10' } },
+          partial: { colorName:'partial', lightColors:{ main:'#7a5000', container:'#fff0b3', onContainer:'#5c3800' } },
+          full:    { colorName:'full',    lightColors:{ main:'#8b0000', container:'#ffd0d0', onContainer:'#5a0000' } },
+        },
+        events,
+      });
+      staffCal.render(container);
+      console.log('✅ Mitarbeiterkalender geladen.');
+    } else if (tries++ < 80) {
+      setTimeout(init, 100);
+    } else {
+      container.innerHTML = '<p style="color:#ff8080;padding:40px;text-align:center;">❌ Kalender konnte nicht geladen werden (scheduleX fehlt). Bitte Seite neu laden.</p>';
+    }
+  }
+  init();
 }
 
 // ---- RESERVATIONS LIST ----
