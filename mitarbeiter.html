@@ -639,10 +639,14 @@ function renderDashboard() {
 
 // ---- STAFF CALENDAR ----
 function renderStaffCalendar() {
+  // 🔽 GLOBALEN NAMEN KORRIGIEREN
   if (!window.scheduleX) { setTimeout(renderStaffCalendar, 300); return; }
   const SX = scheduleX;
+  
   const container = document.getElementById('cal-container');
   container.innerHTML = '';
+  // …
+}
 
   const groups = {};
   reservations.forEach(r => { if (!groups[r.slotKey]) groups[r.slotKey]=0; groups[r.slotKey]++; });
