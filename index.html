@@ -22,13 +22,6 @@
       --text-dark: #2c1a0e;
       --radius: 4px;
     }
-    html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden;
-}
-    
 
     /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -783,75 +776,6 @@
       .footer-inner { flex-direction: column; text-align: center; }
       .nav-cta { display: none; }
     }
-    /* ===== ERWEITERTE RESPONSIVE REGELN ===== */
-@media (max-width: 900px) {
-  .container { max-width: 100%; padding: 0 20px; }
-  .about-grid, .hours-grid, .kontakt-grid, .impressum-grid { grid-template-columns: 1fr; gap: 40px; }
-  .features-grid { grid-template-columns: 1fr 1fr; }
-  .menu-grid { grid-template-columns: 1fr; }
-  .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-  .gallery-item:first-child { grid-row: span 1; }
-  #sx-calendar, .cal-week-body { overflow-x: auto; }
-}
-
-@media (max-width: 600px) {
-  html, body { overflow-x: hidden; width: 100%; }
-  section { padding: 60px 16px; }
-  .container { padding: 0 12px; }
-  
-  /* Hero */
-  .hero-title { font-size: 2.2rem; }
-  .hero-buttons { flex-direction: column; gap: 12px; align-items: center; }
-  .btn-primary, .btn-outline { display: block; width: 100%; text-align: center; }
-  
-  /* Navigation */
-  nav { padding: 12px 16px; }
-  .nav-logo { font-size: 16px; }
-  .dropdown-btn { padding: 6px 10px; }
-  
-  /* About */
-  .about-image-wrap::before { display: none; }
-  .about-badge { width: 80px; height: 80px; }
-  .about-badge .year { font-size: 20px; }
-  
-  /* Features */
-  .features-grid { grid-template-columns: 1fr; gap: 20px; }
-  .feature-card { padding: 24px 20px; }
-  
-  /* Speisekarte */
-  .menu-tabs { gap: 4px; }
-  .menu-tab { padding: 6px 12px; font-size: 11px; }
-  .menu-item { flex-direction: column; align-items: flex-start; padding: 16px; }
-  .menu-item-price { margin-top: 6px; }
-  
-  /* Galerie */
-  .gallery-grid { grid-template-columns: 1fr; }
-  
-  /* Kalender (wichtig für dein Problem) */
-  #sx-calendar { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .cal-toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
-  .cal-view-btns { justify-content: center; }
-  .cal-month-body { min-width: 280px; }
-  .cal-week-body { overflow-x: auto; }
-  .cal-week-head { min-width: 500px; }
-  .cal-day-col { min-width: 80px; }
-  
-  /* Kapazitätsanzeige */
-  .cap-bar-wrap { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .cap-stat { width: 100%; }
-  
-  /* Kontakt */
-  .kontakt-details { gap: 16px; }
-  .map-placeholder { height: 220px; }
-  
-  /* Footer */
-  .footer-inner { flex-direction: column; text-align: center; gap: 12px; }
-  .footer-links { flex-wrap: wrap; justify-content: center; }
-  
-  /* Reservierungsmodal */
-  .res-modal { padding: 24px; width: 95%; }
-  .res-row { grid-template-columns: 1fr; gap: 8px; }
-}
   </style>
 </head>
 <body>
@@ -1161,152 +1085,84 @@
     </div>
   </section>
 
+  <!-- Cal.com Widget Script -->
+  <script type="text/javascript">
+    (function (C, A, L) {
+      let p = function (a, ar) { a.q.push(ar); };
+      let d = C.document;
+      C.Cal = C.Cal || function () {
+        let cal = C.Cal;
+        let ar = arguments;
+        if (!cal.loaded) {
+          cal.ns = {};
+          cal.q = cal.q || [];
+          d.head.appendChild(d.createElement("script")).src = A;
+          cal.loaded = true;
+        }
+        if (ar[0] === L) {
+          const api = function () { p(api, arguments); };
+          const namespace = ar[1];
+          api.q = api.q || [];
+          if (typeof namespace === "string") {
+            cal.ns[namespace] = cal.ns[namespace] || api;
+            p(cal.ns[namespace], ar);
+            p(cal, ["-", namespace, api]);
+          } else {
+            p(cal, ar);
+            p(api, ar);
+          }
+          return;
+        }
+        p(cal, ar);
+      };
+    })(window, "https://app.cal.com/embed/embed.js", "init");
 
-  <style>
-    /* ===== KONTAKT / KALENDER SECTION ===== */
-    #kontakt { background:var(--green-dark); position:relative; overflow:hidden; }
-    #kontakt::before { content:''; position:absolute; inset:0; background:url('https://www.transparenttextures.com/patterns/dark-wood.png'); opacity:0.1; }
-    .kalender-wrap { position:relative; z-index:1; }
-    .kalender-header { text-align:center; margin-bottom:50px; }
-    .kalender-header .section-divider { margin:0 auto 24px; }
+    Cal("init", "tischreservierung", { origin: "https://cal.eu" });
 
-    /* ===== CUSTOM CALENDAR ===== */
-    #sx-calendar {
-      width:100%; border-radius:10px; overflow:hidden;
-      box-shadow:0 20px 60px rgba(0,0,0,0.4);
-      border:1px solid rgba(200,168,75,0.3);
-      background:#fff; font-family:'Lato',sans-serif;
-    }
-    .cal-toolbar {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 18px; background:#2a3d1e; flex-wrap:wrap; gap:10px;
-    }
-    .cal-toolbar-center { display:flex; align-items:center; gap:10px; }
-    .cal-nav-btn {
-      background:rgba(200,168,75,0.15); border:1px solid rgba(200,168,75,0.4);
-      color:#c8a84b; border-radius:6px; padding:6px 12px; cursor:pointer;
-      font-size:14px; transition:background .2s;
-    }
-    .cal-nav-btn:hover { background:rgba(200,168,75,0.35); }
-    .cal-title { color:#fff; font-family:'Playfair Display',serif; font-size:18px; min-width:180px; text-align:center; }
-    .cal-view-btns { display:flex; gap:6px; }
-    .cal-view-btn {
-      background:rgba(200,168,75,0.1); border:1px solid rgba(200,168,75,0.25);
-      color:rgba(245,240,232,0.65); border-radius:6px; padding:6px 14px;
-      cursor:pointer; font-size:12px; letter-spacing:.5px; transition:all .2s;
-      font-family:'Lato',sans-serif;
-    }
-    .cal-view-btn.active, .cal-view-btn:hover {
-      background:#c8a84b; color:#2a3d1e; font-weight:700; border-color:#c8a84b;
-    }
-    /* Month grid */
-    .cal-month { padding:0; }
-    .cal-month-head {
-      display:grid; grid-template-columns:repeat(7,1fr);
-      background:#2a3d1e;
-    }
-    .cal-month-head-cell {
-      padding:8px 0; text-align:center; font-size:11px;
-      letter-spacing:1px; text-transform:uppercase; color:#c8a84b;
-    }
-    .cal-month-body { display:grid; grid-template-columns:repeat(7,1fr); }
-    .cal-month-day {
-      min-height:90px; border-right:1px solid #e8e0d0; border-bottom:1px solid #e8e0d0;
-      padding:6px; cursor:pointer; transition:background .15s; position:relative;
-    }
-    .cal-month-day:hover { background:#f9f5ed; }
-    .cal-month-day.today { background:#fff8ec; }
-    .cal-month-day.other-month { background:#f5f0e8; opacity:.55; }
-    .cal-day-num {
-      font-size:13px; font-weight:700; color:#2c1a0e; margin-bottom:4px;
-      width:24px; height:24px; display:flex; align-items:center; justify-content:center; border-radius:50%;
-    }
-    .cal-month-day.today .cal-day-num { background:#2a3d1e; color:#c8a84b; }
-    .cal-day-event {
-      font-size:11px; padding:2px 5px; border-radius:3px; margin-bottom:2px;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer;
-    }
-    .cal-day-event.booked { background:#c8f0c8; color:#1a3010; border-left:3px solid #2a3d1e; }
-    .cal-day-event.partial { background:#ffe8a0; color:#5c3a00; border-left:3px solid #7a5000; }
-    .cal-day-event.full { background:#ffc0c0; color:#5a0000; border-left:3px solid #8b0000; }
-    /* Week / Day grid */
-    .cal-week { display:flex; flex-direction:column; }
-    .cal-week-head { display:flex; border-bottom:2px solid #e0d8c8; }
-    .cal-week-head-gutter { width:52px; flex-shrink:0; border-right:1px solid #e0d8c8; background:#f5f0e8; }
-    .cal-week-head-col {
-      flex:1; padding:8px 4px; text-align:center; font-size:12px;
-      color:#2a3d1e; border-right:1px solid #e0d8c8; background:#f5f0e8;
-    }
-    .cal-week-head-col.today { background:#2a3d1e; color:#c8a84b; font-weight:700; border-radius:0; }
-    .cal-week-body { display:flex; overflow-y:auto; max-height:600px; }
-    .cal-time-gutter { width:52px; flex-shrink:0; border-right:1px solid #e0d8c8; }
-    .cal-time-label {
-      height:48px; display:flex; align-items:flex-start; justify-content:center;
-      font-size:11px; color:#888; padding-top:2px;
-    }
-    .cal-day-col {
-      flex:1; position:relative; border-right:1px solid #e0d8c8; min-height:624px;
-    }
-    .cal-hour-line {
-      height:48px; border-bottom:1px solid #eee; cursor:pointer; transition:background .15s;
-    }
-    .cal-hour-line:hover { background:rgba(200,168,75,0.08); }
-    .cal-half-line {
-      position:absolute; left:0; right:0;
-      border-bottom:1px dashed #f0e8d8; pointer-events:none;
-    }
-    .cal-week-event {
-      position:absolute; left:2px; right:2px;
-      border-radius:4px; padding:2px 5px; font-size:11px;
-      cursor:pointer; overflow:hidden; z-index:2; line-height:1.3;
-      transition:filter .15s;
-    }
-    .cal-week-event:hover { filter:brightness(.92); }
-    .cal-week-event.booked { background:#c8f0c8; color:#1a3010; border-left:3px solid #2a3d1e; }
-    .cal-week-event.partial { background:#ffe8a0; color:#5c3a00; border-left:3px solid #7a5000; }
-    .cal-week-event.full { background:#ffc0c0; color:#5a0000; border-left:3px solid #8b0000; }
+    Cal.ns.tischreservierung("inline", {
+      elementOrSelector: "#cal-booking-widget",
+      calLink: "biergarten/tischreservierung",
+      layout: "month_view",
+      config: {
+        theme: "light",
+        brandColor: "#c8a84b",
+      }
+    });
 
-    /* Stats bar */
-    .cap-bar-wrap { display:flex; gap:16px; padding:14px 20px; background:rgba(200,168,75,0.08); border:1px solid rgba(200,168,75,0.2); border-radius:8px; flex-wrap:wrap; margin-bottom:20px; }
-    .cap-stat { display:flex; align-items:center; gap:6px; font-size:13px; color:rgba(245,240,232,0.8); }
-    .cap-stat strong { color:var(--gold); font-size:16px; }
+    Cal.ns.tischreservierung("ui", {
+      theme: "light",
+      hideEventTypeDetails: false,
+      layout: "month_view",
+      cssVarsPerTheme: {
+        light: {
+          "cal-brand": "#c8a84b",
+          "cal-text": "#2c1a0e",
+          "cal-border": "#e8c96a",
+          "cal-bg": "#f5f0e8",
+        }
+      }
+    });
+  </script>
 
-    /* Reservation modal */
-    .res-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center; }
-    .res-overlay.open { display:flex; }
-    .res-modal { background:var(--cream); border-radius:12px; padding:36px; max-width:500px; width:92%; position:relative; border-top:4px solid var(--gold); box-shadow:0 24px 70px rgba(0,0,0,0.5); animation:popIn .3s ease; max-height:90vh; overflow-y:auto; }
-    @keyframes popIn { from{opacity:0;transform:scale(.95) translateY(-16px)} to{opacity:1;transform:scale(1) translateY(0)} }
-    .res-modal h3 { font-family:'Playfair Display',serif; font-size:22px; color:var(--green-dark); margin-bottom:4px; }
-    .res-modal-sub { color:var(--gold); font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
-    .res-close { position:absolute; top:14px; right:18px; background:none; border:none; font-size:22px; cursor:pointer; color:#999; }
-    .res-close:hover { color:var(--brown-dark); }
-    .res-field { margin-bottom:13px; }
-    .res-field label { display:block; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:5px; }
-    .res-field input, .res-field select { width:100%; padding:11px 14px; border:1px solid #d0ccc0; border-radius:6px; font-family:'Lato',sans-serif; font-size:14px; color:var(--brown-dark); background:#fff; outline:none; transition:border-color .2s; }
-    .res-field input:focus, .res-field select:focus { border-color:var(--gold); }
-    .res-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    .res-cap-info { background:rgba(200,168,75,0.1); border:1px solid rgba(200,168,75,0.3); border-radius:6px; padding:10px 14px; font-size:13px; color:#5a3a10; margin-bottom:14px; }
-    .res-cap-info.full { background:rgba(200,0,0,0.08); border-color:rgba(200,0,0,0.3); color:#7a0000; }
-    .res-submit { width:100%; padding:14px; background:var(--green-dark); color:var(--gold); border:none; border-radius:6px; font-family:'Lato',sans-serif; font-weight:700; font-size:14px; letter-spacing:1px; cursor:pointer; transition:background .2s; margin-top:6px; }
-    .res-submit:hover { background:var(--green-mid); }
-    .res-submit:disabled { background:#aaa; color:#fff; cursor:not-allowed; }
-  </style>
-
-  <!-- KONTAKT / RESERVIERUNG -->
+  <!-- KONTAKT -->
   <section id="kontakt">
-    <div class="container kalender-wrap">
-      <div class="kalender-header reveal">
-        <span class="section-label" style="color:var(--gold-light)">Tisch reservieren</span>
-        <h2 class="section-title" style="color:#fff;">Reservierungskalender</h2>
-        <div class="section-divider"></div>
-        <p class="section-text light" style="margin:0 auto;text-align:center;max-width:560px;">
-          Wähle Datum &amp; Uhrzeit – bis zu 6 Tische pro halbem Stunde buchbar. Belegte Slots sind direkt sichtbar.
+    <div class="container" style="position:relative;z-index:1">
+
+      <!-- Intro Header zentriert -->
+      <div class="reveal" style="text-align:center; margin-bottom: 60px;">
+        <span class="section-label" style="color: var(--gold-light)">Tisch reservieren</span>
+        <h2 class="section-title light" style="color:#fff;">Jetzt direkt online buchen</h2>
+        <div class="section-divider" style="margin: 0 auto 24px;"></div>
+        <p class="section-text light" style="margin: 0 auto; text-align:center; max-width:560px;">
+          Wähle einfach Datum und Uhrzeit – deine Reservierung wird sofort bestätigt und unser Team sieht sie direkt in unserem System.
         </p>
       </div>
-      <div class="cap-bar-wrap reveal" id="cap-stats"></div>
-      <div class="kontakt-grid" style="margin-bottom:40px;">
+
+      <div class="kontakt-grid">
+
+        <!-- Linke Spalte: Kontaktinfos -->
         <div class="reveal-left">
-          <span class="section-label" style="color:var(--gold-light)">Kontakt &amp; Anfahrt</span>
+          <span class="section-label" style="color: var(--gold-light)">Kontakt & Anfahrt</span>
           <h2 class="section-title light">Wir freuen uns<br>auf Sie!</h2>
           <div class="section-divider"></div>
           <div class="kontakt-details">
@@ -1321,89 +1177,102 @@
               <span class="kontakt-detail-icon">📞</span>
               <div class="kontakt-detail-text">
                 <p class="kontakt-detail-label">Telefon</p>
-                <p class="kontakt-detail-value"><a href="tel:+4989123456" style="color:var(--cream);text-decoration:none">+49 89 123 456</a></p>
+                <p class="kontakt-detail-value">
+                  <a href="tel:+4989123456" style="color:var(--cream);text-decoration:none">+49 89 123 456</a>
+                </p>
               </div>
             </div>
             <div class="kontakt-detail">
               <span class="kontakt-detail-icon">✉️</span>
               <div class="kontakt-detail-text">
                 <p class="kontakt-detail-label">E-Mail</p>
-                <p class="kontakt-detail-value"><a href="mailto:siyo_99@hotmail.de" style="color:var(--cream);text-decoration:none">siyo_99@hotmail.de</a></p>
+                <p class="kontakt-detail-value">
+                  <a href="mailto:siyo_99@hotmail.de" style="color:var(--cream);text-decoration:none">siyo_99@hotmail.de</a>
+                </p>
               </div>
             </div>
             <div class="kontakt-detail">
               <span class="kontakt-detail-icon">🕐</span>
               <div class="kontakt-detail-text">
                 <p class="kontakt-detail-label">Öffnungszeiten</p>
-                <p class="kontakt-detail-value">Di–Do: 11–22 Uhr<br>Fr–Sa: 10–23 Uhr<br>So &amp; Feiertage: 10–22 Uhr<br><span style="color:rgba(245,240,232,0.5);font-size:12px;">Mo: Ruhetag</span></p>
+                <p class="kontakt-detail-value">
+                  Di – Do: 11–22 Uhr<br>
+                  Fr – Sa: 10–23 Uhr<br>
+                  So & Feiertage: 10–22 Uhr<br>
+                  <span style="color:rgba(245,240,232,0.5); font-size:12px;">Mo: Ruhetag</span>
+                </p>
               </div>
             </div>
           </div>
-          <div style="margin-top:28px;padding:18px 20px;background:rgba(200,168,75,0.1);border-left:3px solid var(--gold);border-radius:4px;">
-            <p style="color:var(--gold);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;">✅ So funktioniert es</p>
-            <p style="color:rgba(245,240,232,0.75);font-size:13px;line-height:1.7;">Klicke auf einen freien Slot → Formular ausfüllen → sofort bestätigt. Team sieht alles live im <a href="mitarbeiter.html" style="color:var(--gold);">Mitarbeiterportal →</a></p>
+
+          <!-- Hinweis-Box -->
+          <div style="
+            margin-top: 36px;
+            padding: 20px 22px;
+            background: rgba(200,168,75,0.1);
+            border-left: 3px solid var(--gold);
+            border-radius: var(--radius);
+          ">
+            <p style="color: var(--gold); font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">
+              ✅ Sofortbestätigung
+            </p>
+            <p style="color:rgba(245,240,232,0.75); font-size:13px; line-height:1.7;">
+              Nach deiner Buchung erhältst du automatisch eine Bestätigungs-E-Mail. Unser Team sieht deine Reservierung sofort in unserem Kalender.
+            </p>
           </div>
         </div>
-        <div class="reveal-right" id="today-overview"></div>
-      </div>
-      <!-- Schedule-X Kalender -->
-      <div class="reveal">
-        <div id="sx-calendar"></div>
+
+        <!-- Rechte Spalte: Cal.com Widget -->
+        <div class="reveal-right">
+          <div class="calendly-wrap">
+            <div id="cal-booking-widget" style="width:100%; height:700px; overflow:scroll;"></div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- BUCHUNGS-MODAL -->
-  <div class="res-overlay" id="res-overlay">
-    <div class="res-modal">
-      <button class="res-close" onclick="closeResModal()">✕</button>
-      <h3>Tisch reservieren</h3>
-      <p class="res-modal-sub" id="res-modal-sub"></p>
-      <div class="res-cap-info" id="res-cap-info"></div>
-      <div class="res-row">
-        <div class="res-field"><label>Name *</label><input id="f-name" placeholder="Max Mustermann" /></div>
-        <div class="res-field"><label>E-Mail *</label><input id="f-email" type="email" placeholder="mail@beispiel.de" /></div>
-      </div>
-      <div class="res-row">
-        <div class="res-field"><label>Telefon</label><input id="f-phone" type="tel" placeholder="+49 89 …" /></div>
-        <div class="res-field"><label>Personen *</label>
-          <select id="f-persons">
-            <option value="">Bitte wählen</option>
-            <option>1 Person</option><option>2 Personen</option><option>3 Personen</option>
-            <option>4 Personen</option><option>5 Personen</option><option>6+ Personen</option>
-          </select>
-        </div>
-      </div>
-      <div class="res-field"><label>Uhrzeit *</label><select id="f-time"></select></div>
-      <div class="res-field"><label>Besondere Wünsche</label><input id="f-wishes" placeholder="Geburtstag, Kinderstuhl …" /></div>
-      <button class="res-submit" id="res-submit-btn" onclick="submitReservation()">🍺 Jetzt verbindlich reservieren</button>
-    </div>
-  </div>
-
   <!-- IMPRESSUM -->
-  <section id="impressum" style="background:#1a2a0e;padding:80px 40px;">
+  <section id="impressum">
     <div class="container">
       <div class="reveal">
         <span class="section-label">Rechtliches</span>
-        <h2 class="section-title" style="color:var(--gold);font-family:'Playfair Display',serif;">Impressum</h2>
+        <h2 class="section-title light" style="color: var(--gold)">Impressum</h2>
         <div class="section-divider"></div>
       </div>
       <div class="impressum-grid">
         <div class="impressum-block reveal delay-1">
           <h3>Angaben gemäß § 5 TMG</h3>
-          <p>Biergarten „Zum Goldenen Hopfen"<br>Max Mustermann<br>Biergartenstraße 12<br>80333 München<br><br>Telefon: +49 89 123 456<br>E-Mail: siyo_99@hotmail.de</p>
+          <p>
+            Biergarten „Zum Goldenen Hopfen"<br>
+            Max Mustermann<br>
+            Biergartenstraße 12<br>
+            80333 München<br><br>
+            Telefon: +49 89 123 456<br>
+            E-Mail: info@goldener-hopfen.de
+          </p>
         </div>
         <div class="impressum-block reveal delay-2">
           <h3>Verantwortlich für den Inhalt</h3>
-          <p>Max Mustermann<br>(Adresse wie oben)<br><br>Umsatzsteuer-ID gemäß § 27a UStG: DE123456789</p>
+          <p>
+            Max Mustermann<br>
+            (Adresse wie oben)<br><br>
+            Umsatzsteuer-Identifikationsnummer<br>
+            gemäß § 27a UStG: DE123456789
+          </p>
         </div>
         <div class="impressum-block reveal delay-3">
           <h3>Haftungsausschluss</h3>
-          <p>Die Inhalte dieser Webseite wurden mit größtmöglicher Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität können wir keine Gewähr übernehmen.</p>
+          <p>
+            Die Inhalte dieser Webseite wurden mit größtmöglicher Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir keine Gewähr übernehmen.
+          </p>
         </div>
         <div class="impressum-block reveal delay-4">
           <h3>Datenschutz</h3>
-          <p>Personenbezogene Daten werden nur im erforderlichen Umfang und auf Basis der gesetzlichen Grundlagen erhoben und verarbeitet.</p>
+          <p>
+            Personenbezogene Daten werden auf dieser Webseite nur in dem zur Erbringung unserer Leistungen erforderlichen Umfang und auf Basis der gesetzlichen Grundlagen erhoben und verarbeitet.
+          </p>
         </div>
       </div>
     </div>
@@ -1418,7 +1287,6 @@
         <li><a href="#oeffnungszeiten">Öffnungszeiten</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
         <li><a href="#impressum">Impressum</a></li>
-        <li><a href="mitarbeiter.html" style="color:var(--gold);">🔒 Mitarbeiterportal</a></li>
       </ul>
       <p class="footer-copy">© 2024 Zum Goldenen Hopfen. Alle Rechte vorbehalten.</p>
     </div>
@@ -1426,412 +1294,74 @@
 
   <!-- JAVASCRIPT -->
   <script>
-    // Nav scroll
+    // --- Sticky Nav ---
     const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 60); });
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
 
-    // Dropdown
+    // --- Dropdown ---
     const menuBtn = document.getElementById('menuBtn');
     const dropdownMenu = document.getElementById('dropdownMenu');
-    menuBtn.addEventListener('click', e => { e.stopPropagation(); const open = dropdownMenu.classList.toggle('open'); menuBtn.setAttribute('aria-expanded', open); });
-    document.addEventListener('click', () => { dropdownMenu.classList.remove('open'); menuBtn.setAttribute('aria-expanded', false); });
-    dropdownMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { dropdownMenu.classList.remove('open'); }));
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = dropdownMenu.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open);
+    });
+    document.addEventListener('click', () => {
+      dropdownMenu.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', false);
+    });
+    dropdownMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        dropdownMenu.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded', false);
+      });
+    });
 
-    // Scroll Reveal
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); else e.target.classList.remove('visible'); });
-    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+    // --- Scroll Reveal ---
+    const revealSelectors = '.reveal, .reveal-left, .reveal-right, .reveal-scale';
+    const reveals = document.querySelectorAll(revealSelectors);
 
-    // Menu Tabs
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          // Remove visible class when scrolling back up (re-animate on re-enter)
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // --- Menu Tabs ---
     function switchTab(btn, id) {
       document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
       btn.classList.add('active');
       document.querySelectorAll('.menu-content').forEach(c => c.style.display = 'none');
       document.getElementById(id).style.display = 'block';
-      document.querySelectorAll('#' + id + ' .reveal').forEach(el => { el.classList.remove('visible'); setTimeout(() => el.classList.add('visible'), 50); });
-    }
-  </script>
-
-  <!-- KALENDER JAVASCRIPT -->
-  <script>
-  // ================================================================
-  //  Biergarten – Custom Vanilla Calendar + Reservation System
-  // ================================================================
-  const DB_KEY   = 'biergarten_reservations_v2';
-  const MAX_SLOT = 6;
-  const OPEN_H   = 10;
-  const CLOSE_H  = 23;
-  const MONTHS   = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
-  const WDAYS    = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
-  const WDAYS_SHORT = ['So','Mo','Di','Mi','Do','Fr','Sa'];
-
-  let reservations = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
-  let modalDateStr = null;
-  // Calendar state
-  let calView = 'week'; // 'month' | 'week' | 'day'
-  let calDate = new Date(); // anchor date
-  calDate.setHours(0,0,0,0);
-
-  function save() { localStorage.setItem(DB_KEY, JSON.stringify(reservations)); }
-  function dateStr(d) { return d.toISOString().slice(0,10); }
-  function slotKey(date, h, m) { return `${date} ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
-  function countSlot(key) { return reservations.filter(r => r.slotKey === key).length; }
-  function isFull(key) { return countSlot(key) >= MAX_SLOT; }
-  function eventClass(cnt) { return cnt >= MAX_SLOT ? 'full' : cnt >= 4 ? 'partial' : 'booked'; }
-  function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate()+n); return r; }
-
-  // ---- Group reservations by slotKey ----
-  function getGroups() {
-    const g = {};
-    reservations.forEach(r => { g[r.slotKey] = (g[r.slotKey]||0)+1; });
-    return g;
-  }
-
-  // ---- RENDER CALENDAR ----
-  function renderCal() {
-    const wrap = document.getElementById('sx-calendar');
-    wrap.innerHTML = '';
-
-    // Toolbar
-    const bar = document.createElement('div');
-    bar.className = 'cal-toolbar';
-
-    const left = document.createElement('div');
-    left.className = 'cal-toolbar-center';
-    left.innerHTML = `
-      <button class="cal-nav-btn" id="cal-prev">◀</button>
-      <span class="cal-title" id="cal-title"></span>
-      <button class="cal-nav-btn" id="cal-next">▶</button>
-      <button class="cal-nav-btn" id="cal-today" style="font-size:12px;padding:5px 10px;">Heute</button>`;
-
-    const right = document.createElement('div');
-    right.className = 'cal-view-btns';
-    ['month','week','day'].forEach(v => {
-      const b = document.createElement('button');
-      b.className = 'cal-view-btn' + (calView===v?' active':'');
-      b.textContent = v==='month'?'Monat':v==='week'?'Woche':'Tag';
-      b.onclick = () => { calView = v; renderCal(); };
-      right.appendChild(b);
-    });
-
-    bar.appendChild(left);
-    bar.appendChild(right);
-    wrap.appendChild(bar);
-
-    document.getElementById('cal-prev').onclick = () => navigate(-1);
-    document.getElementById('cal-next').onclick = () => navigate(1);
-    document.getElementById('cal-today').onclick = () => { calDate = new Date(); calDate.setHours(0,0,0,0); renderCal(); };
-
-    if (calView === 'month') renderMonth(wrap);
-    else if (calView === 'week') renderWeek(wrap, 7);
-    else renderWeek(wrap, 1);
-  }
-
-  function navigate(dir) {
-    if (calView === 'month') calDate.setMonth(calDate.getMonth()+dir);
-    else if (calView === 'week') calDate.setDate(calDate.getDate()+7*dir);
-    else calDate.setDate(calDate.getDate()+dir);
-    renderCal();
-  }
-
-  // ---- MONTH VIEW ----
-  function renderMonth(wrap) {
-    const title = document.getElementById('cal-title');
-    title.textContent = MONTHS[calDate.getMonth()] + ' ' + calDate.getFullYear();
-
-    const grid = document.createElement('div');
-    grid.className = 'cal-month';
-
-    // Header
-    const head = document.createElement('div');
-    head.className = 'cal-month-head';
-    WDAYS_SHORT.forEach(d => {
-      const c = document.createElement('div');
-      c.className = 'cal-month-head-cell';
-      c.textContent = d;
-      head.appendChild(c);
-    });
-    grid.appendChild(head);
-
-    // Body
-    const body = document.createElement('div');
-    body.className = 'cal-month-body';
-
-    const first = new Date(calDate.getFullYear(), calDate.getMonth(), 1);
-    const last  = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0);
-    const startWD = first.getDay(); // 0=Sun
-    const today = dateStr(new Date());
-    const groups = getGroups();
-
-    // Fill blanks before month start
-    for (let i=0; i<startWD; i++) {
-      const prev = addDays(first, i - startWD);
-      body.appendChild(buildMonthDay(prev, groups, today, true));
-    }
-    // Month days
-    for (let d=1; d<=last.getDate(); d++) {
-      const day = new Date(calDate.getFullYear(), calDate.getMonth(), d);
-      body.appendChild(buildMonthDay(day, groups, today, false));
-    }
-    // Fill blanks after month end
-    const endWD = last.getDay();
-    for (let i=1; i<7-endWD; i++) {
-      const next = addDays(last, i);
-      body.appendChild(buildMonthDay(next, groups, today, true));
+      // Re-trigger reveal animations for new tab content
+      document.querySelectorAll('#' + id + ' .reveal, #' + id + ' .reveal-left, #' + id + ' .reveal-right').forEach(el => {
+        el.classList.remove('visible');
+        setTimeout(() => el.classList.add('visible'), 50);
+      });
     }
 
-    grid.appendChild(body);
-    wrap.appendChild(grid);
-  }
-
-  function buildMonthDay(day, groups, today, otherMonth) {
-    const ds = dateStr(day);
-    const cell = document.createElement('div');
-    cell.className = 'cal-month-day' + (otherMonth?' other-month':'') + (ds===today?' today':'');
-    cell.onclick = () => { calView='day'; calDate=new Date(day); renderCal(); };
-
-    const num = document.createElement('div');
-    num.className = 'cal-day-num';
-    num.textContent = day.getDate();
-    cell.appendChild(num);
-
-    // Show events for this day
-    Object.entries(groups).filter(([k]) => k.startsWith(ds)).sort().forEach(([k,cnt]) => {
-      const t = k.split(' ')[1];
-      const ev = document.createElement('div');
-      ev.className = 'cal-day-event ' + eventClass(cnt);
-      ev.textContent = `${t} – ${cnt}/${MAX_SLOT}${cnt>=MAX_SLOT?' VOLL':''}`;
-      ev.onclick = e => { e.stopPropagation(); openResModal(ds, k); };
-      cell.appendChild(ev);
-    });
-
-    // Click on empty area → open modal for this day
-    cell.addEventListener('click', function(e) {
-      if (e.target === cell || e.target === num) openResModal(ds, null);
-    });
-    return cell;
-  }
-
-  // ---- WEEK / DAY VIEW ----
-  function renderWeek(wrap, cols) {
-    const title = document.getElementById('cal-title');
-
-    // Compute start of week (Monday)
-    let start;
-    if (cols === 7) {
-      const wd = calDate.getDay(); // 0=Sun
-      start = addDays(calDate, wd === 0 ? -6 : 1 - wd);
-    } else {
-      start = new Date(calDate);
-    }
-
-    if (cols === 7) {
-      const end = addDays(start, 6);
-      title.textContent = `${start.getDate()}. ${MONTHS[start.getMonth()]} – ${end.getDate()}. ${MONTHS[end.getMonth()]} ${end.getFullYear()}`;
-    } else {
-      title.textContent = `${WDAYS[calDate.getDay()]}, ${calDate.getDate()}. ${MONTHS[calDate.getMonth()]} ${calDate.getFullYear()}`;
-    }
-
-    const days = [];
-    for (let i=0; i<cols; i++) days.push(addDays(start, i));
-
-    const today = dateStr(new Date());
-    const groups = getGroups();
-
-    // Build container
-    const container = document.createElement('div');
-    container.className = 'cal-week';
-
-    // Header row
-    const headRow = document.createElement('div');
-    headRow.className = 'cal-week-head';
-    const gutter0 = document.createElement('div');
-    gutter0.className = 'cal-week-head-gutter';
-    headRow.appendChild(gutter0);
-    days.forEach(d => {
-      const ds = dateStr(d);
-      const c = document.createElement('div');
-      c.className = 'cal-week-head-col' + (ds===today?' today':'');
-      c.innerHTML = `<strong>${WDAYS_SHORT[d.getDay()]}</strong><br>${d.getDate()}. ${MONTHS[d.getMonth()].slice(0,3)}`;
-      headRow.appendChild(c);
-    });
-    container.appendChild(headRow);
-
-    // Body: scrollable area
-    const body = document.createElement('div');
-    body.className = 'cal-week-body';
-
-    // Time gutter
-    const gutter = document.createElement('div');
-    gutter.className = 'cal-time-gutter';
-    for (let h=OPEN_H; h<CLOSE_H; h++) {
-      const lbl = document.createElement('div');
-      lbl.className = 'cal-time-label';
-      lbl.textContent = `${String(h).padStart(2,'0')}:00`;
-      gutter.appendChild(lbl);
-    }
-    body.appendChild(gutter);
-
-    const totalHours = CLOSE_H - OPEN_H;
-
-    days.forEach(d => {
-      const ds = dateStr(d);
-      const col = document.createElement('div');
-      col.className = 'cal-day-col';
-      col.style.minHeight = (totalHours * 48) + 'px';
-
-      // Hour lines + click
-      for (let h=OPEN_H; h<CLOSE_H; h++) {
-        const line = document.createElement('div');
-        line.className = 'cal-hour-line';
-        line.onclick = () => openResModal(ds, slotKey(ds, h, 0));
-        const half = document.createElement('div');
-        half.className = 'cal-half-line';
-        half.style.top = ((h - OPEN_H) * 48 + 24) + 'px';
-        col.appendChild(half);
-        col.appendChild(line);
+    // Cal.com: Highlight border after successful booking
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'cal:booking_successful') {
+        const wrap = document.querySelector('.calendly-wrap');
+        if (wrap) {
+          wrap.style.borderColor = 'rgba(200,168,75,0.6)';
+          wrap.style.boxShadow = '0 0 30px rgba(200,168,75,0.15)';
+        }
       }
-
-      // Events
-      Object.entries(groups).filter(([k]) => k.startsWith(ds)).forEach(([k,cnt]) => {
-        const time = k.split(' ')[1];
-        const [h,m] = time.split(':').map(Number);
-        const topPx = ((h - OPEN_H) * 48) + (m === 30 ? 24 : 0);
-        const ev = document.createElement('div');
-        ev.className = 'cal-week-event ' + eventClass(cnt);
-        ev.style.top = topPx + 'px';
-        ev.style.height = '22px';
-        ev.innerHTML = `<strong>${time}</strong> ${cnt}/${MAX_SLOT}${cnt>=MAX_SLOT?' VOLL':''}`;
-        ev.onclick = e => { e.stopPropagation(); openResModal(ds, k); };
-        col.appendChild(ev);
-      });
-
-      body.appendChild(col);
     });
-
-    container.appendChild(body);
-    wrap.appendChild(container);
-
-    // Scroll to current/open hour
-    const scrollH = Math.max(OPEN_H, Math.min(new Date().getHours(), CLOSE_H - 2));
-    body.scrollTop = (scrollH - OPEN_H) * 48;
-  }
-
-  // ---- STATS BAR ----
-  function renderStats() {
-    const today = new Date().toISOString().slice(0,10);
-    const todayN = reservations.filter(r => r.slotKey.startsWith(today)).length;
-    const now = new Date();
-    const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay()+6)%7)); mon.setHours(0,0,0,0);
-    const sun = new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59);
-    const weekN = reservations.filter(r => { const d=new Date(r.slotKey.slice(0,10)); return d>=mon&&d<=sun; }).length;
-    document.getElementById('cap-stats').innerHTML = `
-      <div class="cap-stat">🍺 Heute: <strong>${todayN}</strong></div>
-      <div class="cap-stat">📅 Woche: <strong>${weekN}</strong></div>
-      <div class="cap-stat">📊 Gesamt: <strong>${reservations.length}</strong></div>
-      <div class="cap-stat" style="margin-left:auto;display:flex;gap:12px;align-items:center;">
-        <span><span style="display:inline-block;width:10px;height:10px;background:#c8f0c8;border:2px solid #2a3d1e;border-radius:2px;margin-right:4px;"></span>Verfügbar</span>
-        <span><span style="display:inline-block;width:10px;height:10px;background:#ffe8a0;border:2px solid #7a5000;border-radius:2px;margin-right:4px;"></span>Belegt</span>
-        <span><span style="display:inline-block;width:10px;height:10px;background:#ffc0c0;border:2px solid #8b0000;border-radius:2px;margin-right:4px;"></span>Voll</span>
-      </div>`;
-  }
-
-  // ---- TODAY OVERVIEW (sidebar) ----
-  function renderTodayOverview() {
-    const el = document.getElementById('today-overview');
-    if (!el) return;
-    const today = new Date().toISOString().slice(0,10);
-    const nowH = new Date().getHours(), nowM = new Date().getMinutes();
-    let html = `<div style="background:rgba(245,240,232,0.06);border:1px solid rgba(200,168,75,0.2);border-radius:10px;padding:24px;max-height:400px;overflow-y:auto;">
-      <p style="color:var(--gold);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;">Heute – Belegung</p>`;
-    for (let h = OPEN_H; h < CLOSE_H; h++) {
-      [0,30].forEach(m => {
-        const key = slotKey(today, h, m);
-        const cnt = countSlot(key);
-        const past = h < nowH || (h===nowH && m<=nowM);
-        const pct = (cnt/MAX_SLOT)*100;
-        const col = cnt>=MAX_SLOT?'#e55':cnt>=4?'#c8a84b':'#4caf50';
-        html += `<div style="display:flex;align-items:center;gap:10px;padding:4px 0;${past?'opacity:0.35;':''}cursor:pointer;" onclick="openResModal('${today}','${key}')">
-          <span style="color:rgba(245,240,232,0.6);font-size:11px;min-width:40px;">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}</span>
-          <div style="flex:1;height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;">
-            <div style="height:100%;width:${pct}%;background:${col};border-radius:3px;"></div>
-          </div>
-          <span style="color:${col};font-size:11px;font-weight:700;min-width:48px;text-align:right;">${cnt>=MAX_SLOT?'Voll':`${MAX_SLOT-cnt} frei`}</span>
-        </div>`;
-      });
-    }
-    html += `</div>`;
-    el.innerHTML = html;
-  }
-
-  // ---- RESERVATION MODAL ----
-  function openResModal(ds, preSlot) {
-    modalDateStr = ds;
-    const parts = ds.split('-');
-    const d = new Date(parts[0], parts[1]-1, parts[2]);
-    document.getElementById('res-modal-sub').textContent = `${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-
-    const sel = document.getElementById('f-time');
-    sel.innerHTML = '<option value="">Bitte wählen *</option>';
-    for (let h = OPEN_H; h < CLOSE_H; h++) {
-      [0,30].forEach(m => {
-        const sk = slotKey(ds, h, m);
-        const free = MAX_SLOT - countSlot(sk);
-        const dis = free<=0?'disabled':'';
-        sel.innerHTML += `<option value="${sk}" ${dis}>${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} – ${free<=0?'Ausgebucht':`${free}/${MAX_SLOT} frei`}</option>`;
-      });
-    }
-    if (preSlot) for (const o of sel.options) { if (o.value===preSlot){o.selected=true;break;} }
-    updateCapInfo(sel.value);
-    sel.onchange = () => updateCapInfo(sel.value);
-
-    ['f-name','f-email','f-phone','f-wishes'].forEach(id => document.getElementById(id).value='');
-    document.getElementById('f-persons').value='';
-    document.getElementById('res-overlay').classList.add('open');
-  }
-
-  function updateCapInfo(key) {
-    const el = document.getElementById('res-cap-info');
-    if (!key) { el.innerHTML=''; return; }
-    const free = MAX_SLOT - countSlot(key);
-    const t = key.split(' ')[1];
-    if (free<=0) {
-      el.className='res-cap-info full';
-      el.innerHTML=`❌ ${t} Uhr – Dieser Slot ist vollständig ausgebucht.`;
-      document.getElementById('res-submit-btn').disabled=true;
-    } else {
-      el.className='res-cap-info';
-      el.innerHTML=`🍺 ${t} Uhr – <strong>${free} von ${MAX_SLOT} Tischen</strong> noch verfügbar`;
-      document.getElementById('res-submit-btn').disabled=false;
-    }
-  }
-
-  function closeResModal() {
-    document.getElementById('res-overlay').classList.remove('open');
-  }
-
-  function submitReservation() {
-    const name=document.getElementById('f-name').value.trim();
-    const email=document.getElementById('f-email').value.trim();
-    const persons=document.getElementById('f-persons').value;
-    const slot=document.getElementById('f-time').value;
-    if (!name||!email||!persons||!slot){alert('Bitte alle Pflichtfelder (*) ausfüllen.');return;}
-    if (isFull(slot)){alert('Dieser Slot ist ausgebucht. Bitte andere Uhrzeit wählen.');return;}
-    const r={id:Date.now().toString(),slotKey:slot,name,email,phone:document.getElementById('f-phone').value,persons,wishes:document.getElementById('f-wishes').value,createdAt:new Date().toISOString()};
-    reservations.push(r); save(); closeResModal();
-    renderCal(); renderStats(); renderTodayOverview();
-    const [date,time]=slot.split(' ');
-    const parts=date.split('-'); const d=new Date(parts[0],parts[1]-1,parts[2]);
-    alert(`✅ Reservierung bestätigt!\n\n🍺 ${name}\n📅 ${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} um ${time} Uhr\n👥 ${persons}\n\nWir freuen uns auf Sie!`);
-  }
-
-  document.getElementById('res-overlay').addEventListener('click', function(e){ if(e.target===this) closeResModal(); });
-
-  // Init
-  renderCal();
-  renderStats();
-  renderTodayOverview();
   </script>
 </body>
 </html>
