@@ -639,8 +639,8 @@ function renderDashboard() {
 
 // ---- STAFF CALENDAR ----
 function renderStaffCalendar() {
-  if (!window.ScheduleX) { setTimeout(renderStaffCalendar, 300); return; }
-  const SX = ScheduleX;
+  if (!window.scheduleX) { setTimeout(renderStaffCalendar, 300); return; }
+  const SX = scheduleX;
   const container = document.getElementById('cal-container');
   container.innerHTML = '';
 
