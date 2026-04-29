@@ -298,6 +298,7 @@
     </div>
     <button class="login-btn" onclick="doLogin()">Einloggen →</button>
     <p class="login-error" id="login-error">❌ Falscher Benutzername oder Passwort.</p>
+    <div class="login-hint">
 
   </div>
 </div>
@@ -488,7 +489,6 @@ const USERS = [
   { id:1, username:'admin',    password:'hopfen2024', name:'Admin',          role:'Administrator', roleKey:'admin' },
   { id:2, username:'kellner1', password:'bier123',    name:'Hans Meier',     role:'Kellner',       roleKey:'staff' },
   { id:3, username:'chef',     password:'goldener',   name:'Maria Schmidt',  role:'Küche',         roleKey:'staff' },
-  { id:4, username:'NorbertKettner',     password:'Norbi',   name:'Norbert Kettner',  role:'Administrator',         roleKey:'admin' },
 ];
 
 const DB_KEY   = 'biergarten_reservations_v2';
@@ -639,14 +639,10 @@ function renderDashboard() {
 
 // ---- STAFF CALENDAR ----
 function renderStaffCalendar() {
-  // 🔽 GLOBALEN NAMEN KORRIGIEREN
-  if (!window.scheduleX) { setTimeout(renderStaffCalendar, 300); return; }
-  const SX = scheduleX;
-  
+  if (!window.ScheduleX) { setTimeout(renderStaffCalendar, 300); return; }
+  const SX = ScheduleX;
   const container = document.getElementById('cal-container');
   container.innerHTML = '';
-  // …
-}
 
   const groups = {};
   reservations.forEach(r => { if (!groups[r.slotKey]) groups[r.slotKey]=0; groups[r.slotKey]++; });
