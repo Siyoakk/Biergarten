@@ -1282,194 +1282,218 @@
     }
   </script>
 
- <script>
-  const DB_KEY   = 'biergarten_reservations_v2';
-  const MAX_SLOT = 6;
-  const OPEN_H   = 10;
-  const CLOSE_H  = 23;
-  const MONTHS   = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
-  const WDAYS    = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+   <!-- KALENDER JAVASCRIPT -->
+  <script>
+  (function() {
+    const DB_KEY   = 'biergarten_reservations_v2';
+    const MAX_SLOT = 6;
+    const OPEN_H   = 10;
+    const CLOSE_H  = 23;
+    const MONTHS   = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+    const WDAYS    = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
 
-  let reservations = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
-  let modalDateStr = null;
-  let calInst = null;
+    let reservations = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+    let modalDateStr = null;
+    let calInst = null;
 
-  function save() { localStorage.setItem(DB_KEY, JSON.stringify(reservations)); }
-  function slotKey(date, h, m) { return `${date} ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
-  function countSlot(key) { return reservations.filter(r => r.slotKey === key).length; }
-  function isFull(key) { return countSlot(key) >= MAX_SLOT; }
+    function save() { localStorage.setItem(DB_KEY, JSON.stringify(reservations)); }
+    function slotKey(date, h, m) { return `${date} ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
+    function countSlot(key) { return reservations.filter(r => r.slotKey === key).length; }
+    function isFull(key) { return countSlot(key) >= MAX_SLOT; }
 
-  function buildCalEvents() {
-    const groups = {};
-    reservations.forEach(r => { if (!groups[r.slotKey]) groups[r.slotKey] = 0; groups[r.slotKey]++; });
-    return Object.entries(groups).map(([key, count]) => {
-      const [date, time] = key.split(' ');
-      const [h, m] = time.split(':').map(Number);
-      const endM = m === 30 ? 0 : 30;
-      const endH = m === 30 ? h + 1 : h;
-      const full = count >= MAX_SLOT;
-      const partial = count >= 4;
-      return {
-        id: key,
-        title: `${count}/${MAX_SLOT} Tische${full ? ' · VOLL' : ''}`,
-        start: key,
-        end: `${date} ${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`,
-        calendarId: full ? 'full' : partial ? 'partial' : 'booked',
-      };
-    });
-  }
+    function buildCalEvents() {
+      const groups = {};
+      reservations.forEach(r => { if (!groups[r.slotKey]) groups[r.slotKey] = 0; groups[r.slotKey]++; });
+      return Object.entries(groups).map(([key, count]) => {
+        const [date, time] = key.split(' ');
+        const [h, m] = time.split(':').map(Number);
+        const endM = m === 30 ? 0 : 30;
+        const endH = m === 30 ? h + 1 : h;
+        const full = count >= MAX_SLOT;
+        const partial = count >= 4;
+        return {
+          id: key,
+          title: `${count}/${MAX_SLOT} Tische${full ? ' · VOLL' : ''}`,
+          start: key,
+          end: `${date} ${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`,
+          calendarId: full ? 'full' : partial ? 'partial' : 'booked',
+        };
+      });
+    }
 
-  function initCalendar() {
-    // 🔽 GLOBALEN NAMEN KORRIGIEREN (scheduleX)
-    if (typeof scheduleX === 'undefined') { setTimeout(initCalendar, 300); return; }
-    const SX = scheduleX;
-    calInst = SX.createCalendar({
-      locale: 'de-DE',
-      selectedDate: new Date().toISOString().slice(0,10),
-      defaultView: SX.viewWeek.name,
-      views: [SX.viewDay, SX.viewWeek, SX.viewMonthGrid, SX.viewMonthAgenda],
-      dayBoundaries: { start:'10:00', end:'23:00' },
-      plugins: [SX.createEventModalPlugin(), SX.createDragAndDropPlugin()],
-      calendars: {
-        booked:  { colorName:'booked',  lightColors: { main:'#2a3d1e', container:'#c8f0c8', onContainer:'#1a3010' } },
-        partial: { colorName:'partial', lightColors: { main:'#7a5000', container:'#ffe8a0', onContainer:'#5c3a00' } },
-        full:    { colorName:'full',    lightColors: { main:'#8b0000', container:'#ffc0c0', onContainer:'#5a0000' } },
-      },
-      events: buildCalEvents(),
-      callbacks: {
-        onClickDateTime(dt) { openResModal(dt.slice(0,10), snapSlot(dt)); },
-        onClickDate(date)   { calInst.setView(SX.viewDay.name); calInst.setDate(date); },
-        onEventClick(ev)    { if (!isFull(ev.id)) openResModal(ev.id.slice(0,10), ev.id); },
-      },
-    });
-    calInst.render(document.getElementById('sx-calendar'));
-    renderStats();
-    renderTodayOverview();
-  }
+    // Wartet aktiv darauf, dass scheduleX global verfügbar wird
+    function waitForScheduleX(callback, maxTries = 50) {
+      let tries = 0;
+      function check() {
+        if (window.scheduleX) {
+          console.log('✅ scheduleX gefunden, initialisiere Kalender...');
+          callback();
+        } else if (tries++ < maxTries) {
+          setTimeout(check, 100);
+        } else {
+          console.error('❌ scheduleX konnte nicht geladen werden. Bitte Konsole prüfen.');
+        }
+      }
+      check();
+    }
 
-</script>
+    function initCalendar() {
+      const SX = scheduleX;
+      // Nur initialisieren, wenn das DOM-Element vorhanden ist
+      const container = document.getElementById('sx-calendar');
+      if (!container) return;
 
-  function snapSlot(dt) {
-    const [date, time] = dt.split(' ');
-    if (!time) return slotKey(date, OPEN_H, 0);
-    const [h, mRaw] = time.split(':').map(Number);
-    return slotKey(date, h, mRaw < 30 ? 0 : 30);
-  }
+      calInst = SX.createCalendar({
+        locale: 'de-DE',
+        selectedDate: new Date().toISOString().slice(0,10),
+        defaultView: SX.viewWeek.name,
+        views: [SX.viewDay, SX.viewWeek, SX.viewMonthGrid, SX.viewMonthAgenda],
+        dayBoundaries: { start:'10:00', end:'23:00' },
+        plugins: [SX.createEventModalPlugin(), SX.createDragAndDropPlugin()],
+        calendars: {
+          booked:  { colorName:'booked',  lightColors: { main:'#2a3d1e', container:'#c8f0c8', onContainer:'#1a3010' } },
+          partial: { colorName:'partial', lightColors: { main:'#7a5000', container:'#ffe8a0', onContainer:'#5c3a00' } },
+          full:    { colorName:'full',    lightColors: { main:'#8b0000', container:'#ffc0c0', onContainer:'#5a0000' } },
+        },
+        events: buildCalEvents(),
+        callbacks: {
+          onClickDateTime(dt) { openResModal(dt.slice(0,10), snapSlot(dt)); },
+          onClickDate(date)   { calInst.setView(SX.viewDay.name); calInst.setDate(date); },
+          onEventClick(ev)    { if (!isFull(ev.id)) openResModal(ev.id.slice(0,10), ev.id); },
+        },
+      });
+      calInst.render(container);
+      renderStats();
+      renderTodayOverview();
+    }
 
-  function refreshCal() {
-    if (!calInst) return;
-    calInst.eventsService.getAll().forEach(e => calInst.eventsService.remove(e.id));
-    buildCalEvents().forEach(e => calInst.eventsService.add(e));
-    renderStats();
-    renderTodayOverview();
-  }
+    function snapSlot(dt) {
+      const [date, time] = dt.split(' ');
+      if (!time) return slotKey(date, OPEN_H, 0);
+      const [h, mRaw] = time.split(':').map(Number);
+      return slotKey(date, h, mRaw < 30 ? 0 : 30);
+    }
 
-  function renderStats() {
-    const today = new Date().toISOString().slice(0,10);
-    const todayN = reservations.filter(r => r.slotKey.startsWith(today)).length;
-    const now = new Date();
-    const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay()+6)%7)); mon.setHours(0,0,0,0);
-    const sun = new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59);
-    const weekN = reservations.filter(r => { const d=new Date(r.slotKey.slice(0,10)); return d>=mon&&d<=sun; }).length;
-    document.getElementById('cap-stats').innerHTML = `
-      <div class="cap-stat">🍺 Heute: <strong>${todayN}</strong></div>
-      <div class="cap-stat">📅 Woche: <strong>${weekN}</strong></div>
-      <div class="cap-stat">📊 Gesamt: <strong>${reservations.length}</strong></div>
-      <div class="cap-stat" style="margin-left:auto;display:flex;gap:12px;align-items:center;">
-        <span><span style="display:inline-block;width:10px;height:10px;background:#c8f0c8;border:2px solid #2a3d1e;border-radius:2px;margin-right:4px;"></span>Verfügbar</span>
-        <span><span style="display:inline-block;width:10px;height:10px;background:#ffe8a0;border:2px solid #7a5000;border-radius:2px;margin-right:4px;"></span>Belegt</span>
-        <span><span style="display:inline-block;width:10px;height:10px;background:#ffc0c0;border:2px solid #8b0000;border-radius:2px;margin-right:4px;"></span>Voll</span>
-      </div>`;
-  }
+    function refreshCal() {
+      if (!calInst) return;
+      calInst.eventsService.getAll().forEach(e => calInst.eventsService.remove(e.id));
+      buildCalEvents().forEach(e => calInst.eventsService.add(e));
+      renderStats();
+      renderTodayOverview();
+    }
 
-  function renderTodayOverview() {
-    const el = document.getElementById('today-overview');
-    if (!el) return;
-    const today = new Date().toISOString().slice(0,10);
-    const nowH = new Date().getHours(), nowM = new Date().getMinutes();
-    let html = `<div style="background:rgba(245,240,232,0.06);border:1px solid rgba(200,168,75,0.2);border-radius:10px;padding:24px;max-height:400px;overflow-y:auto;">
-      <p style="color:var(--gold);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;">Heute – Belegung</p>`;
-    for (let h = OPEN_H; h < CLOSE_H; h++) {
-      [0,30].forEach(m => {
-        const key = slotKey(today, h, m);
-        const cnt = countSlot(key);
-        const past = h < nowH || (h===nowH && m<=nowM);
-        const pct = (cnt/MAX_SLOT)*100;
-        const col = cnt>=MAX_SLOT?'#e55':cnt>=4?'#c8a84b':'#4caf50';
-        html += `<div style="display:flex;align-items:center;gap:10px;padding:4px 0;${past?'opacity:0.35':''}cursor:pointer;" onclick="openResModal('${today}','${key}')">
-          <span style="color:rgba(245,240,232,0.6);font-size:11px;min-width:40px;">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}</span>
-          <div style="flex:1;height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;">
-            <div style="height:100%;width:${pct}%;background:${col};border-radius:3px;"></div>
-          </div>
-          <span style="color:${col};font-size:11px;font-weight:700;min-width:48px;text-align:right;">${cnt>=MAX_SLOT?'Voll':`${MAX_SLOT-cnt} frei`}</span>
+    function renderStats() {
+      const today = new Date().toISOString().slice(0,10);
+      const todayN = reservations.filter(r => r.slotKey.startsWith(today)).length;
+      const now = new Date();
+      const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay()+6)%7)); mon.setHours(0,0,0,0);
+      const sun = new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59);
+      const weekN = reservations.filter(r => { const d=new Date(r.slotKey.slice(0,10)); return d>=mon&&d<=sun; }).length;
+      const el = document.getElementById('cap-stats');
+      if (!el) return;
+      el.innerHTML = `
+        <div class="cap-stat">🍺 Heute: <strong>${todayN}</strong></div>
+        <div class="cap-stat">📅 Woche: <strong>${weekN}</strong></div>
+        <div class="cap-stat">📊 Gesamt: <strong>${reservations.length}</strong></div>
+        <div class="cap-stat" style="margin-left:auto;display:flex;gap:12px;align-items:center;">
+          <span><span style="display:inline-block;width:10px;height:10px;background:#c8f0c8;border:2px solid #2a3d1e;border-radius:2px;margin-right:4px;"></span>Verfügbar</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:#ffe8a0;border:2px solid #7a5000;border-radius:2px;margin-right:4px;"></span>Belegt</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:#ffc0c0;border:2px solid #8b0000;border-radius:2px;margin-right:4px;"></span>Voll</span>
         </div>`;
-      });
     }
-    html += `</div>`;
-    el.innerHTML = html;
-  }
 
-  function openResModal(dateStr, preSlot) {
-    modalDateStr = dateStr;
-    const parts = dateStr.split('-');
-    const d = new Date(parts[0], parts[1]-1, parts[2]);
-    document.getElementById('res-modal-sub').textContent = `${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-
-    const sel = document.getElementById('f-time');
-    sel.innerHTML = '<option value="">Bitte wählen *</option>';
-    for (let h = OPEN_H; h < CLOSE_H; h++) {
-      [0,30].forEach(m => {
-        const sk = slotKey(dateStr, h, m);
-        const free = MAX_SLOT - countSlot(sk);
-        const dis = free<=0?'disabled':'';
-        sel.innerHTML += `<option value="${sk}" ${dis}>${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} – ${free<=0?'Ausgebucht':`${free}/${MAX_SLOT} frei`}</option>`;
-      });
+    function renderTodayOverview() {
+      const el = document.getElementById('today-overview');
+      if (!el) return;
+      const today = new Date().toISOString().slice(0,10);
+      const nowH = new Date().getHours(), nowM = new Date().getMinutes();
+      let html = `<div style="background:rgba(245,240,232,0.06);border:1px solid rgba(200,168,75,0.2);border-radius:10px;padding:24px;max-height:400px;overflow-y:auto;">
+        <p style="color:var(--gold);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;">Heute – Belegung</p>`;
+      for (let h = OPEN_H; h < CLOSE_H; h++) {
+        [0,30].forEach(m => {
+          const key = slotKey(today, h, m);
+          const cnt = countSlot(key);
+          const past = h < nowH || (h===nowH && m<=nowM);
+          const pct = (cnt/MAX_SLOT)*100;
+          const col = cnt>=MAX_SLOT?'#e55':cnt>=4?'#c8a84b':'#4caf50';
+          html += `<div style="display:flex;align-items:center;gap:10px;padding:4px 0;${past?'opacity:0.35':''}cursor:pointer;" onclick="openResModal('${today}','${key}')">
+            <span style="color:rgba(245,240,232,0.6);font-size:11px;min-width:40px;">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}</span>
+            <div style="flex:1;height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;">
+              <div style="height:100%;width:${pct}%;background:${col};border-radius:3px;"></div>
+            </div>
+            <span style="color:${col};font-size:11px;font-weight:700;min-width:48px;text-align:right;">${cnt>=MAX_SLOT?'Voll':`${MAX_SLOT-cnt} frei`}</span>
+          </div>`;
+        });
+      }
+      html += `</div>`;
+      el.innerHTML = html;
     }
-    if (preSlot) for (const o of sel.options) { if (o.value===preSlot){o.selected=true;break;} }
-    updateCapInfo(sel.value);
-    sel.onchange = () => updateCapInfo(sel.value);
 
-    ['f-name','f-email','f-phone','f-wishes'].forEach(id => document.getElementById(id).value='');
-    document.getElementById('f-persons').value='';
-    document.getElementById('res-overlay').classList.add('open');
-  }
+    // Res Modal
+    window.openResModal = function(dateStr, preSlot) {
+      modalDateStr = dateStr;
+      const parts = dateStr.split('-');
+      const d = new Date(parts[0], parts[1]-1, parts[2]);
+      document.getElementById('res-modal-sub').textContent = `${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 
-  function updateCapInfo(key) {
-    const el = document.getElementById('res-cap-info');
-    if (!key) { el.innerHTML=''; return; }
-    const free = MAX_SLOT - countSlot(key);
-    const t = key.split(' ')[1];
-    if (free<=0) {
-      el.className='res-cap-info full';
-      el.innerHTML=`❌ ${t} Uhr – Dieser Slot ist vollständig ausgebucht.`;
-      document.getElementById('res-submit-btn').disabled=true;
-    } else {
-      el.className='res-cap-info';
-      el.innerHTML=`🍺 ${t} Uhr – <strong>${free} von ${MAX_SLOT} Tischen</strong> noch verfügbar`;
-      document.getElementById('res-submit-btn').disabled=false;
+      const sel = document.getElementById('f-time');
+      sel.innerHTML = '<option value="">Bitte wählen *</option>';
+      for (let h = OPEN_H; h < CLOSE_H; h++) {
+        [0,30].forEach(m => {
+          const sk = slotKey(dateStr, h, m);
+          const free = MAX_SLOT - countSlot(sk);
+          const dis = free<=0?'disabled':'';
+          sel.innerHTML += `<option value="${sk}" ${dis}>${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} – ${free<=0?'Ausgebucht':`${free}/${MAX_SLOT} frei`}</option>`;
+        });
+      }
+      if (preSlot) for (const o of sel.options) { if (o.value===preSlot){o.selected=true;break;} }
+      updateCapInfo(sel.value);
+      sel.onchange = () => updateCapInfo(sel.value);
+
+      ['f-name','f-email','f-phone','f-wishes'].forEach(id => document.getElementById(id).value='');
+      document.getElementById('f-persons').value='';
+      document.getElementById('res-overlay').classList.add('open');
+    };
+
+    function updateCapInfo(key) {
+      const el = document.getElementById('res-cap-info');
+      if (!key) { el.innerHTML=''; return; }
+      const free = MAX_SLOT - countSlot(key);
+      const t = key.split(' ')[1];
+      if (free<=0) {
+        el.className='res-cap-info full';
+        el.innerHTML=`❌ ${t} Uhr – Dieser Slot ist vollständig ausgebucht.`;
+        document.getElementById('res-submit-btn').disabled=true;
+      } else {
+        el.className='res-cap-info';
+        el.innerHTML=`🍺 ${t} Uhr – <strong>${free} von ${MAX_SLOT} Tischen</strong> noch verfügbar`;
+        document.getElementById('res-submit-btn').disabled=false;
+      }
     }
-  }
 
-  function closeResModal() {
-    document.getElementById('res-overlay').classList.remove('open');
-  }
+    window.closeResModal = function() {
+      document.getElementById('res-overlay').classList.remove('open');
+    };
 
-  function submitReservation() {
-    const name=document.getElementById('f-name').value.trim();
-    const email=document.getElementById('f-email').value.trim();
-    const persons=document.getElementById('f-persons').value;
-    const slot=document.getElementById('f-time').value;
-    if (!name||!email||!persons||!slot){alert('Bitte alle Pflichtfelder (*) ausfüllen.');return;}
-    if (isFull(slot)){alert('Dieser Slot ist ausgebucht. Bitte andere Uhrzeit wählen.');return;}
-    const r={id:Date.now().toString(),slotKey:slot,name,email,phone:document.getElementById('f-phone').value,persons,wishes:document.getElementById('f-wishes').value,createdAt:new Date().toISOString()};
-    reservations.push(r); save(); closeResModal(); refreshCal();
-    const [date,time]=slot.split(' ');
-    const parts=date.split('-'); const d=new Date(parts[0],parts[1]-1,parts[2]);
-    alert(`✅ Reservierung bestätigt!\n\n🍺 ${name}\n📅 ${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} um ${time} Uhr\n👥 ${persons}\n\nWir freuen uns auf Sie!`);
-  }
+    window.submitReservation = function() {
+      const name=document.getElementById('f-name').value.trim();
+      const email=document.getElementById('f-email').value.trim();
+      const persons=document.getElementById('f-persons').value;
+      const slot=document.getElementById('f-time').value;
+      if (!name||!email||!persons||!slot){alert('Bitte alle Pflichtfelder (*) ausfüllen.');return;}
+      if (isFull(slot)){alert('Dieser Slot ist ausgebucht. Bitte andere Uhrzeit wählen.');return;}
+      const r={id:Date.now().toString(),slotKey:slot,name,email,phone:document.getElementById('f-phone').value,persons,wishes:document.getElementById('f-wishes').value,createdAt:new Date().toISOString()};
+      reservations.push(r); save(); closeResModal(); refreshCal();
+      const [date,time]=slot.split(' ');
+      const parts=date.split('-'); const d=new Date(parts[0],parts[1]-1,parts[2]);
+      alert(`✅ Reservierung bestätigt!\n\n🍺 ${name}\n📅 ${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} um ${time} Uhr\n👥 ${persons}\n\nWir freuen uns auf Sie!`);
+    };
 
-  document.getElementById('res-overlay').addEventListener('click', function(e){ if(e.target===this) closeResModal(); });
-  initCalendar();
+    document.getElementById('res-overlay').addEventListener('click', function(e){ if(e.target===this) closeResModal(); });
+
+    // Kalender starten, sobald scheduleX da ist
+    waitForScheduleX(initCalendar);
+  })();
   </script>
 </body>
 </html>
