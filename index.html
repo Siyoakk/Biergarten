@@ -1282,8 +1282,7 @@
     }
   </script>
 
-  <!-- KALENDER JAVASCRIPT -->
-  <script>
+ <script>
   const DB_KEY   = 'biergarten_reservations_v2';
   const MAX_SLOT = 6;
   const OPEN_H   = 10;
@@ -1321,8 +1320,9 @@
   }
 
   function initCalendar() {
-    if (typeof ScheduleX === 'undefined') { setTimeout(initCalendar, 300); return; }
-    const SX = ScheduleX;
+    // 🔽 GLOBALEN NAMEN KORRIGIEREN (scheduleX)
+    if (typeof scheduleX === 'undefined') { setTimeout(initCalendar, 300); return; }
+    const SX = scheduleX;
     calInst = SX.createCalendar({
       locale: 'de-DE',
       selectedDate: new Date().toISOString().slice(0,10),
@@ -1346,6 +1346,8 @@
     renderStats();
     renderTodayOverview();
   }
+
+</script>
 
   function snapSlot(dt) {
     const [date, time] = dt.split(' ');
