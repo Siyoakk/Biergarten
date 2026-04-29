@@ -3,802 +3,1491 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mitarbeiterportal – Zum Goldenen Hopfen</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@schedule-x/theme-default@2/dist/index.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@schedule-x/bundle@2/dist/index.global.js"></script>
+  <title>Zum Goldenen Hopfen – Biergarten</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <style>
+    /* ===== CSS VARIABLES ===== */
     :root {
       --gold: #c8a84b;
       --gold-light: #e8c96a;
       --green-dark: #2a3d1e;
       --green-mid: #3d5c28;
+      --green-light: #5a7a3a;
       --cream: #f5f0e8;
       --brown-dark: #2c1a0e;
-      --red: #8b0000;
-      --sidebar: 260px;
+      --brown-mid: #5c3a1e;
+      --text-light: #f5f0e8;
+      --text-dark: #2c1a0e;
+      --radius: 4px;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Lato', sans-serif; background: #1a1a1a; color: #eee; min-height: 100vh; }
 
-    /* ===== LOGIN ===== */
-    #login-screen {
-      min-height: 100vh;
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+
+    /* ===== NAVIGATION ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      background: transparent;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(26, 42, 12, 0.97);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+
+    /* Dropdown Menu */
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-btn {
+      background: none;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      padding: 10px 16px;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.3s, color 0.3s;
+      border-radius: var(--radius);
+    }
+    .dropdown-btn:hover {
+      background: var(--gold);
+      color: var(--green-dark);
+    }
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 20px;
+    }
+    .hamburger span {
+      display: block;
+      height: 2px;
+      background: currentColor;
+      transition: transform 0.3s;
+      border-radius: 2px;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: var(--green-dark);
+      border: 1px solid var(--gold);
+      border-radius: var(--radius);
+      min-width: 220px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    }
+    .dropdown-menu.open { display: block; }
+    .dropdown-menu a {
+      display: block;
+      padding: 14px 20px;
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(200,168,75,0.2);
+      transition: background 0.2s, color 0.2s;
+    }
+    .dropdown-menu a:last-child { border-bottom: none; }
+    .dropdown-menu a:hover {
+      background: rgba(200,168,75,0.15);
+      color: var(--gold);
+    }
+
+    /* Logo */
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+
+    /* Nav CTA */
+    .nav-cta {
+      background: var(--gold);
+      color: var(--green-dark);
+      padding: 10px 22px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-light); }
+
+    /* ===== HERO ===== */
+    .hero {
+      height: 100vh;
+      min-height: 600px;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #1a2a0e 0%, #2c1a0e 100%);
-    }
-    .login-card {
-      background: rgba(245,240,232,0.05);
-      border: 1px solid rgba(200,168,75,0.3);
-      border-radius: 16px;
-      padding: 48px 40px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      overflow: hidden;
       text-align: center;
     }
-    .login-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      color: var(--gold);
-      margin-bottom: 6px;
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(20,35,10,0.55) 0%, rgba(20,35,10,0.35) 50%, rgba(20,35,10,0.7) 100%),
+        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&q=80') center/cover no-repeat;
     }
-    .login-sub {
-      color: rgba(245,240,232,0.5);
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+      padding: 0 24px;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      color: var(--gold);
       font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s forwards;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 1s 0.5s forwards;
+    }
+    .hero-title em {
+      color: var(--gold);
+      font-style: italic;
+    }
+    .hero-subtitle {
+      color: rgba(245,240,232,0.85);
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.7;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 1s 0.7s forwards;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s forwards;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--green-dark);
+      padding: 15px 36px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-outline {
+      border: 2px solid var(--cream);
+      color: var(--cream);
+      padding: 13px 34px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-outline:hover { background: rgba(245,240,232,0.15); transform: translateY(-2px); }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      color: rgba(245,240,232,0.6);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 1s 1.2s forwards;
+    }
+    .scroll-arrow {
+      width: 24px;
+      height: 24px;
+      border-right: 2px solid var(--gold);
+      border-bottom: 2px solid var(--gold);
+      transform: rotate(45deg);
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(45deg) translateY(6px); }
+    }
+
+    /* ===== SECTIONS ===== */
+    section { padding: 100px 40px; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--green-dark);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .section-title.light { color: var(--cream); }
+
+    .section-divider {
+      width: 60px;
+      height: 3px;
+      background: var(--gold);
+      margin: 0 0 30px;
+      border-radius: 2px;
+    }
+
+    .section-text {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #4a3728;
+      max-width: 600px;
+    }
+    .section-text.light { color: rgba(245,240,232,0.85); }
+
+    /* ===== ABOUT ===== */
+    #ueber-uns {
+      background: var(--cream);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about-image-wrap {
+      position: relative;
+    }
+    .about-image-wrap::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: 20px;
+      bottom: 20px;
+      border: 2px solid var(--gold);
+      border-radius: var(--radius);
+      z-index: 0;
+    }
+    .about-image-wrap img {
+      width: 100%;
+      height: 480px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      position: relative;
+      z-index: 1;
+    }
+    .about-badge {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      z-index: 2;
+      background: var(--green-dark);
+      color: var(--gold);
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 3px solid var(--gold);
+      font-family: 'Playfair Display', serif;
+    }
+    .about-badge .year { font-size: 28px; font-weight: 700; }
+    .about-badge .since { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
+
+    /* ===== FEATURES ===== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 60px;
+    }
+    .feature-card {
+      background: #fff;
+      padding: 40px 32px;
+      border-radius: var(--radius);
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(44,26,14,0.08);
+      border-bottom: 3px solid transparent;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .feature-card:hover {
+      border-bottom-color: var(--gold);
+      transform: translateY(-6px);
+    }
+    .feature-icon {
+      font-size: 42px;
+      margin-bottom: 20px;
+    }
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--green-dark);
+      margin-bottom: 12px;
+    }
+    .feature-text {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #6a5040;
+    }
+
+    /* ===== MENU PREVIEW ===== */
+    #speisekarte {
+      background: var(--green-dark);
+      position: relative;
+      overflow: hidden;
+    }
+    #speisekarte::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+      opacity: 0.15;
+    }
+    .menu-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .menu-header .section-divider { margin: 0 auto 30px; }
+
+    .menu-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .menu-tab {
+      padding: 10px 24px;
+      border: 1px solid rgba(200,168,75,0.4);
+      border-radius: 30px;
+      color: rgba(245,240,232,0.7);
+      background: none;
+      font-family: 'Lato', sans-serif;
+      font-size: 13px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+    }
+    .menu-tab.active, .menu-tab:hover {
+      background: var(--gold);
+      color: var(--green-dark);
+      border-color: var(--gold);
+      font-weight: 700;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 20px 24px;
+      background: rgba(245,240,232,0.06);
+      border-radius: var(--radius);
+      border: 1px solid rgba(200,168,75,0.15);
+      gap: 16px;
+      transition: background 0.3s;
+    }
+    .menu-item:hover { background: rgba(200,168,75,0.1); }
+    .menu-item-info { flex: 1; }
+    .menu-item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      color: var(--cream);
+      margin-bottom: 5px;
+    }
+    .menu-item-desc {
+      font-size: 13px;
+      color: rgba(245,240,232,0.55);
+      line-height: 1.5;
+    }
+    .menu-item-price {
+      color: var(--gold);
+      font-size: 16px;
+      font-weight: 700;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+    .menu-cta {
+      text-align: center;
+      margin-top: 48px;
+    }
+
+    /* ===== GALLERY ===== */
+    #galerie {
+      background: var(--cream);
+    }
+    .gallery-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .gallery-header .section-divider { margin: 0 auto 30px; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 260px 260px;
+      gap: 16px;
+    }
+    .gallery-item {
+      overflow: hidden;
+      border-radius: var(--radius);
+      position: relative;
+    }
+    .gallery-item:first-child {
+      grid-row: span 2;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26,42,12,0.7) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    /* ===== ÖFFNUNGSZEITEN ===== */
+    #oeffnungszeiten {
+      background: #f0ebe0;
+    }
+    .hours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .hours-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+    .hours-table tr {
+      border-bottom: 1px solid rgba(44,26,14,0.1);
+    }
+    .hours-table td {
+      padding: 14px 0;
+      font-size: 15px;
+      color: #4a3728;
+    }
+    .hours-table td:last-child {
+      text-align: right;
+      font-weight: 700;
+      color: var(--green-dark);
+    }
+    .hours-table tr.highlight td {
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .hours-table tr.highlight td:last-child { color: var(--gold); }
+
+    .map-placeholder {
+      background: var(--green-dark);
+      border-radius: var(--radius);
+      overflow: hidden;
+      height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      text-align: center;
+      padding: 30px;
+      position: relative;
+    }
+    .map-placeholder iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      filter: grayscale(30%) sepia(20%);
+    }
+
+    /* ===== KONTAKT ===== */
+    #kontakt {
+      background: var(--brown-dark);
+      position: relative;
+      overflow: hidden;
+    }
+    #kontakt::after {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      border: 60px solid rgba(200,168,75,0.06);
+    }
+    .kontakt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .kontakt-info { }
+    .kontakt-details {
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .kontakt-detail {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .kontakt-detail-icon {
+      font-size: 20px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .kontakt-detail-text { }
+    .kontakt-detail-label {
+      font-size: 11px;
       letter-spacing: 2px;
       text-transform: uppercase;
-      margin-bottom: 36px;
+      color: var(--gold);
+      margin-bottom: 4px;
     }
-    .login-field { margin-bottom: 16px; text-align: left; }
-    .login-field label { display: block; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(200,168,75,0.8); margin-bottom: 7px; }
-    .login-field input {
-      width: 100%; padding: 13px 16px;
-      background: rgba(255,255,255,0.06);
+    .kontakt-detail-value {
+      font-size: 15px;
+      color: var(--cream);
+      line-height: 1.5;
+    }
+
+    /* Calendly Widget Wrapper */
+    .calendly-wrap {
+      background: rgba(245,240,232,0.04);
       border: 1px solid rgba(200,168,75,0.25);
-      border-radius: 8px; color: #fff;
-      font-family: 'Lato', sans-serif; font-size: 15px;
-      outline: none; transition: border-color .2s;
-    }
-    .login-field input:focus { border-color: var(--gold); }
-    .login-btn {
-      width: 100%; padding: 14px;
-      background: var(--gold); color: var(--green-dark);
-      border: none; border-radius: 8px;
-      font-family: 'Lato', sans-serif; font-weight: 700;
-      font-size: 15px; letter-spacing: 1px; cursor: pointer;
-      transition: background .2s; margin-top: 8px;
-    }
-    .login-btn:hover { background: var(--gold-light); }
-    .login-error { color: #ff8080; font-size: 13px; margin-top: 12px; display: none; }
-    .login-hint {
-      margin-top: 24px; padding: 14px;
-      background: rgba(200,168,75,0.08);
-      border-radius: 8px; border: 1px solid rgba(200,168,75,0.2);
-      font-size: 12px; color: rgba(245,240,232,0.5);
-      text-align: left; line-height: 1.7;
-    }
-    .login-hint strong { color: var(--gold); }
-
-    /* ===== APP SHELL ===== */
-    #app { display: none; min-height: 100vh; }
-
-    /* Topbar */
-    .topbar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      height: 60px;
-      background: var(--green-dark);
-      border-bottom: 2px solid var(--gold);
-      display: flex; align-items: center;
-      padding: 0 24px; gap: 20px;
-    }
-    .topbar-logo { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--gold); }
-    .topbar-badge {
-      background: rgba(200,168,75,0.15); border: 1px solid rgba(200,168,75,0.3);
-      color: rgba(245,240,232,0.6); font-size: 11px; letter-spacing: 1px;
-      padding: 3px 10px; border-radius: 20px; text-transform: uppercase;
-    }
-    .topbar-user { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-    .topbar-user-name { font-size: 14px; color: rgba(245,240,232,0.8); }
-    .topbar-user-role { font-size: 11px; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
-    .logout-btn {
-      background: rgba(200,168,75,0.15); border: 1px solid rgba(200,168,75,0.3);
-      color: var(--gold); padding: 7px 16px; border-radius: 6px;
-      font-family: 'Lato', sans-serif; font-size: 12px; cursor: pointer;
-      transition: background .2s; letter-spacing: 1px;
-    }
-    .logout-btn:hover { background: rgba(200,168,75,0.3); }
-
-    /* Sidebar */
-    .sidebar {
-      position: fixed; top: 60px; left: 0; bottom: 0;
-      width: var(--sidebar);
-      background: #111a0a;
-      border-right: 1px solid rgba(200,168,75,0.15);
-      padding: 24px 0;
-      overflow-y: auto;
-    }
-    .nav-section { padding: 0 16px; margin-bottom: 8px; }
-    .nav-section-label {
-      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-      color: rgba(200,168,75,0.5); padding: 12px 8px 6px;
-    }
-    .nav-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 11px 12px; border-radius: 8px;
-      color: rgba(245,240,232,0.65); font-size: 14px;
-      cursor: pointer; transition: all .2s; margin-bottom: 2px;
-      text-decoration: none;
-    }
-    .nav-item:hover { background: rgba(200,168,75,0.1); color: var(--gold); }
-    .nav-item.active { background: rgba(200,168,75,0.15); color: var(--gold); font-weight: 700; }
-    .nav-item .icon { width: 20px; text-align: center; font-size: 16px; }
-    .nav-badge {
-      margin-left: auto; background: var(--gold); color: var(--green-dark);
-      border-radius: 10px; padding: 1px 7px; font-size: 11px; font-weight: 700;
-    }
-
-    /* Main content */
-    .main {
-      margin-left: var(--sidebar);
-      margin-top: 60px;
-      padding: 30px;
-      min-height: calc(100vh - 60px);
-      background: #1e1e1e;
-    }
-
-    /* Page titles */
-    .page-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 26px; color: var(--gold); margin-bottom: 6px;
-    }
-    .page-sub { font-size: 14px; color: rgba(245,240,232,0.5); margin-bottom: 28px; }
-
-    /* ===== DASHBOARD ===== */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-    .stat-card {
-      background: #272727; border-radius: 10px;
-      padding: 20px 22px;
-      border-left: 3px solid var(--gold);
-    }
-    .stat-card.red { border-left-color: #e55; }
-    .stat-card.green { border-left-color: #4caf50; }
-    .stat-card.blue { border-left-color: #64b5f6; }
-    .stat-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,240,232,0.4); margin-bottom: 8px; }
-    .stat-value { font-family: 'Playfair Display', serif; font-size: 32px; color: #fff; }
-    .stat-sub { font-size: 12px; color: rgba(245,240,232,0.4); margin-top: 4px; }
-
-    .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .dash-card { background: #272727; border-radius: 10px; padding: 22px; }
-    .dash-card-title { font-size: 14px; font-weight: 700; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
-
-    /* ===== CALENDAR VIEW ===== */
-    #cal-container {
-      background: #fff;
       border-radius: 10px;
       overflow: hidden;
-      height: calc(100vh - 200px);
-      min-height: 500px;
+      min-height: 700px;
+    }
+    .calendly-inline-widget {
+      min-width: 100%;
+      min-height: 700px;
     }
 
-    /* ===== RESERVATIONS LIST ===== */
-    .filter-bar {
-      display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;
+    /* ===== IMPRESSUM ===== */
+    #impressum {
+      background: #1a2a0e;
+      padding: 80px 40px;
     }
-    .filter-input {
-      padding: 9px 14px; background: #272727; border: 1px solid rgba(200,168,75,0.25);
-      border-radius: 6px; color: #eee; font-family: 'Lato', sans-serif; font-size: 13px;
-      outline: none; transition: border-color .2s;
+    .impressum-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
     }
-    .filter-input:focus { border-color: var(--gold); }
-    .res-table { width: 100%; border-collapse: collapse; }
-    .res-table th {
-      text-align: left; padding: 12px 14px;
-      background: #1a1a1a; color: var(--gold);
-      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-      border-bottom: 2px solid rgba(200,168,75,0.2);
+    .impressum-block h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 18px;
+      margin-bottom: 16px;
     }
-    .res-table td {
-      padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.05);
-      font-size: 13px; color: rgba(245,240,232,0.8); vertical-align: middle;
+    .impressum-block p {
+      font-size: 14px;
+      color: rgba(245,240,232,0.65);
+      line-height: 1.8;
     }
-    .res-table tr:hover td { background: rgba(200,168,75,0.04); }
-    .slot-badge {
-      display: inline-block; padding: 3px 8px; border-radius: 4px;
-      font-size: 11px; font-weight: 700;
-    }
-    .slot-badge.ok { background: rgba(76,175,80,0.15); color: #4caf50; border: 1px solid rgba(76,175,80,0.3); }
-    .slot-badge.warn { background: rgba(200,168,75,0.15); color: var(--gold); border: 1px solid rgba(200,168,75,0.3); }
-    .slot-badge.full { background: rgba(200,0,0,0.15); color: #ff8080; border: 1px solid rgba(200,0,0,0.3); }
-    .del-btn {
-      padding: 5px 10px; background: rgba(200,0,0,0.15);
-      border: 1px solid rgba(200,0,0,0.3); color: #ff8080;
-      border-radius: 4px; cursor: pointer; font-size: 12px;
-      transition: background .2s;
-    }
-    .del-btn:hover { background: rgba(200,0,0,0.3); }
-    .empty-state { text-align: center; padding: 60px; color: rgba(245,240,232,0.3); font-size: 14px; }
 
-    /* ===== NEW RESERVATION FORM ===== */
-    .form-card { background: #272727; border-radius: 10px; padding: 28px; max-width: 600px; }
-    .form-field { margin-bottom: 18px; }
-    .form-field label { display: block; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(200,168,75,0.7); margin-bottom: 7px; }
-    .form-field input, .form-field select, .form-field textarea {
-      width: 100%; padding: 11px 14px;
-      background: #1e1e1e; border: 1px solid rgba(200,168,75,0.2);
-      border-radius: 6px; color: #eee; font-family: 'Lato', sans-serif; font-size: 14px;
-      outline: none; transition: border-color .2s;
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--brown-dark);
+      padding: 40px 40px;
+      border-top: 1px solid rgba(200,168,75,0.2);
     }
-    .form-field input:focus, .form-field select:focus { border-color: var(--gold); }
-    .form-field select option { background: #1e1e1e; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .form-submit {
-      padding: 13px 32px; background: var(--gold); color: var(--green-dark);
-      border: none; border-radius: 6px; font-family: 'Lato', sans-serif;
-      font-weight: 700; font-size: 14px; cursor: pointer; transition: background .2s;
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
     }
-    .form-submit:hover { background: var(--gold-light); }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--gold);
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .footer-links a {
+      color: rgba(245,240,232,0.55);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy {
+      color: rgba(245,240,232,0.35);
+      font-size: 12px;
+    }
 
-    /* ===== SETTINGS ===== */
-    .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .settings-card { background: #272727; border-radius: 10px; padding: 24px; }
-    .settings-card h3 { font-size: 14px; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
-    .user-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px; background: #1e1e1e; border-radius: 8px; margin-bottom: 10px;
-    }
-    .user-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--green-dark); display: flex; align-items: center; justify-content: center;
-      color: var(--gold); font-weight: 700; font-size: 14px; flex-shrink: 0;
-    }
-    .user-info { flex: 1; }
-    .user-name { font-size: 14px; color: #eee; }
-    .user-role { font-size: 11px; color: rgba(245,240,232,0.4); letter-spacing: 1px; }
-    .user-badge {
-      padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 700;
-    }
-    .user-badge.admin { background: rgba(200,168,75,0.2); color: var(--gold); }
-    .user-badge.staff { background: rgba(76,175,80,0.2); color: #4caf50; }
-
-    /* Pages */
-    .page { display: none; }
-    .page.active { display: block; }
-
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 900px) {
-      .sidebar { display: none; }
-      .main { margin-left: 0; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-      .dash-grid { grid-template-columns: 1fr; }
-      .settings-grid { grid-template-columns: 1fr; }
+      section { padding: 70px 24px; }
+      .about-grid,
+      .hours-grid,
+      .kontakt-grid,
+      .impressum-grid { grid-template-columns: 1fr; gap: 40px; }
+      .calendly-wrap, .calendly-inline-widget { min-height: 600px !important; height: 600px !important; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .gallery-item:first-child { grid-row: span 1; }
+      nav { padding: 14px 20px; }
+      .nav-logo { font-size: 18px; }
     }
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .nav-cta { display: none; }
+    }
+
+    /* Kalender-spezifische Styles (neu) */
+    #kontakt { background:var(--green-dark); position:relative; overflow:hidden; }
+    #kontakt::before { content:''; position:absolute; inset:0; background:url('https://www.transparenttextures.com/patterns/dark-wood.png'); opacity:0.1; }
+    .kalender-wrap { position:relative; z-index:1; }
+    .kalender-header { text-align:center; margin-bottom:50px; }
+    .kalender-header .section-divider { margin:0 auto 24px; }
+    #sx-calendar { width:100%; height:750px; max-height:90vh; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:1px solid rgba(200,168,75,0.3); }
+    .cap-bar-wrap { display:flex; gap:16px; padding:14px 20px; background:rgba(200,168,75,0.08); border:1px solid rgba(200,168,75,0.2); border-radius:8px; flex-wrap:wrap; margin-bottom:20px; }
+    .cap-stat { display:flex; align-items:center; gap:6px; font-size:13px; color:rgba(245,240,232,0.8); }
+    .cap-stat strong { color:var(--gold); font-size:16px; }
+    .res-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center; }
+    .res-overlay.open { display:flex; }
+    .res-modal { background:var(--cream); border-radius:12px; padding:36px; max-width:500px; width:92%; position:relative; border-top:4px solid var(--gold); box-shadow:0 24px 70px rgba(0,0,0,0.5); animation:popIn .3s ease; }
+    @keyframes popIn { from{opacity:0;transform:scale(.95) translateY(-16px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    .res-modal h3 { font-family:'Playfair Display',serif; font-size:22px; color:var(--green-dark); margin-bottom:4px; }
+    .res-modal-sub { color:var(--gold); font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
+    .res-close { position:absolute; top:14px; right:18px; background:none; border:none; font-size:22px; cursor:pointer; color:#999; }
+    .res-close:hover { color:var(--brown-dark); }
+    .res-field { margin-bottom:13px; }
+    .res-field label { display:block; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:5px; }
+    .res-field input, .res-field select { width:100%; padding:11px 14px; border:1px solid #d0ccc0; border-radius:6px; font-family:'Lato',sans-serif; font-size:14px; color:var(--brown-dark); background:#fff; outline:none; transition:border-color .2s; }
+    .res-field input:focus, .res-field select:focus { border-color:var(--gold); }
+    .res-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .res-cap-info { background:rgba(200,168,75,0.1); border:1px solid rgba(200,168,75,0.3); border-radius:6px; padding:10px 14px; font-size:13px; color:#5a3a10; margin-bottom:14px; }
+    .res-cap-info.full { background:rgba(200,0,0,0.08); border-color:rgba(200,0,0,0.3); color:#7a0000; }
+    .res-submit { width:100%; padding:14px; background:var(--green-dark); color:var(--gold); border:none; border-radius:6px; font-family:'Lato',sans-serif; font-weight:700; font-size:14px; letter-spacing:1px; cursor:pointer; transition:background .2s; margin-top:6px; }
+    .res-submit:hover { background:var(--green-mid); }
+    .res-submit:disabled { background:#aaa; color:#fff; cursor:not-allowed; }
   </style>
 </head>
 <body>
 
-<!-- ===== LOGIN ===== -->
-<div id="login-screen">
-  <div class="login-card">
-    <p class="login-logo">🍺 Zum Goldenen Hopfen</p>
-    <p class="login-sub">Mitarbeiterportal</p>
-    <div class="login-field">
-      <label>Benutzername</label>
-      <input type="text" id="login-user" placeholder="benutzername" autocomplete="username" />
-    </div>
-    <div class="login-field">
-      <label>Passwort</label>
-      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()" />
-    </div>
-    <button class="login-btn" onclick="doLogin()">Einloggen →</button>
-    <p class="login-error" id="login-error">❌ Falscher Benutzername oder Passwort.</p>
-  </div>
-</div>
-
-<!-- ===== APP ===== -->
-<div id="app">
-
-  <!-- Topbar -->
-  <div class="topbar">
-    <span class="topbar-logo">🍺 Goldener Hopfen</span>
-    <span class="topbar-badge">Mitarbeiterportal</span>
-    <div class="topbar-user">
-      <div>
-        <div class="topbar-user-name" id="topbar-name"></div>
-        <div class="topbar-user-role" id="topbar-role"></div>
-      </div>
-      <button class="logout-btn" onclick="doLogout()">Ausloggen</button>
-    </div>
-  </div>
-
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="nav-section">
-      <div class="nav-section-label">Übersicht</div>
-      <div class="nav-item active" onclick="showPage('dashboard')">
-        <span class="icon">📊</span> Dashboard
-      </div>
-      <div class="nav-item" onclick="showPage('calendar')">
-        <span class="icon">📅</span> Kalender
-      </div>
-    </div>
-    <div class="nav-section">
-      <div class="nav-section-label">Reservierungen</div>
-      <div class="nav-item" onclick="showPage('reservations')">
-        <span class="icon">📋</span> Alle Buchungen
-        <span class="nav-badge" id="res-count-badge">0</span>
-      </div>
-      <div class="nav-item" onclick="showPage('new-reservation')">
-        <span class="icon">➕</span> Neue Buchung
-      </div>
-    </div>
-    <div class="nav-section" id="admin-nav" style="display:none">
-      <div class="nav-section-label">Administration</div>
-      <div class="nav-item" onclick="showPage('settings')">
-        <span class="icon">⚙️</span> Einstellungen
-      </div>
-    </div>
-    <div class="nav-section" style="margin-top:auto; padding-top:20px;">
-      <a class="nav-item" href="index.html">
-        <span class="icon">🌐</span> Zur Webseite
-      </a>
-    </div>
-  </div>
-
-  <!-- Main Content -->
-  <div class="main">
-
-    <!-- DASHBOARD -->
-    <div class="page active" id="page-dashboard">
-      <h1 class="page-title">Dashboard</h1>
-      <p class="page-sub" id="dash-greeting"></p>
-      <div class="stats-grid" id="stats-grid"></div>
-      <div class="dash-grid">
-        <div class="dash-card">
-          <div class="dash-card-title">📅 Heutige Reservierungen</div>
-          <div id="today-list"></div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-title">🕐 Belegung heute (Slots)</div>
-          <div id="today-slots-staff"></div>
-        </div>
+  <!-- NAVIGATION -->
+  <nav id="navbar">
+    <div class="dropdown">
+      <button class="dropdown-btn" id="menuBtn" aria-expanded="false" aria-haspopup="true">
+        <span class="hamburger">
+          <span></span><span></span><span></span>
+        </span>
+        Menü
+      </button>
+      <div class="dropdown-menu" id="dropdownMenu" role="menu">
+        <a href="#speisekarte" role="menuitem">🍽 Speisekarte</a>
+        <a href="#kontakt" role="menuitem">📬 Kontakt &amp; Reservierung</a>
+        <a href="#oeffnungszeiten" role="menuitem">🕐 Öffnungszeiten</a>
+        <a href="#galerie" role="menuitem">📷 Galerie</a>
+        <a href="#impressum" role="menuitem">📄 Impressum</a>
       </div>
     </div>
 
-    <!-- KALENDER -->
-    <div class="page" id="page-calendar">
-      <h1 class="page-title">Reservierungskalender</h1>
-      <p class="page-sub">Alle Buchungen auf einen Blick – klicke auf einen Slot für Details.</p>
-      <div id="cal-container"></div>
-    </div>
+    <a href="#" class="nav-logo">Zum Goldenen Hopfen</a>
+    <a href="#kontakt" class="nav-cta">Tisch reservieren</a>
+  </nav>
 
-    <!-- ALLE RESERVIERUNGEN -->
-    <div class="page" id="page-reservations">
-      <h1 class="page-title">Alle Buchungen</h1>
-      <p class="page-sub" id="res-page-sub"></p>
-      <div class="filter-bar">
-        <input class="filter-input" id="filter-search" placeholder="🔍 Name, E-Mail, Datum …" oninput="renderResList()" />
-        <input class="filter-input" id="filter-date" type="date" onchange="renderResList()" />
-        <select class="filter-input" id="filter-sort" onchange="renderResList()">
-          <option value="newest">Neueste zuerst</option>
-          <option value="oldest">Älteste zuerst</option>
-          <option value="date">Nach Datum</option>
-        </select>
-        <button class="form-submit" style="padding:9px 18px;font-size:13px;" onclick="exportCSV()">📥 CSV Export</button>
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <span class="hero-eyebrow">Willkommen im</span>
+      <h1 class="hero-title">Zum Goldenen <em>Hopfen</em></h1>
+      <p class="hero-subtitle">Gemütliche Atmosphäre, frisch gezapftes Bier und herzhafte bayerische Küche – direkt unter dem freien Himmel.</p>
+      <div class="hero-buttons">
+        <a href="#speisekarte" class="btn-primary">Speisekarte ansehen</a>
+        <a href="#kontakt" class="btn-outline">Tisch reservieren</a>
       </div>
-      <div style="overflow-x:auto;">
-        <table class="res-table">
-          <thead>
-            <tr>
-              <th>Datum & Zeit</th>
-              <th>Name</th>
-              <th>Personen</th>
-              <th>E-Mail</th>
-              <th>Telefon</th>
-              <th>Wünsche</th>
-              <th>Slot</th>
-              <th>Aktion</th>
-            </tr>
-          </thead>
-          <tbody id="res-table-body"></tbody>
-        </table>
-      </div>
-      <div id="res-empty" class="empty-state" style="display:none">📭 Keine Reservierungen gefunden.</div>
     </div>
+    <div class="hero-scroll-hint">
+      <span>Scrollen</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
 
-    <!-- NEUE RESERVIERUNG -->
-    <div class="page" id="page-new-reservation">
-      <h1 class="page-title">Neue Reservierung</h1>
-      <p class="page-sub">Tischreservierung manuell anlegen (z.B. per Telefon).</p>
-      <div class="form-card">
-        <div class="form-row">
-          <div class="form-field"><label>Name *</label><input id="nf-name" placeholder="Max Mustermann" /></div>
-          <div class="form-field"><label>E-Mail *</label><input id="nf-email" type="email" placeholder="max@beispiel.de" /></div>
-        </div>
-        <div class="form-row">
-          <div class="form-field"><label>Telefon</label><input id="nf-phone" type="tel" placeholder="+49 89 …" /></div>
-          <div class="form-field"><label>Personen *</label>
-            <select id="nf-persons">
-              <option value="">Bitte wählen</option>
-              <option>1 Person</option><option>2 Personen</option><option>3 Personen</option>
-              <option>4 Personen</option><option>5 Personen</option><option>6+ Personen</option>
-            </select>
+  <!-- ÜBER UNS -->
+  <section id="ueber-uns">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image-wrap reveal-left">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Unser Biergarten" />
+          <div class="about-badge">
+            <span class="year">1987</span>
+            <span class="since">Seit</span>
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-field"><label>Datum *</label><input id="nf-date" type="date" /></div>
-          <div class="form-field"><label>Uhrzeit *</label>
-            <select id="nf-time">
-              <option value="">Bitte wählen</option>
-            </select>
-          </div>
+        <div class="reveal-right">
+          <span class="section-label">Unsere Geschichte</span>
+          <h2 class="section-title">Tradition trifft auf Gastfreundschaft</h2>
+          <div class="section-divider"></div>
+          <p class="section-text">
+            Seit über drei Jahrzehnten ist der Goldene Hopfen ein Ort, an dem sich Freunde treffen, Familien feiern und die schönsten Sommerabende entstehen. Unter alten Kastanienbäumen servieren wir frisch gezapfte Biere aus der Region, hausgemachte Brotzeiten und traditionelle Gerichte nach Omas Rezept.
+          </p>
+          <p class="section-text" style="margin-top: 16px;">
+            Unser Biergarten bietet Platz für bis zu 400 Gäste – und jeder fühlt sich bei uns wie zu Hause.
+          </p>
+          <a href="#kontakt" class="btn-primary" style="display:inline-block;margin-top:32px;">Reservierung anfragen</a>
         </div>
-        <div class="form-field"><label>Besondere Wünsche</label><input id="nf-wishes" placeholder="Geburtstag, Allergie, Kinderstuhl …" /></div>
-        <button class="form-submit" onclick="createManualReservation()">✅ Reservierung anlegen</button>
       </div>
     </div>
+  </section>
 
-    <!-- EINSTELLUNGEN -->
-    <div class="page" id="page-settings">
-      <h1 class="page-title">Einstellungen</h1>
-      <p class="page-sub">Benutzerverwaltung und Systemeinstellungen.</p>
-      <div class="settings-grid">
-        <div class="settings-card">
-          <h3>👥 Mitarbeiter</h3>
-          <div id="user-list"></div>
+  <!-- FEATURES -->
+  <section style="background: #f0ebe0; padding-top: 0;">
+    <div class="container">
+      <div class="features-grid">
+        <div class="feature-card reveal delay-1">
+          <div class="feature-icon">🍺</div>
+          <h3 class="feature-title">Regionales Bier</h3>
+          <p class="feature-text">Frisch gezapfte Biere von lokalen Brauereien – vom klassischen Hellen bis zum saisonalen Märzen.</p>
         </div>
-        <div class="settings-card">
-          <h3>⚙️ System</h3>
-          <div style="display:flex;flex-direction:column;gap:12px;">
-            <div style="padding:14px;background:#1e1e1e;border-radius:8px;">
-              <p style="font-size:13px;color:rgba(245,240,232,0.6);margin-bottom:8px;">Maximale Buchungen pro Slot</p>
-              <p style="font-size:24px;font-weight:700;color:var(--gold);">6</p>
+        <div class="feature-card reveal delay-2">
+          <div class="feature-icon">🥨</div>
+          <h3 class="feature-title">Hausgemachte Küche</h3>
+          <p class="feature-text">Deftige Brotzeiten, knusprige Schweinshaxe und hausgemachter Obatzda – alles frisch zubereitet.</p>
+        </div>
+        <div class="feature-card reveal delay-3">
+          <div class="feature-icon">🌳</div>
+          <h3 class="feature-title">Schattige Kastanien</h3>
+          <p class="feature-text">400 Plätze unter alten Kastanienbäumen – der perfekte Ort für heiße Sommertage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPEISEKARTE -->
+  <section id="speisekarte">
+    <div class="container" style="position:relative;z-index:1">
+      <div class="menu-header reveal">
+        <span class="section-label" style="color: var(--gold-light)">Was wir bieten</span>
+        <h2 class="section-title light">Unsere Speisekarte</h2>
+        <div class="section-divider"></div>
+        <p class="section-text light" style="margin: 0 auto; text-align:center;">Herzhafte bayerische Küche, frisch zubereitet mit regionalen Zutaten.</p>
+      </div>
+
+      <div class="menu-tabs reveal">
+        <button class="menu-tab active" onclick="switchTab(this, 'brotzeiten')">Brotzeiten</button>
+        <button class="menu-tab" onclick="switchTab(this, 'hauptspeisen')">Hauptspeisen</button>
+        <button class="menu-tab" onclick="switchTab(this, 'getraenke')">Getränke</button>
+        <button class="menu-tab" onclick="switchTab(this, 'desserts')">Desserts</button>
+      </div>
+
+      <div id="brotzeiten" class="menu-content">
+        <div class="menu-grid">
+          <div class="menu-item reveal delay-1">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Obatzda mit Brezn</p>
+              <p class="menu-item-desc">Hausgemachter Obatzda, frische Brezn, Radieschen</p>
             </div>
-            <div style="padding:14px;background:#1e1e1e;border-radius:8px;">
-              <p style="font-size:13px;color:rgba(245,240,232,0.6);margin-bottom:8px;">Buchungstakt</p>
-              <p style="font-size:24px;font-weight:700;color:var(--gold);">30 Min.</p>
+            <p class="menu-item-price">8,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-2">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Brotzeit-Teller</p>
+              <p class="menu-item-desc">Wurst, Käse, Schmalz, Gurkerl, Brot</p>
             </div>
-            <div style="padding:14px;background:#1e1e1e;border-radius:8px;">
-              <p style="font-size:13px;color:rgba(245,240,232,0.6);margin-bottom:8px;">Öffnungszeiten</p>
-              <p style="font-size:16px;font-weight:700;color:var(--gold);">10:00 – 23:00 Uhr</p>
+            <p class="menu-item-price">12,50 €</p>
+          </div>
+          <div class="menu-item reveal delay-3">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Leberkäse-Semmel</p>
+              <p class="menu-item-desc">Frischer Leberkäse, Senf, Semmel</p>
             </div>
-            <button class="del-btn" style="align-self:flex-start;" onclick="clearAllData()">🗑 Alle Daten löschen</button>
+            <p class="menu-item-price">4,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-4">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Weißwürste (2 Stk.)</p>
+              <p class="menu-item-desc">Mit süßem Senf und Brezn</p>
+            </div>
+            <p class="menu-item-price">7,50 €</p>
           </div>
         </div>
       </div>
+
+      <div id="hauptspeisen" class="menu-content" style="display:none">
+        <div class="menu-grid">
+          <div class="menu-item reveal delay-1">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Schweinshaxe</p>
+              <p class="menu-item-desc">Knusprige Haxe mit Knödel und Sauerkraut</p>
+            </div>
+            <p class="menu-item-price">18,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-2">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Grillhendl (½)</p>
+              <p class="menu-item-desc">Halbes Hendl vom Grill mit Kartoffelsalat</p>
+            </div>
+            <p class="menu-item-price">13,50 €</p>
+          </div>
+          <div class="menu-item reveal delay-3">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Steckerlfisch</p>
+              <p class="menu-item-desc">Gegrillter Fisch am Spieß mit Salat</p>
+            </div>
+            <p class="menu-item-price">14,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-4">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Käsespätzle</p>
+              <p class="menu-item-desc">Hausgemachte Spätzle mit Bergkäse und Röstzwiebeln</p>
+            </div>
+            <p class="menu-item-price">11,90 €</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="getraenke" class="menu-content" style="display:none">
+        <div class="menu-grid">
+          <div class="menu-item reveal delay-1">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Helles (1,0 L)</p>
+              <p class="menu-item-desc">Frisch gezapft, lokal gebraut</p>
+            </div>
+            <p class="menu-item-price">7,80 €</p>
+          </div>
+          <div class="menu-item reveal delay-2">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Weißbier (0,5 L)</p>
+              <p class="menu-item-desc">Traditionelles Hefeweizen</p>
+            </div>
+            <p class="menu-item-price">4,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-3">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Radler (1,0 L)</p>
+              <p class="menu-item-desc">Bier mit frischer Zitronenlimonade</p>
+            </div>
+            <p class="menu-item-price">6,50 €</p>
+          </div>
+          <div class="menu-item reveal delay-4">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Apfelsaftschorle (0,5 L)</p>
+              <p class="menu-item-desc">Regionaler Apfelsaft mit Sprudel</p>
+            </div>
+            <p class="menu-item-price">3,80 €</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="desserts" class="menu-content" style="display:none">
+        <div class="menu-grid">
+          <div class="menu-item reveal delay-1">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Kaiserschmarrn</p>
+              <p class="menu-item-desc">Mit Zwetschgenröster und Puderzucker</p>
+            </div>
+            <p class="menu-item-price">8,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-2">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Dampfnudeln</p>
+              <p class="menu-item-desc">Mit Vanillesauce oder Weinsauce</p>
+            </div>
+            <p class="menu-item-price">7,50 €</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-cta reveal">
+        <a href="#kontakt" class="btn-primary">Tisch reservieren</a>
+      </div>
     </div>
+  </section>
 
-  </div><!-- /main -->
-</div><!-- /app -->
-
-<script>
-// ================================================================
-// MITARBEITERPORTAL – Komplettes System
-// ================================================================
-
-// ---- USERS ----
-const USERS = [
-  { id:1, username:'admin',    password:'hopfen2024', name:'Admin',          role:'Administrator', roleKey:'admin' },
-  { id:2, username:'kellner1', password:'bier123',    name:'Hans Meier',     role:'Kellner',       roleKey:'staff' },
-  { id:3, username:'chef',     password:'goldener',   name:'Maria Schmidt',  role:'Küche',         roleKey:'staff' },
-];
-
-const DB_KEY   = 'biergarten_reservations_v2';
-const MAX_SLOT = 6;
-const OPEN_H   = 10;
-const CLOSE_H  = 23;
-const MONTHS   = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-const MONTHS_F = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
-const WDAYS    = ['So','Mo','Di','Mi','Do','Fr','Sa'];
-
-let currentUser = null;
-let reservations = [];
-let staffCal = null;
-
-function loadRes() { reservations = JSON.parse(localStorage.getItem(DB_KEY) || '[]'); }
-function saveRes() { localStorage.setItem(DB_KEY, JSON.stringify(reservations)); }
-function slotKey(date, h, m) { return `${date} ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
-function countSlot(key) { return reservations.filter(r => r.slotKey === key).length; }
-
-// ---- LOGIN ----
-function doLogin() {
-  const u = document.getElementById('login-user').value.trim().toLowerCase();
-  const p = document.getElementById('login-pass').value;
-  const user = USERS.find(x => x.username === u && x.password === p);
-  if (!user) {
-    document.getElementById('login-error').style.display = 'block';
-    return;
-  }
-  currentUser = user;
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('topbar-name').textContent = user.name;
-  document.getElementById('topbar-role').textContent = user.role;
-  if (user.roleKey === 'admin') document.getElementById('admin-nav').style.display = 'block';
-  loadRes();
-  initApp();
-}
-
-function doLogout() {
-  currentUser = null;
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('login-user').value = '';
-  document.getElementById('login-pass').value = '';
-  document.getElementById('login-error').style.display = 'none';
-}
-
-// ---- APP INIT ----
-function initApp() {
-  buildTimeSelect();
-  showPage('dashboard');
-  document.getElementById('nf-date').value = new Date().toISOString().slice(0,10);
-  document.getElementById('nf-date').addEventListener('change', buildTimeSelect);
-}
-
-function buildTimeSelect() {
-  const date = document.getElementById('nf-date').value;
-  const sel = document.getElementById('nf-time');
-  sel.innerHTML = '<option value="">Bitte wählen</option>';
-  for (let h = OPEN_H; h < CLOSE_H; h++) {
-    [0,30].forEach(m => {
-      const sk = slotKey(date || new Date().toISOString().slice(0,10), h, m);
-      const free = MAX_SLOT - countSlot(sk);
-      const dis = free <= 0 ? 'disabled' : '';
-      sel.innerHTML += `<option value="${sk}" ${dis}>${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} – ${free<=0?'Ausgebucht':`${free} frei`}</option>`;
-    });
-  }
-}
-
-// ---- PAGE NAVIGATION ----
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + id)?.classList.add('active');
-  event?.currentTarget?.classList.add('active');
-
-  loadRes();
-  if (id === 'dashboard') renderDashboard();
-  else if (id === 'calendar') renderStaffCalendar();
-  else if (id === 'reservations') renderResList();
-  else if (id === 'settings') renderSettings();
-
-  document.getElementById('res-count-badge').textContent = reservations.length;
-}
-
-// ---- DASHBOARD ----
-function renderDashboard() {
-  const today = new Date().toISOString().slice(0,10);
-  const now = new Date();
-  const hour = now.getHours();
-  const greeting = hour < 12 ? 'Guten Morgen' : hour < 18 ? 'Guten Tag' : 'Guten Abend';
-  document.getElementById('dash-greeting').textContent = `${greeting}, ${currentUser.name}! Heute ist ${now.getDate()}. ${MONTHS_F[now.getMonth()]} ${now.getFullYear()}.`;
-
-  const todayRes = reservations.filter(r => r.slotKey.startsWith(today));
-  const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay()+6)%7)); mon.setHours(0,0,0,0);
-  const weekRes = reservations.filter(r => { const d=new Date(r.slotKey.slice(0,10)); return d>=mon; });
-  const fullSlots = (() => {
-    const g = {}; todayRes.forEach(r => { g[r.slotKey]=(g[r.slotKey]||0)+1; });
-    return Object.values(g).filter(c => c >= MAX_SLOT).length;
-  })();
-
-  document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card"><div class="stat-label">Heute</div><div class="stat-value">${todayRes.length}</div><div class="stat-sub">Reservierungen</div></div>
-    <div class="stat-card green"><div class="stat-label">Diese Woche</div><div class="stat-value">${weekRes.length}</div><div class="stat-sub">Buchungen</div></div>
-    <div class="stat-card red"><div class="stat-label">Ausgebuchte Slots</div><div class="stat-value">${fullSlots}</div><div class="stat-sub">Heute</div></div>
-    <div class="stat-card blue"><div class="stat-label">Gesamt</div><div class="stat-value">${reservations.length}</div><div class="stat-sub">Alle Buchungen</div></div>`;
-
-  // Today list
-  const el = document.getElementById('today-list');
-  if (todayRes.length === 0) {
-    el.innerHTML = '<p style="color:rgba(245,240,232,0.3);font-size:13px;padding:20px 0;">Noch keine Buchungen heute.</p>';
-  } else {
-    const sorted = [...todayRes].sort((a,b) => a.slotKey.localeCompare(b.slotKey));
-    el.innerHTML = sorted.map(r => `
-      <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
-        <div style="background:rgba(200,168,75,0.15);border-radius:6px;padding:6px 10px;text-align:center;min-width:54px;">
-          <p style="color:var(--gold);font-size:14px;font-weight:700;">${r.slotKey.split(' ')[1]}</p>
+  <!-- GALERIE -->
+  <section id="galerie">
+    <div class="container">
+      <div class="gallery-header reveal">
+        <span class="section-label">Atmosphäre</span>
+        <h2 class="section-title">Einblicke in unseren Biergarten</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item reveal-left">
+          <img src="https://images.unsplash.com/photo-1559628233-100c798642d4?w=700&q=80" alt="Biergarten Atmosphäre" />
+          <div class="gallery-overlay"></div>
         </div>
-        <div style="flex:1;">
-          <p style="font-size:14px;color:#eee;">${r.name}</p>
-          <p style="font-size:12px;color:rgba(245,240,232,0.4);">${r.persons}</p>
+        <div class="gallery-item reveal delay-1">
+          <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=80" alt="Bayerisches Essen" />
+          <div class="gallery-overlay"></div>
         </div>
-        <button class="del-btn" onclick="deleteRes('${r.id}','dashboard')">✕</button>
-      </div>`).join('');
-  }
-
-  // Today slots
-  const slotsEl = document.getElementById('today-slots-staff');
-  let shtml = '';
-  for (let h = OPEN_H; h < CLOSE_H; h++) {
-    [0,30].forEach(m => {
-      const key = slotKey(today, h, m);
-      const cnt = countSlot(key);
-      if (cnt === 0) return;
-      const pct = (cnt/MAX_SLOT)*100;
-      const col = cnt>=MAX_SLOT?'#e55':cnt>=4?'var(--gold)':'#4caf50';
-      shtml += `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;">
-        <span style="font-size:12px;color:rgba(245,240,232,0.5);min-width:44px;">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}</span>
-        <div style="flex:1;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;">
-          <div style="height:100%;width:${pct}%;background:${col};border-radius:3px;"></div>
+        <div class="gallery-item reveal delay-2">
+          <img src="https://images.unsplash.com/photo-1574259392081-cbf4c7dc6028?w=600&q=80" alt="Frisches Bier" />
+          <div class="gallery-overlay"></div>
         </div>
-        <span style="color:${col};font-size:12px;font-weight:700;min-width:40px;">${cnt}/${MAX_SLOT}</span>
-      </div>`;
-    });
-  }
-  slotsEl.innerHTML = shtml || '<p style="color:rgba(245,240,232,0.3);font-size:13px;padding:20px 0;">Keine Buchungen heute.</p>';
-}
+        <div class="gallery-item reveal delay-3">
+          <img src="https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=600&q=80" alt="Gemütliche Runde" />
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-item reveal delay-4">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80" alt="Speisen" />
+          <div class="gallery-overlay"></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-function renderStaffCalendar() {
-  const container = document.getElementById('cal-container');
-  if (!container) return;
-  container.innerHTML = '';
+  <!-- ÖFFNUNGSZEITEN -->
+  <section id="oeffnungszeiten">
+    <div class="container">
+      <div class="hours-grid">
+        <div class="reveal-left">
+          <span class="section-label">Wir sind für Sie da</span>
+          <h2 class="section-title">Öffnungszeiten</h2>
+          <div class="section-divider"></div>
+          <table class="hours-table">
+            <tr><td>Montag</td><td>Ruhetag</td></tr>
+            <tr><td>Dienstag – Donnerstag</td><td>11:00 – 22:00 Uhr</td></tr>
+            <tr class="highlight"><td>Freitag</td><td>11:00 – 23:00 Uhr</td></tr>
+            <tr class="highlight"><td>Samstag</td><td>10:00 – 23:00 Uhr</td></tr>
+            <tr class="highlight"><td>Sonntag</td><td>10:00 – 22:00 Uhr</td></tr>
+            <tr><td>Feiertage</td><td>10:00 – 22:00 Uhr</td></tr>
+          </table>
+          <p style="margin-top:24px; font-size:13px; color:#8a7060;">* Bei schlechtem Wetter können die Öffnungszeiten variieren.</p>
+        </div>
+        <div class="reveal-right">
+          <span class="section-label">So finden Sie uns</span>
+          <h2 class="section-title">Anfahrt</h2>
+          <div class="section-divider"></div>
+          <div class="map-placeholder">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2660.1231!2d11.5753!3d48.1371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDjCsDA4JzEzLjYiTiAxMcKwMzQnMzEuMSJF!5e0!3m2!1sde!2sde!4v1600000000000!5m2!1sde!2sde"
+              title="Standort Biergarten"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+          <p style="margin-top:20px; font-size:14px; color:#4a3728;">
+            🚗 Parkplätze direkt am Haus verfügbar<br>
+            🚌 Bushaltestelle: Marktplatz (2 min Fußweg)
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  // Warten, bis scheduleX da ist
-  let tries = 0;
-  function init() {
-    if (window.scheduleX) {
-      const SX = scheduleX;
+  <!-- Schedule-X CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@schedule-x/theme-default@2/dist/index.css" />
 
+  <!-- KONTAKT / RESERVIERUNG -->
+  <section id="kontakt">
+    <div class="container kalender-wrap">
+      <div class="kalender-header reveal">
+        <span class="section-label" style="color:var(--gold-light)">Tisch reservieren</span>
+        <h2 class="section-title" style="color:#fff;">Reservierungskalender</h2>
+        <div class="section-divider"></div>
+        <p class="section-text light" style="margin:0 auto;text-align:center;max-width:560px;">
+          Wähle Datum &amp; Uhrzeit – bis zu 6 Tische pro halbem Stunde buchbar. Belegte Slots sind direkt sichtbar.
+        </p>
+      </div>
+      <div class="cap-bar-wrap reveal" id="cap-stats"></div>
+      <div class="kontakt-grid" style="margin-bottom:40px;">
+        <div class="reveal-left">
+          <span class="section-label" style="color:var(--gold-light)">Kontakt &amp; Anfahrt</span>
+          <h2 class="section-title light">Wir freuen uns<br>auf Sie!</h2>
+          <div class="section-divider"></div>
+          <div class="kontakt-details">
+            <div class="kontakt-detail">
+              <span class="kontakt-detail-icon">📍</span>
+              <div class="kontakt-detail-text">
+                <p class="kontakt-detail-label">Adresse</p>
+                <p class="kontakt-detail-value">Biergartenstraße 12<br>80333 München</p>
+              </div>
+            </div>
+            <div class="kontakt-detail">
+              <span class="kontakt-detail-icon">📞</span>
+              <div class="kontakt-detail-text">
+                <p class="kontakt-detail-label">Telefon</p>
+                <p class="kontakt-detail-value"><a href="tel:+4989123456" style="color:var(--cream);text-decoration:none">+49 89 123 456</a></p>
+              </div>
+            </div>
+            <div class="kontakt-detail">
+              <span class="kontakt-detail-icon">✉️</span>
+              <div class="kontakt-detail-text">
+                <p class="kontakt-detail-label">E-Mail</p>
+                <p class="kontakt-detail-value"><a href="mailto:siyo_99@hotmail.de" style="color:var(--cream);text-decoration:none">siyo_99@hotmail.de</a></p>
+              </div>
+            </div>
+            <div class="kontakt-detail">
+              <span class="kontakt-detail-icon">🕐</span>
+              <div class="kontakt-detail-text">
+                <p class="kontakt-detail-label">Öffnungszeiten</p>
+                <p class="kontakt-detail-value">Di–Do: 11–22 Uhr<br>Fr–Sa: 10–23 Uhr<br>So &amp; Feiertage: 10–22 Uhr<br><span style="color:rgba(245,240,232,0.5);font-size:12px;">Mo: Ruhetag</span></p>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:28px;padding:18px 20px;background:rgba(200,168,75,0.1);border-left:3px solid var(--gold);border-radius:4px;">
+            <p style="color:var(--gold);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;">✅ So funktioniert es</p>
+            <p style="color:rgba(245,240,232,0.75);font-size:13px;line-height:1.7;">Klicke auf einen freien Slot → Formular ausfüllen → sofort bestätigt. Team sieht alles live im <a href="mitarbeiter.html" style="color:var(--gold);">Mitarbeiterportal →</a></p>
+          </div>
+        </div>
+        <div class="reveal-right" id="today-overview"></div>
+      </div>
+      <!-- Schedule-X Kalender -->
+      <div class="reveal">
+        <div id="sx-calendar"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUCHUNGS-MODAL -->
+  <div class="res-overlay" id="res-overlay">
+    <div class="res-modal">
+      <button class="res-close" onclick="closeResModal()">✕</button>
+      <h3>Tisch reservieren</h3>
+      <p class="res-modal-sub" id="res-modal-sub"></p>
+      <div class="res-cap-info" id="res-cap-info"></div>
+      <div class="res-row">
+        <div class="res-field"><label>Name *</label><input id="f-name" placeholder="Max Mustermann" /></div>
+        <div class="res-field"><label>E-Mail *</label><input id="f-email" type="email" placeholder="mail@beispiel.de" /></div>
+      </div>
+      <div class="res-row">
+        <div class="res-field"><label>Telefon</label><input id="f-phone" type="tel" placeholder="+49 89 …" /></div>
+        <div class="res-field"><label>Personen *</label>
+          <select id="f-persons">
+            <option value="">Bitte wählen</option>
+            <option>1 Person</option><option>2 Personen</option><option>3 Personen</option>
+            <option>4 Personen</option><option>5 Personen</option><option>6+ Personen</option>
+          </select>
+        </div>
+      </div>
+      <div class="res-field"><label>Uhrzeit *</label><select id="f-time"></select></div>
+      <div class="res-field"><label>Besondere Wünsche</label><input id="f-wishes" placeholder="Geburtstag, Kinderstuhl …" /></div>
+      <button class="res-submit" id="res-submit-btn" onclick="submitReservation()">🍺 Jetzt verbindlich reservieren</button>
+    </div>
+  </div>
+
+  <!-- IMPRESSUM -->
+  <section id="impressum" style="background:#1a2a0e;padding:80px 40px;">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label">Rechtliches</span>
+        <h2 class="section-title" style="color:var(--gold);font-family:'Playfair Display',serif;">Impressum</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="impressum-grid">
+        <div class="impressum-block reveal delay-1">
+          <h3>Angaben gemäß § 5 TMG</h3>
+          <p>Biergarten „Zum Goldenen Hopfen"<br>Max Mustermann<br>Biergartenstraße 12<br>80333 München<br><br>Telefon: +49 89 123 456<br>E-Mail: siyo_99@hotmail.de</p>
+        </div>
+        <div class="impressum-block reveal delay-2">
+          <h3>Verantwortlich für den Inhalt</h3>
+          <p>Max Mustermann<br>(Adresse wie oben)<br><br>Umsatzsteuer-ID gemäß § 27a UStG: DE123456789</p>
+        </div>
+        <div class="impressum-block reveal delay-3">
+          <h3>Haftungsausschluss</h3>
+          <p>Die Inhalte dieser Webseite wurden mit größtmöglicher Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität können wir keine Gewähr übernehmen.</p>
+        </div>
+        <div class="impressum-block reveal delay-4">
+          <h3>Datenschutz</h3>
+          <p>Personenbezogene Daten werden nur im erforderlichen Umfang und auf Basis der gesetzlichen Grundlagen erhoben und verarbeitet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Zum Goldenen Hopfen</div>
+      <ul class="footer-links">
+        <li><a href="#speisekarte">Speisekarte</a></li>
+        <li><a href="#oeffnungszeiten">Öffnungszeiten</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+        <li><a href="#impressum">Impressum</a></li>
+        <li><a href="mitarbeiter.html" style="color:var(--gold);">🔒 Mitarbeiterportal</a></li>
+      </ul>
+      <p class="footer-copy">© 2024 Zum Goldenen Hopfen. Alle Rechte vorbehalten.</p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // Nav scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 60); });
+
+    // Dropdown
+    const menuBtn = document.getElementById('menuBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    menuBtn.addEventListener('click', e => { e.stopPropagation(); const open = dropdownMenu.classList.toggle('open'); menuBtn.setAttribute('aria-expanded', open); });
+    document.addEventListener('click', () => { dropdownMenu.classList.remove('open'); menuBtn.setAttribute('aria-expanded', false); });
+    dropdownMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { dropdownMenu.classList.remove('open'); }));
+
+    // Scroll Reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); else e.target.classList.remove('visible'); });
+    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+
+    // Menu Tabs
+    function switchTab(btn, id) {
+      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.menu-content').forEach(c => c.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+      document.querySelectorAll('#' + id + ' .reveal').forEach(el => { el.classList.remove('visible'); setTimeout(() => el.classList.add('visible'), 50); });
+    }
+  </script>
+
+  <!-- Schedule-X JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/@schedule-x/bundle@2/dist/index.global.js"></script>
+
+  <!-- KALENDER JAVASCRIPT (robust) -->
+  <script>
+  (function() {
+    const DB_KEY   = 'biergarten_reservations_v2';
+    const MAX_SLOT = 6;
+    const OPEN_H   = 10;
+    const CLOSE_H  = 23;
+    const MONTHS   = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+    const WDAYS    = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+
+    let reservations = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+    let calInst = null;
+
+    function save() { localStorage.setItem(DB_KEY, JSON.stringify(reservations)); }
+    function slotKey(date, h, m) { return `${date} ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
+    function countSlot(key) { return reservations.filter(r => r.slotKey === key).length; }
+    function isFull(key) { return countSlot(key) >= MAX_SLOT; }
+
+    function buildCalEvents() {
       const groups = {};
-      reservations.forEach(r => { if (!groups[r.slotKey]) groups[r.slotKey]=0; groups[r.slotKey]++; });
-      const events = Object.entries(groups).map(([key, cnt]) => {
+      reservations.forEach(r => { if (!groups[r.slotKey]) groups[r.slotKey] = 0; groups[r.slotKey]++; });
+      return Object.entries(groups).map(([key, count]) => {
         const [date, time] = key.split(' ');
         const [h, m] = time.split(':').map(Number);
-        const endH = m===30?h+1:h, endM = m===30?0:30;
+        const endM = m === 30 ? 0 : 30;
+        const endH = m === 30 ? h + 1 : h;
+        const full = count >= MAX_SLOT;
+        const partial = count >= 4;
         return {
           id: key,
-          title: `${cnt}/${MAX_SLOT} Tische${cnt>=MAX_SLOT?' · VOLL':''}`,
+          title: `${count}/${MAX_SLOT} Tische${full ? ' · VOLL' : ''}`,
           start: key,
           end: `${date} ${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`,
-          calendarId: cnt>=MAX_SLOT?'full':cnt>=4?'partial':'booked',
+          calendarId: full ? 'full' : partial ? 'partial' : 'booked',
         };
       });
+    }
 
-      staffCal = SX.createCalendar({
+    function waitForScheduleX(callback, maxTries = 80) {
+      let tries = 0;
+      function check() {
+        if (window.scheduleX) {
+          console.log('✅ scheduleX geladen, initialisiere Kalender');
+          callback();
+        } else if (tries++ < maxTries) {
+          setTimeout(check, 150);
+        } else {
+          console.error('❌ scheduleX nicht geladen – Kalender kann nicht angezeigt werden.');
+        }
+      }
+      check();
+    }
+
+    function initCalendar() {
+      const SX = scheduleX;
+      const container = document.getElementById('sx-calendar');
+      if (!container) return;
+
+      calInst = SX.createCalendar({
         locale: 'de-DE',
         selectedDate: new Date().toISOString().slice(0,10),
         defaultView: SX.viewWeek.name,
         views: [SX.viewDay, SX.viewWeek, SX.viewMonthGrid, SX.viewMonthAgenda],
         dayBoundaries: { start:'10:00', end:'23:00' },
-        plugins: [SX.createEventModalPlugin()],
+        plugins: [SX.createEventModalPlugin(), SX.createDragAndDropPlugin()],
         calendars: {
-          booked:  { colorName:'booked',  lightColors:{ main:'#2a5f1e', container:'#d4f7d4', onContainer:'#1a3d10' } },
-          partial: { colorName:'partial', lightColors:{ main:'#7a5000', container:'#fff0b3', onContainer:'#5c3800' } },
-          full:    { colorName:'full',    lightColors:{ main:'#8b0000', container:'#ffd0d0', onContainer:'#5a0000' } },
+          booked:  { colorName:'booked',  lightColors: { main:'#2a3d1e', container:'#c8f0c8', onContainer:'#1a3010' } },
+          partial: { colorName:'partial', lightColors: { main:'#7a5000', container:'#ffe8a0', onContainer:'#5c3a00' } },
+          full:    { colorName:'full',    lightColors: { main:'#8b0000', container:'#ffc0c0', onContainer:'#5a0000' } },
         },
-        events,
+        events: buildCalEvents(),
+        callbacks: {
+          onClickDateTime(dt) { openResModal(dt.slice(0,10), snapSlot(dt)); },
+          onClickDate(date)   { calInst.setView(SX.viewDay.name); calInst.setDate(date); },
+          onEventClick(ev)    { if (!isFull(ev.id)) openResModal(ev.id.slice(0,10), ev.id); },
+        },
       });
-      staffCal.render(container);
-      console.log('✅ Mitarbeiterkalender geladen.');
-    } else if (tries++ < 80) {
-      setTimeout(init, 100);
-    } else {
-      container.innerHTML = '<p style="color:#ff8080;padding:40px;text-align:center;">❌ Kalender konnte nicht geladen werden (scheduleX fehlt). Bitte Seite neu laden.</p>';
+      calInst.render(container);
+      renderStats();
+      renderTodayOverview();
     }
-  }
-  init();
-}
 
-// ---- RESERVATIONS LIST ----
-function renderResList() {
-  loadRes();
-  const search = document.getElementById('filter-search').value.toLowerCase();
-  const dateF  = document.getElementById('filter-date').value;
-  const sort   = document.getElementById('filter-sort').value;
+    function snapSlot(dt) {
+      const [date, time] = dt.split(' ');
+      if (!time) return slotKey(date, OPEN_H, 0);
+      const [h, mRaw] = time.split(':').map(Number);
+      return slotKey(date, h, mRaw < 30 ? 0 : 30);
+    }
 
-  let list = [...reservations];
-  if (search) list = list.filter(r =>
-    r.name.toLowerCase().includes(search) ||
-    r.email.toLowerCase().includes(search) ||
-    r.slotKey.includes(search)
-  );
-  if (dateF) list = list.filter(r => r.slotKey.startsWith(dateF));
-  if (sort === 'newest') list.sort((a,b) => b.createdAt.localeCompare(a.createdAt));
-  else if (sort === 'oldest') list.sort((a,b) => a.createdAt.localeCompare(b.createdAt));
-  else list.sort((a,b) => a.slotKey.localeCompare(b.slotKey));
+    function refreshCal() {
+      if (!calInst) return;
+      calInst.eventsService.getAll().forEach(e => calInst.eventsService.remove(e.id));
+      buildCalEvents().forEach(e => calInst.eventsService.add(e));
+      renderStats();
+      renderTodayOverview();
+    }
 
-  document.getElementById('res-page-sub').textContent = `${list.length} Reservierung${list.length!==1?'en':''} gefunden`;
-  document.getElementById('res-empty').style.display = list.length === 0 ? 'block' : 'none';
+    function renderStats() {
+      const today = new Date().toISOString().slice(0,10);
+      const todayN = reservations.filter(r => r.slotKey.startsWith(today)).length;
+      const now = new Date();
+      const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay()+6)%7)); mon.setHours(0,0,0,0);
+      const sun = new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59);
+      const weekN = reservations.filter(r => { const d=new Date(r.slotKey.slice(0,10)); return d>=mon&&d<=sun; }).length;
+      const el = document.getElementById('cap-stats');
+      if (!el) return;
+      el.innerHTML = `
+        <div class="cap-stat">🍺 Heute: <strong>${todayN}</strong></div>
+        <div class="cap-stat">📅 Woche: <strong>${weekN}</strong></div>
+        <div class="cap-stat">📊 Gesamt: <strong>${reservations.length}</strong></div>
+        <div class="cap-stat" style="margin-left:auto;display:flex;gap:12px;align-items:center;">
+          <span><span style="display:inline-block;width:10px;height:10px;background:#c8f0c8;border:2px solid #2a3d1e;border-radius:2px;margin-right:4px;"></span>Verfügbar</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:#ffe8a0;border:2px solid #7a5000;border-radius:2px;margin-right:4px;"></span>Belegt</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:#ffc0c0;border:2px solid #8b0000;border-radius:2px;margin-right:4px;"></span>Voll</span>
+        </div>`;
+    }
 
-  const tbody = document.getElementById('res-table-body');
-  tbody.innerHTML = list.map(r => {
-    const [date, time] = r.slotKey.split(' ');
-    const cnt = countSlot(r.slotKey);
-    const cls = cnt>=MAX_SLOT?'full':cnt>=4?'warn':'ok';
-    const label = cnt>=MAX_SLOT?'Voll':cnt>=4?'Belegt':'Frei';
-    const d = new Date(date + 'T00:00:00');
-    return `<tr>
-      <td><strong>${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}</strong><br><span style="color:var(--gold);font-weight:700;">${time} Uhr</span></td>
-      <td>${r.name}</td>
-      <td>${r.persons}</td>
-      <td><a href="mailto:${r.email}" style="color:rgba(245,240,232,0.7);text-decoration:none;">${r.email}</a></td>
-      <td>${r.phone || '–'}</td>
-      <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.wishes || '–'}</td>
-      <td><span class="slot-badge ${cls}">${cnt}/${MAX_SLOT} · ${label}</span></td>
-      <td><button class="del-btn" onclick="deleteRes('${r.id}','reservations')">🗑 Löschen</button></td>
-    </tr>`;
-  }).join('');
-}
+    function renderTodayOverview() {
+      const el = document.getElementById('today-overview');
+      if (!el) return;
+      const today = new Date().toISOString().slice(0,10);
+      const nowH = new Date().getHours(), nowM = new Date().getMinutes();
+      let html = `<div style="background:rgba(245,240,232,0.06);border:1px solid rgba(200,168,75,0.2);border-radius:10px;padding:24px;max-height:400px;overflow-y:auto;">
+        <p style="color:var(--gold);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;">Heute – Belegung</p>`;
+      for (let h = OPEN_H; h < CLOSE_H; h++) {
+        [0,30].forEach(m => {
+          const key = slotKey(today, h, m);
+          const cnt = countSlot(key);
+          const past = h < nowH || (h===nowH && m<=nowM);
+          const pct = (cnt/MAX_SLOT)*100;
+          const col = cnt>=MAX_SLOT?'#e55':cnt>=4?'#c8a84b':'#4caf50';
+          html += `<div style="display:flex;align-items:center;gap:10px;padding:4px 0;${past?'opacity:0.35':''}cursor:pointer;" onclick="openResModal('${today}','${key}')">
+            <span style="color:rgba(245,240,232,0.6);font-size:11px;min-width:40px;">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}</span>
+            <div style="flex:1;height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;">
+              <div style="height:100%;width:${pct}%;background:${col};border-radius:3px;"></div>
+            </div>
+            <span style="color:${col};font-size:11px;font-weight:700;min-width:48px;text-align:right;">${cnt>=MAX_SLOT?'Voll':`${MAX_SLOT-cnt} frei`}</span>
+          </div>`;
+        });
+      }
+      html += `</div>`;
+      el.innerHTML = html;
+    }
 
-// ---- DELETE ----
-function deleteRes(id, returnPage) {
-  if (!confirm('Reservierung wirklich stornieren?')) return;
-  reservations = reservations.filter(r => r.id !== id);
-  saveRes();
-  if (returnPage === 'dashboard') renderDashboard();
-  else renderResList();
-  document.getElementById('res-count-badge').textContent = reservations.length;
-}
+    // Res Modal (global zugänglich machen)
+    window.openResModal = function(dateStr, preSlot) {
+      const parts = dateStr.split('-');
+      const d = new Date(parts[0], parts[1]-1, parts[2]);
+      document.getElementById('res-modal-sub').textContent = `${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 
-// ---- MANUAL RESERVATION ----
-function createManualReservation() {
-  const name    = document.getElementById('nf-name').value.trim();
-  const email   = document.getElementById('nf-email').value.trim();
-  const persons = document.getElementById('nf-persons').value;
-  const slot    = document.getElementById('nf-time').value;
-  if (!name || !email || !persons || !slot) { alert('Bitte alle Pflichtfelder ausfüllen.'); return; }
-  if (countSlot(slot) >= MAX_SLOT) { alert('Dieser Slot ist ausgebucht.'); return; }
+      const sel = document.getElementById('f-time');
+      sel.innerHTML = '<option value="">Bitte wählen *</option>';
+      for (let h = OPEN_H; h < CLOSE_H; h++) {
+        [0,30].forEach(m => {
+          const sk = slotKey(dateStr, h, m);
+          const free = MAX_SLOT - countSlot(sk);
+          const dis = free<=0?'disabled':'';
+          sel.innerHTML += `<option value="${sk}" ${dis}>${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} – ${free<=0?'Ausgebucht':`${free}/${MAX_SLOT} frei`}</option>`;
+        });
+      }
+      if (preSlot) for (const o of sel.options) { if (o.value===preSlot){o.selected=true;break;} }
+      updateCapInfo(sel.value);
+      sel.onchange = () => updateCapInfo(sel.value);
 
-  const r = {
-    id: Date.now().toString(),
-    slotKey: slot, name, email,
-    phone:   document.getElementById('nf-phone').value,
-    persons,
-    wishes:  document.getElementById('nf-wishes').value,
-    createdAt: new Date().toISOString(),
-    createdBy: currentUser.name,
-  };
-  reservations.push(r); saveRes();
-  alert(`✅ Reservierung für ${name} um ${slot.split(' ')[1]} Uhr angelegt!`);
-  ['nf-name','nf-email','nf-phone','nf-wishes'].forEach(id => document.getElementById(id).value='');
-  document.getElementById('nf-persons').value='';
-  document.getElementById('nf-time').value='';
-  document.getElementById('res-count-badge').textContent = reservations.length;
-  buildTimeSelect();
-}
+      ['f-name','f-email','f-phone','f-wishes'].forEach(id => document.getElementById(id).value='');
+      document.getElementById('f-persons').value='';
+      document.getElementById('res-overlay').classList.add('open');
+    };
 
-// ---- SETTINGS ----
-function renderSettings() {
-  document.getElementById('user-list').innerHTML = USERS.map(u => `
-    <div class="user-row">
-      <div class="user-avatar">${u.name[0]}</div>
-      <div class="user-info">
-        <div class="user-name">${u.name}</div>
-        <div class="user-role">${u.username} · ${u.role}</div>
-      </div>
-      <span class="user-badge ${u.roleKey}">${u.roleKey==='admin'?'Admin':'Mitarbeiter'}</span>
-    </div>`).join('');
-}
+    function updateCapInfo(key) {
+      const el = document.getElementById('res-cap-info');
+      if (!key) { el.innerHTML=''; return; }
+      const free = MAX_SLOT - countSlot(key);
+      const t = key.split(' ')[1];
+      if (free<=0) {
+        el.className='res-cap-info full';
+        el.innerHTML=`❌ ${t} Uhr – Dieser Slot ist vollständig ausgebucht.`;
+        document.getElementById('res-submit-btn').disabled=true;
+      } else {
+        el.className='res-cap-info';
+        el.innerHTML=`🍺 ${t} Uhr – <strong>${free} von ${MAX_SLOT} Tischen</strong> noch verfügbar`;
+        document.getElementById('res-submit-btn').disabled=false;
+      }
+    }
 
-function clearAllData() {
-  if (currentUser.roleKey !== 'admin') { alert('Nur Admins können alle Daten löschen.'); return; }
-  if (!confirm('ALLE Reservierungen unwiderruflich löschen?')) return;
-  if (!confirm('Wirklich sicher? Diese Aktion kann nicht rückgängig gemacht werden!')) return;
-  reservations = []; saveRes();
-  alert('✅ Alle Daten gelöscht.');
-  renderDashboard();
-  document.getElementById('res-count-badge').textContent = '0';
-}
+    window.closeResModal = function() {
+      document.getElementById('res-overlay').classList.remove('open');
+    };
 
-// ---- CSV EXPORT ----
-function exportCSV() {
-  const header = 'Datum,Uhrzeit,Name,Personen,E-Mail,Telefon,Wünsche,Erstellt am\n';
-  const rows = reservations.map(r => {
-    const [d, t] = r.slotKey.split(' ');
-    return [d, t, r.name, r.persons, r.email, r.phone||'', r.wishes||'', r.createdAt.slice(0,10)].map(v => `"${v}"`).join(',');
-  }).join('\n');
-  const blob = new Blob(['\uFEFF' + header + rows], { type:'text/csv;charset=utf-8;' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = `reservierungen_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-}
-</script>
+    window.submitReservation = function() {
+      const name=document.getElementById('f-name').value.trim();
+      const email=document.getElementById('f-email').value.trim();
+      const persons=document.getElementById('f-persons').value;
+      const slot=document.getElementById('f-time').value;
+      if (!name||!email||!persons||!slot){alert('Bitte alle Pflichtfelder (*) ausfüllen.');return;}
+      if (isFull(slot)){alert('Dieser Slot ist ausgebucht. Bitte andere Uhrzeit wählen.');return;}
+      const r={id:Date.now().toString(),slotKey:slot,name,email,phone:document.getElementById('f-phone').value,persons,wishes:document.getElementById('f-wishes').value,createdAt:new Date().toISOString()};
+      reservations.push(r); save(); closeResModal(); refreshCal();
+      const [date,time]=slot.split(' ');
+      const parts=date.split('-'); const d=new Date(parts[0],parts[1]-1,parts[2]);
+      alert(`✅ Reservierung bestätigt!\n\n🍺 ${name}\n📅 ${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} um ${time} Uhr\n👥 ${persons}\n\nWir freuen uns auf Sie!`);
+    };
+
+    document.getElementById('res-overlay').addEventListener('click', function(e){ if(e.target===this) closeResModal(); });
+
+    // Starte die Kalenderinitialisierung, sobald scheduleX da ist
+    waitForScheduleX(initCalendar);
+  })();
+  </script>
 </body>
 </html>
