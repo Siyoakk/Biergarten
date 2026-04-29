@@ -682,194 +682,17 @@
       line-height: 1.5;
     }
 
-    /* Kalender Container */
-    .kalender-wrapper {
-      margin-top: 60px;
-    }
-    .kalender-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .kalender-header .section-divider {
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 20px;
-    }
-    #sx-calendar {
-      width: 100%;
-      height: 700px;
-      border-radius: 12px;
+    /* Calendly Widget Wrapper */
+    .calendly-wrap {
+      background: rgba(245,240,232,0.04);
+      border: 1px solid rgba(200,168,75,0.25);
+      border-radius: 10px;
       overflow: hidden;
-      background: var(--cream);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      border: 1px solid rgba(200,168,75,0.4);
+      min-height: 700px;
     }
-    .cap-bar-wrap {
-      display: flex;
-      gap: 24px;
-      padding: 14px 24px;
-      background: rgba(200,168,75,0.08);
-      border: 1px solid rgba(200,168,75,0.2);
-      border-radius: 40px;
-      flex-wrap: wrap;
-      margin-bottom: 32px;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .cap-stat {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      color: rgba(245,240,232,0.9);
-      background: rgba(0,0,0,0.2);
-      padding: 6px 14px;
-      border-radius: 30px;
-    }
-    .cap-stat strong {
-      color: var(--gold);
-      font-size: 18px;
-      margin-left: 4px;
-    }
-    .legend {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-    }
-    .legend span {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-    }
-    .legend .color-box {
-      width: 14px;
-      height: 14px;
-      border-radius: 3px;
-    }
-
-    /* Modal Styles */
-    .res-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-    }
-    .res-overlay.open { display: flex; }
-    .res-modal {
-      background: var(--cream);
-      border-radius: 16px;
-      padding: 32px;
-      max-width: 520px;
-      width: 92%;
-      position: relative;
-      border-top: 5px solid var(--gold);
-      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-      animation: popIn 0.3s ease;
-    }
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.96) translateY(-20px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .res-modal h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      color: var(--green-dark);
-      margin-bottom: 6px;
-    }
-    .res-modal-sub {
-      color: var(--gold);
-      font-size: 13px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-      font-weight: 600;
-    }
-    .res-close {
-      position: absolute;
-      top: 18px;
-      right: 22px;
-      background: none;
-      border: none;
-      font-size: 26px;
-      cursor: pointer;
-      color: #aaa;
-      transition: color 0.2s;
-    }
-    .res-close:hover { color: var(--brown-dark); }
-    .res-field { margin-bottom: 16px; }
-    .res-field label {
-      display: block;
-      font-size: 11px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: #7a6a5a;
-      margin-bottom: 6px;
-      font-weight: 700;
-    }
-    .res-field input, .res-field select {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1px solid #ddd6c8;
-      border-radius: 8px;
-      font-family: 'Lato', sans-serif;
-      font-size: 15px;
-      background: #fff;
-      transition: 0.2s;
-    }
-    .res-field input:focus, .res-field select:focus {
-      border-color: var(--gold);
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(200,168,75,0.2);
-    }
-    .res-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    .res-cap-info {
-      background: rgba(200,168,75,0.12);
-      border-left: 4px solid var(--gold);
-      border-radius: 8px;
-      padding: 12px 16px;
-      font-size: 14px;
-      color: #5a3e1a;
-      margin-bottom: 20px;
-      font-weight: 500;
-    }
-    .res-cap-info.full {
-      background: rgba(200,60,60,0.1);
-      border-left-color: #c0392b;
-      color: #a82313;
-    }
-    .res-submit {
-      width: 100%;
-      padding: 14px;
-      background: var(--green-dark);
-      color: var(--gold);
-      border: none;
-      border-radius: 40px;
-      font-family: 'Lato', sans-serif;
-      font-weight: 800;
-      font-size: 15px;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 10px;
-    }
-    .res-submit:hover {
-      background: var(--gold);
-      color: var(--green-dark);
-      transform: translateY(-2px);
-    }
-    .res-submit:disabled {
-      background: #aaa;
-      color: #eee;
-      cursor: not-allowed;
-      transform: none;
+    .calendly-inline-widget {
+      min-width: 100%;
+      min-height: 700px;
     }
 
     /* ===== IMPRESSUM ===== */
@@ -931,10 +754,14 @@
       font-size: 12px;
     }
 
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 900px) {
       section { padding: 70px 24px; }
-      .about-grid, .hours-grid, .kontakt-grid, .impressum-grid { grid-template-columns: 1fr; gap: 40px; }
-      #sx-calendar { height: 550px; }
+      .about-grid,
+      .hours-grid,
+      .kontakt-grid,
+      .impressum-grid { grid-template-columns: 1fr; gap: 40px; }
+      .calendly-wrap, .calendly-inline-widget { min-height: 600px !important; height: 600px !important; }
       .features-grid { grid-template-columns: 1fr 1fr; }
       .menu-grid { grid-template-columns: 1fr; }
       .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
@@ -945,22 +772,21 @@
     @media (max-width: 600px) {
       .features-grid { grid-template-columns: 1fr; }
       .gallery-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
       .footer-inner { flex-direction: column; text-align: center; }
       .nav-cta { display: none; }
-      .cap-bar-wrap { flex-direction: column; align-items: stretch; border-radius: 16px; }
     }
   </style>
-  <!-- Schedule-X CSS & JS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@schedule-x/theme-default@2/dist/index.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@schedule-x/bundle@2/dist/index.global.js"></script>
 </head>
 <body>
 
-  <!-- NAVIGATION (unverändert) -->
+  <!-- NAVIGATION -->
   <nav id="navbar">
     <div class="dropdown">
       <button class="dropdown-btn" id="menuBtn" aria-expanded="false" aria-haspopup="true">
-        <span class="hamburger"><span></span><span></span><span></span></span>
+        <span class="hamburger">
+          <span></span><span></span><span></span>
+        </span>
         Menü
       </button>
       <div class="dropdown-menu" id="dropdownMenu" role="menu">
@@ -971,11 +797,677 @@
         <a href="#impressum" role="menuitem">📄 Impressum</a>
       </div>
     </div>
+
     <a href="#" class="nav-logo">Zum Goldenen Hopfen</a>
     <a href="#kontakt" class="nav-cta">Tisch reservieren</a>
   </nav>
 
-  <!-- HERO, ABOUT, FEATURES, SPEISEKARTE, GALERIE, Öffnungszeiten (gekürzt, aber voll funktional) -->
-  <section class="hero" id="home"><div class="hero-bg"></div><div class="hero-content"><span class="hero-eyebrow">Willkommen im</span><h1 class="hero-title">Zum Goldenen <em>Hopfen</em></h1><p class="hero-subtitle">Gemütliche Atmosphäre, frisch gezapftes Bier und herzhafte bayerische Küche – direkt unter dem freien Himmel.</p><div class="hero-buttons"><a href="#speisekarte" class="btn-primary">Speisekarte ansehen</a><a href="#kontakt" class="btn-outline">Tisch reservieren</a></div></div><div class="hero-scroll-hint"><span>Scrollen</span><div class="scroll-arrow"></div></div></section>
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <span class="hero-eyebrow">Willkommen im</span>
+      <h1 class="hero-title">Zum Goldenen <em>Hopfen</em></h1>
+      <p class="hero-subtitle">Gemütliche Atmosphäre, frisch gezapftes Bier und herzhafte bayerische Küche – direkt unter dem freien Himmel.</p>
+      <div class="hero-buttons">
+        <a href="#speisekarte" class="btn-primary">Speisekarte ansehen</a>
+        <a href="#kontakt" class="btn-outline">Tisch reservieren</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scrollen</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
 
-  <section id="ueber-uns"><div class="container"><div class="about-grid"><div class="about-image-wrap reveal-left"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Unser Biergarten" /><div class="about-badge"><span class="year">1987</span><span class="since">Seit</span></div></div><div class="reveal-right"><span class="section-label">Unsere Geschichte</span><h2 class="section-title">Tradition trifft auf Gastfreundschaft</h2><div class="section-divider"></div><p class="section-text">Seit über drei Jahrzehnten ist der Goldene Hopfen ein Ort, an dem sich Freunde treffen, Familien feiern und die schönsten Sommerabende entstehen. Unter alten Kastanienbäumen servieren wir frisch gezapfte Biere aus der Region, hausgemachte Brotzeiten und traditionelle Gerichte nach Omas Rezept.</p><p class="section-text" style="margin-top
+  <!-- ÜBER UNS -->
+  <section id="ueber-uns">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image-wrap reveal-left">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Unser Biergarten" />
+          <div class="about-badge">
+            <span class="year">1987</span>
+            <span class="since">Seit</span>
+          </div>
+        </div>
+        <div class="reveal-right">
+          <span class="section-label">Unsere Geschichte</span>
+          <h2 class="section-title">Tradition trifft auf Gastfreundschaft</h2>
+          <div class="section-divider"></div>
+          <p class="section-text">
+            Seit über drei Jahrzehnten ist der Goldene Hopfen ein Ort, an dem sich Freunde treffen, Familien feiern und die schönsten Sommerabende entstehen. Unter alten Kastanienbäumen servieren wir frisch gezapfte Biere aus der Region, hausgemachte Brotzeiten und traditionelle Gerichte nach Omas Rezept.
+          </p>
+          <p class="section-text" style="margin-top: 16px;">
+            Unser Biergarten bietet Platz für bis zu 400 Gäste – und jeder fühlt sich bei uns wie zu Hause.
+          </p>
+          <a href="#kontakt" class="btn-primary" style="display:inline-block;margin-top:32px;">Reservierung anfragen</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section style="background: #f0ebe0; padding-top: 0;">
+    <div class="container">
+      <div class="features-grid">
+        <div class="feature-card reveal delay-1">
+          <div class="feature-icon">🍺</div>
+          <h3 class="feature-title">Regionales Bier</h3>
+          <p class="feature-text">Frisch gezapfte Biere von lokalen Brauereien – vom klassischen Hellen bis zum saisonalen Märzen.</p>
+        </div>
+        <div class="feature-card reveal delay-2">
+          <div class="feature-icon">🥨</div>
+          <h3 class="feature-title">Hausgemachte Küche</h3>
+          <p class="feature-text">Deftige Brotzeiten, knusprige Schweinshaxe und hausgemachter Obatzda – alles frisch zubereitet.</p>
+        </div>
+        <div class="feature-card reveal delay-3">
+          <div class="feature-icon">🌳</div>
+          <h3 class="feature-title">Schattige Kastanien</h3>
+          <p class="feature-text">400 Plätze unter alten Kastanienbäumen – der perfekte Ort für heiße Sommertage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPEISEKARTE -->
+  <section id="speisekarte">
+    <div class="container" style="position:relative;z-index:1">
+      <div class="menu-header reveal">
+        <span class="section-label" style="color: var(--gold-light)">Was wir bieten</span>
+        <h2 class="section-title light">Unsere Speisekarte</h2>
+        <div class="section-divider"></div>
+        <p class="section-text light" style="margin: 0 auto; text-align:center;">Herzhafte bayerische Küche, frisch zubereitet mit regionalen Zutaten.</p>
+      </div>
+
+      <div class="menu-tabs reveal">
+        <button class="menu-tab active" onclick="switchTab(this, 'brotzeiten')">Brotzeiten</button>
+        <button class="menu-tab" onclick="switchTab(this, 'hauptspeisen')">Hauptspeisen</button>
+        <button class="menu-tab" onclick="switchTab(this, 'getraenke')">Getränke</button>
+        <button class="menu-tab" onclick="switchTab(this, 'desserts')">Desserts</button>
+      </div>
+
+      <div id="brotzeiten" class="menu-content">
+        <div class="menu-grid">
+          <div class="menu-item reveal delay-1">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Obatzda mit Brezn</p>
+              <p class="menu-item-desc">Hausgemachter Obatzda, frische Brezn, Radieschen</p>
+            </div>
+            <p class="menu-item-price">8,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-2">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Brotzeit-Teller</p>
+              <p class="menu-item-desc">Wurst, Käse, Schmalz, Gurkerl, Brot</p>
+            </div>
+            <p class="menu-item-price">12,50 €</p>
+          </div>
+          <div class="menu-item reveal delay-3">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Leberkäse-Semmel</p>
+              <p class="menu-item-desc">Frischer Leberkäse, Senf, Semmel</p>
+            </div>
+            <p class="menu-item-price">4,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-4">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Weißwürste (2 Stk.)</p>
+              <p class="menu-item-desc">Mit süßem Senf und Brezn</p>
+            </div>
+            <p class="menu-item-price">7,50 €</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="hauptspeisen" class="menu-content" style="display:none">
+        <div class="menu-grid">
+          <div class="menu-item reveal delay-1">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Schweinshaxe</p>
+              <p class="menu-item-desc">Knusprige Haxe mit Knödel und Sauerkraut</p>
+            </div>
+            <p class="menu-item-price">18,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-2">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Grillhendl (½)</p>
+              <p class="menu-item-desc">Halbes Hendl vom Grill mit Kartoffelsalat</p>
+            </div>
+            <p class="menu-item-price">13,50 €</p>
+          </div>
+          <div class="menu-item reveal delay-3">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Steckerlfisch</p>
+              <p class="menu-item-desc">Gegrillter Fisch am Spieß mit Salat</p>
+            </div>
+            <p class="menu-item-price">14,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-4">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Käsespätzle</p>
+              <p class="menu-item-desc">Hausgemachte Spätzle mit Bergkäse und Röstzwiebeln</p>
+            </div>
+            <p class="menu-item-price">11,90 €</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="getraenke" class="menu-content" style="display:none">
+        <div class="menu-grid">
+          <div class="menu-item reveal delay-1">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Helles (1,0 L)</p>
+              <p class="menu-item-desc">Frisch gezapft, lokal gebraut</p>
+            </div>
+            <p class="menu-item-price">7,80 €</p>
+          </div>
+          <div class="menu-item reveal delay-2">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Weißbier (0,5 L)</p>
+              <p class="menu-item-desc">Traditionelles Hefeweizen</p>
+            </div>
+            <p class="menu-item-price">4,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-3">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Radler (1,0 L)</p>
+              <p class="menu-item-desc">Bier mit frischer Zitronenlimonade</p>
+            </div>
+            <p class="menu-item-price">6,50 €</p>
+          </div>
+          <div class="menu-item reveal delay-4">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Apfelsaftschorle (0,5 L)</p>
+              <p class="menu-item-desc">Regionaler Apfelsaft mit Sprudel</p>
+            </div>
+            <p class="menu-item-price">3,80 €</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="desserts" class="menu-content" style="display:none">
+        <div class="menu-grid">
+          <div class="menu-item reveal delay-1">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Kaiserschmarrn</p>
+              <p class="menu-item-desc">Mit Zwetschgenröster und Puderzucker</p>
+            </div>
+            <p class="menu-item-price">8,90 €</p>
+          </div>
+          <div class="menu-item reveal delay-2">
+            <div class="menu-item-info">
+              <p class="menu-item-name">Dampfnudeln</p>
+              <p class="menu-item-desc">Mit Vanillesauce oder Weinsauce</p>
+            </div>
+            <p class="menu-item-price">7,50 €</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-cta reveal">
+        <a href="#kontakt" class="btn-primary">Tisch reservieren</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERIE -->
+  <section id="galerie">
+    <div class="container">
+      <div class="gallery-header reveal">
+        <span class="section-label">Atmosphäre</span>
+        <h2 class="section-title">Einblicke in unseren Biergarten</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item reveal-left">
+          <img src="https://images.unsplash.com/photo-1559628233-100c798642d4?w=700&q=80" alt="Biergarten Atmosphäre" />
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-item reveal delay-1">
+          <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=80" alt="Bayerisches Essen" />
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-item reveal delay-2">
+          <img src="https://images.unsplash.com/photo-1574259392081-cbf4c7dc6028?w=600&q=80" alt="Frisches Bier" />
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-item reveal delay-3">
+          <img src="https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=600&q=80" alt="Gemütliche Runde" />
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-item reveal delay-4">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80" alt="Speisen" />
+          <div class="gallery-overlay"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÖFFNUNGSZEITEN -->
+  <section id="oeffnungszeiten">
+    <div class="container">
+      <div class="hours-grid">
+        <div class="reveal-left">
+          <span class="section-label">Wir sind für Sie da</span>
+          <h2 class="section-title">Öffnungszeiten</h2>
+          <div class="section-divider"></div>
+          <table class="hours-table">
+            <tr><td>Montag</td><td>Ruhetag</td></tr>
+            <tr><td>Dienstag – Donnerstag</td><td>11:00 – 22:00 Uhr</td></tr>
+            <tr class="highlight"><td>Freitag</td><td>11:00 – 23:00 Uhr</td></tr>
+            <tr class="highlight"><td>Samstag</td><td>10:00 – 23:00 Uhr</td></tr>
+            <tr class="highlight"><td>Sonntag</td><td>10:00 – 22:00 Uhr</td></tr>
+            <tr><td>Feiertage</td><td>10:00 – 22:00 Uhr</td></tr>
+          </table>
+          <p style="margin-top:24px; font-size:13px; color:#8a7060;">* Bei schlechtem Wetter können die Öffnungszeiten variieren.</p>
+        </div>
+        <div class="reveal-right">
+          <span class="section-label">So finden Sie uns</span>
+          <h2 class="section-title">Anfahrt</h2>
+          <div class="section-divider"></div>
+          <div class="map-placeholder">
+            <!-- Replace with real Google Maps embed src for your location -->
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2660.1231!2d11.5753!3d48.1371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDjCsDA4JzEzLjYiTiAxMcKwMzQnMzEuMSJF!5e0!3m2!1sde!2sde!4v1600000000000!5m2!1sde!2sde"
+              title="Standort Biergarten"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+          <p style="margin-top:20px; font-size:14px; color:#4a3728;">
+            🚗 Parkplätze direkt am Haus verfügbar<br>
+            🚌 Bushaltestelle: Marktplatz (2 min Fußweg)
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Schedule-X Kalender CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@schedule-x/theme-default@2/dist/index.css" />
+  <style>
+    #kontakt { background:var(--green-dark); position:relative; overflow:hidden; }
+    #kontakt::before { content:''; position:absolute; inset:0; background:url('https://www.transparenttextures.com/patterns/dark-wood.png'); opacity:0.1; }
+    .kalender-wrap { position:relative; z-index:1; }
+    .kalender-header { text-align:center; margin-bottom:50px; }
+    .kalender-header .section-divider { margin:0 auto 24px; }
+    #sx-calendar { width:100%; height:750px; max-height:90vh; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:1px solid rgba(200,168,75,0.3); }
+    .cap-bar-wrap { display:flex; gap:16px; padding:14px 20px; background:rgba(200,168,75,0.08); border:1px solid rgba(200,168,75,0.2); border-radius:8px; flex-wrap:wrap; margin-bottom:20px; }
+    .cap-stat { display:flex; align-items:center; gap:6px; font-size:13px; color:rgba(245,240,232,0.8); }
+    .cap-stat strong { color:var(--gold); font-size:16px; }
+    .res-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center; }
+    .res-overlay.open { display:flex; }
+    .res-modal { background:var(--cream); border-radius:12px; padding:36px; max-width:500px; width:92%; position:relative; border-top:4px solid var(--gold); box-shadow:0 24px 70px rgba(0,0,0,0.5); animation:popIn .3s ease; }
+    @keyframes popIn { from{opacity:0;transform:scale(.95) translateY(-16px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    .res-modal h3 { font-family:'Playfair Display',serif; font-size:22px; color:var(--green-dark); margin-bottom:4px; }
+    .res-modal-sub { color:var(--gold); font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
+    .res-close { position:absolute; top:14px; right:18px; background:none; border:none; font-size:22px; cursor:pointer; color:#999; }
+    .res-close:hover { color:var(--brown-dark); }
+    .res-field { margin-bottom:13px; }
+    .res-field label { display:block; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:5px; }
+    .res-field input, .res-field select { width:100%; padding:11px 14px; border:1px solid #d0ccc0; border-radius:6px; font-family:'Lato',sans-serif; font-size:14px; color:var(--brown-dark); background:#fff; outline:none; transition:border-color .2s; }
+    .res-field input:focus, .res-field select:focus { border-color:var(--gold); }
+    .res-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .res-cap-info { background:rgba(200,168,75,0.1); border:1px solid rgba(200,168,75,0.3); border-radius:6px; padding:10px 14px; font-size:13px; color:#5a3a10; margin-bottom:14px; }
+    .res-cap-info.full { background:rgba(200,0,0,0.08); border-color:rgba(200,0,0,0.3); color:#7a0000; }
+    .res-submit { width:100%; padding:14px; background:var(--green-dark); color:var(--gold); border:none; border-radius:6px; font-family:'Lato',sans-serif; font-weight:700; font-size:14px; letter-spacing:1px; cursor:pointer; transition:background .2s; margin-top:6px; }
+    .res-submit:hover { background:var(--green-mid); }
+    .res-submit:disabled { background:#aaa; color:#fff; cursor:not-allowed; }
+  </style>
+
+  <!-- Schedule-X JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/@schedule-x/bundle@2/dist/index.global.js"></script>
+
+  <!-- KONTAKT / RESERVIERUNG -->
+  <section id="kontakt">
+    <div class="container kalender-wrap">
+      <div class="kalender-header reveal">
+        <span class="section-label" style="color:var(--gold-light)">Tisch reservieren</span>
+        <h2 class="section-title" style="color:#fff;">Reservierungskalender</h2>
+        <div class="section-divider"></div>
+        <p class="section-text light" style="margin:0 auto;text-align:center;max-width:560px;">
+          Wähle Datum &amp; Uhrzeit – bis zu 6 Tische pro halbem Stunde buchbar. Belegte Slots sind direkt sichtbar.
+        </p>
+      </div>
+      <div class="cap-bar-wrap reveal" id="cap-stats"></div>
+      <div class="kontakt-grid" style="margin-bottom:40px;">
+        <div class="reveal-left">
+          <span class="section-label" style="color:var(--gold-light)">Kontakt &amp; Anfahrt</span>
+          <h2 class="section-title light">Wir freuen uns<br>auf Sie!</h2>
+          <div class="section-divider"></div>
+          <div class="kontakt-details">
+            <div class="kontakt-detail">
+              <span class="kontakt-detail-icon">📍</span>
+              <div class="kontakt-detail-text">
+                <p class="kontakt-detail-label">Adresse</p>
+                <p class="kontakt-detail-value">Biergartenstraße 12<br>80333 München</p>
+              </div>
+            </div>
+            <div class="kontakt-detail">
+              <span class="kontakt-detail-icon">📞</span>
+              <div class="kontakt-detail-text">
+                <p class="kontakt-detail-label">Telefon</p>
+                <p class="kontakt-detail-value"><a href="tel:+4989123456" style="color:var(--cream);text-decoration:none">+49 89 123 456</a></p>
+              </div>
+            </div>
+            <div class="kontakt-detail">
+              <span class="kontakt-detail-icon">✉️</span>
+              <div class="kontakt-detail-text">
+                <p class="kontakt-detail-label">E-Mail</p>
+                <p class="kontakt-detail-value"><a href="mailto:siyo_99@hotmail.de" style="color:var(--cream);text-decoration:none">siyo_99@hotmail.de</a></p>
+              </div>
+            </div>
+            <div class="kontakt-detail">
+              <span class="kontakt-detail-icon">🕐</span>
+              <div class="kontakt-detail-text">
+                <p class="kontakt-detail-label">Öffnungszeiten</p>
+                <p class="kontakt-detail-value">Di–Do: 11–22 Uhr<br>Fr–Sa: 10–23 Uhr<br>So &amp; Feiertage: 10–22 Uhr<br><span style="color:rgba(245,240,232,0.5);font-size:12px;">Mo: Ruhetag</span></p>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:28px;padding:18px 20px;background:rgba(200,168,75,0.1);border-left:3px solid var(--gold);border-radius:4px;">
+            <p style="color:var(--gold);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;">✅ So funktioniert es</p>
+            <p style="color:rgba(245,240,232,0.75);font-size:13px;line-height:1.7;">Klicke auf einen freien Slot → Formular ausfüllen → sofort bestätigt. Team sieht alles live im <a href="mitarbeiter.html" style="color:var(--gold);">Mitarbeiterportal →</a></p>
+          </div>
+        </div>
+        <div class="reveal-right" id="today-overview"></div>
+      </div>
+      <!-- Schedule-X Kalender -->
+      <div class="reveal">
+        <div id="sx-calendar"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUCHUNGS-MODAL -->
+  <div class="res-overlay" id="res-overlay">
+    <div class="res-modal">
+      <button class="res-close" onclick="closeResModal()">✕</button>
+      <h3>Tisch reservieren</h3>
+      <p class="res-modal-sub" id="res-modal-sub"></p>
+      <div class="res-cap-info" id="res-cap-info"></div>
+      <div class="res-row">
+        <div class="res-field"><label>Name *</label><input id="f-name" placeholder="Max Mustermann" /></div>
+        <div class="res-field"><label>E-Mail *</label><input id="f-email" type="email" placeholder="mail@beispiel.de" /></div>
+      </div>
+      <div class="res-row">
+        <div class="res-field"><label>Telefon</label><input id="f-phone" type="tel" placeholder="+49 89 …" /></div>
+        <div class="res-field"><label>Personen *</label>
+          <select id="f-persons">
+            <option value="">Bitte wählen</option>
+            <option>1 Person</option><option>2 Personen</option><option>3 Personen</option>
+            <option>4 Personen</option><option>5 Personen</option><option>6+ Personen</option>
+          </select>
+        </div>
+      </div>
+      <div class="res-field"><label>Uhrzeit *</label><select id="f-time"></select></div>
+      <div class="res-field"><label>Besondere Wünsche</label><input id="f-wishes" placeholder="Geburtstag, Kinderstuhl …" /></div>
+      <button class="res-submit" id="res-submit-btn" onclick="submitReservation()">🍺 Jetzt verbindlich reservieren</button>
+    </div>
+  </div>
+
+  <!-- IMPRESSUM -->
+  <section id="impressum" style="background:#1a2a0e;padding:80px 40px;">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label">Rechtliches</span>
+        <h2 class="section-title" style="color:var(--gold);font-family:'Playfair Display',serif;">Impressum</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="impressum-grid">
+        <div class="impressum-block reveal delay-1">
+          <h3>Angaben gemäß § 5 TMG</h3>
+          <p>Biergarten „Zum Goldenen Hopfen"<br>Max Mustermann<br>Biergartenstraße 12<br>80333 München<br><br>Telefon: +49 89 123 456<br>E-Mail: siyo_99@hotmail.de</p>
+        </div>
+        <div class="impressum-block reveal delay-2">
+          <h3>Verantwortlich für den Inhalt</h3>
+          <p>Max Mustermann<br>(Adresse wie oben)<br><br>Umsatzsteuer-ID gemäß § 27a UStG: DE123456789</p>
+        </div>
+        <div class="impressum-block reveal delay-3">
+          <h3>Haftungsausschluss</h3>
+          <p>Die Inhalte dieser Webseite wurden mit größtmöglicher Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität können wir keine Gewähr übernehmen.</p>
+        </div>
+        <div class="impressum-block reveal delay-4">
+          <h3>Datenschutz</h3>
+          <p>Personenbezogene Daten werden nur im erforderlichen Umfang und auf Basis der gesetzlichen Grundlagen erhoben und verarbeitet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Zum Goldenen Hopfen</div>
+      <ul class="footer-links">
+        <li><a href="#speisekarte">Speisekarte</a></li>
+        <li><a href="#oeffnungszeiten">Öffnungszeiten</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+        <li><a href="#impressum">Impressum</a></li>
+        <li><a href="mitarbeiter.html" style="color:var(--gold);">🔒 Mitarbeiterportal</a></li>
+      </ul>
+      <p class="footer-copy">© 2024 Zum Goldenen Hopfen. Alle Rechte vorbehalten.</p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // Nav scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 60); });
+
+    // Dropdown
+    const menuBtn = document.getElementById('menuBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    menuBtn.addEventListener('click', e => { e.stopPropagation(); const open = dropdownMenu.classList.toggle('open'); menuBtn.setAttribute('aria-expanded', open); });
+    document.addEventListener('click', () => { dropdownMenu.classList.remove('open'); menuBtn.setAttribute('aria-expanded', false); });
+    dropdownMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { dropdownMenu.classList.remove('open'); }));
+
+    // Scroll Reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); else e.target.classList.remove('visible'); });
+    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+
+    // Menu Tabs
+    function switchTab(btn, id) {
+      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.menu-content').forEach(c => c.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+      document.querySelectorAll('#' + id + ' .reveal').forEach(el => { el.classList.remove('visible'); setTimeout(() => el.classList.add('visible'), 50); });
+    }
+  </script>
+
+  <!-- KALENDER JAVASCRIPT -->
+  <script>
+  const DB_KEY   = 'biergarten_reservations_v2';
+  const MAX_SLOT = 6;
+  const OPEN_H   = 10;
+  const CLOSE_H  = 23;
+  const MONTHS   = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  const WDAYS    = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+
+  let reservations = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+  let modalDateStr = null;
+  let calInst = null;
+
+  function save() { localStorage.setItem(DB_KEY, JSON.stringify(reservations)); }
+  function slotKey(date, h, m) { return `${date} ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
+  function countSlot(key) { return reservations.filter(r => r.slotKey === key).length; }
+  function isFull(key) { return countSlot(key) >= MAX_SLOT; }
+
+  function buildCalEvents() {
+    const groups = {};
+    reservations.forEach(r => { if (!groups[r.slotKey]) groups[r.slotKey] = 0; groups[r.slotKey]++; });
+    return Object.entries(groups).map(([key, count]) => {
+      const [date, time] = key.split(' ');
+      const [h, m] = time.split(':').map(Number);
+      const endM = m === 30 ? 0 : 30;
+      const endH = m === 30 ? h + 1 : h;
+      const full = count >= MAX_SLOT;
+      const partial = count >= 4;
+      return {
+        id: key,
+        title: `${count}/${MAX_SLOT} Tische${full ? ' · VOLL' : ''}`,
+        start: key,
+        end: `${date} ${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`,
+        calendarId: full ? 'full' : partial ? 'partial' : 'booked',
+      };
+    });
+  }
+
+  function initCalendar() {
+    if (typeof ScheduleX === 'undefined') { setTimeout(initCalendar, 300); return; }
+    const SX = ScheduleX;
+    calInst = SX.createCalendar({
+      locale: 'de-DE',
+      selectedDate: new Date().toISOString().slice(0,10),
+      defaultView: SX.viewWeek.name,
+      views: [SX.viewDay, SX.viewWeek, SX.viewMonthGrid, SX.viewMonthAgenda],
+      dayBoundaries: { start:'10:00', end:'23:00' },
+      plugins: [SX.createEventModalPlugin(), SX.createDragAndDropPlugin()],
+      calendars: {
+        booked:  { colorName:'booked',  lightColors: { main:'#2a3d1e', container:'#c8f0c8', onContainer:'#1a3010' } },
+        partial: { colorName:'partial', lightColors: { main:'#7a5000', container:'#ffe8a0', onContainer:'#5c3a00' } },
+        full:    { colorName:'full',    lightColors: { main:'#8b0000', container:'#ffc0c0', onContainer:'#5a0000' } },
+      },
+      events: buildCalEvents(),
+      callbacks: {
+        onClickDateTime(dt) { openResModal(dt.slice(0,10), snapSlot(dt)); },
+        onClickDate(date)   { calInst.setView(SX.viewDay.name); calInst.setDate(date); },
+        onEventClick(ev)    { if (!isFull(ev.id)) openResModal(ev.id.slice(0,10), ev.id); },
+      },
+    });
+    calInst.render(document.getElementById('sx-calendar'));
+    renderStats();
+    renderTodayOverview();
+  }
+
+  function snapSlot(dt) {
+    const [date, time] = dt.split(' ');
+    if (!time) return slotKey(date, OPEN_H, 0);
+    const [h, mRaw] = time.split(':').map(Number);
+    return slotKey(date, h, mRaw < 30 ? 0 : 30);
+  }
+
+  function refreshCal() {
+    if (!calInst) return;
+    calInst.eventsService.getAll().forEach(e => calInst.eventsService.remove(e.id));
+    buildCalEvents().forEach(e => calInst.eventsService.add(e));
+    renderStats();
+    renderTodayOverview();
+  }
+
+  function renderStats() {
+    const today = new Date().toISOString().slice(0,10);
+    const todayN = reservations.filter(r => r.slotKey.startsWith(today)).length;
+    const now = new Date();
+    const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay()+6)%7)); mon.setHours(0,0,0,0);
+    const sun = new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59);
+    const weekN = reservations.filter(r => { const d=new Date(r.slotKey.slice(0,10)); return d>=mon&&d<=sun; }).length;
+    document.getElementById('cap-stats').innerHTML = `
+      <div class="cap-stat">🍺 Heute: <strong>${todayN}</strong></div>
+      <div class="cap-stat">📅 Woche: <strong>${weekN}</strong></div>
+      <div class="cap-stat">📊 Gesamt: <strong>${reservations.length}</strong></div>
+      <div class="cap-stat" style="margin-left:auto;display:flex;gap:12px;align-items:center;">
+        <span><span style="display:inline-block;width:10px;height:10px;background:#c8f0c8;border:2px solid #2a3d1e;border-radius:2px;margin-right:4px;"></span>Verfügbar</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#ffe8a0;border:2px solid #7a5000;border-radius:2px;margin-right:4px;"></span>Belegt</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#ffc0c0;border:2px solid #8b0000;border-radius:2px;margin-right:4px;"></span>Voll</span>
+      </div>`;
+  }
+
+  function renderTodayOverview() {
+    const el = document.getElementById('today-overview');
+    if (!el) return;
+    const today = new Date().toISOString().slice(0,10);
+    const nowH = new Date().getHours(), nowM = new Date().getMinutes();
+    let html = `<div style="background:rgba(245,240,232,0.06);border:1px solid rgba(200,168,75,0.2);border-radius:10px;padding:24px;max-height:400px;overflow-y:auto;">
+      <p style="color:var(--gold);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;">Heute – Belegung</p>`;
+    for (let h = OPEN_H; h < CLOSE_H; h++) {
+      [0,30].forEach(m => {
+        const key = slotKey(today, h, m);
+        const cnt = countSlot(key);
+        const past = h < nowH || (h===nowH && m<=nowM);
+        const pct = (cnt/MAX_SLOT)*100;
+        const col = cnt>=MAX_SLOT?'#e55':cnt>=4?'#c8a84b':'#4caf50';
+        html += `<div style="display:flex;align-items:center;gap:10px;padding:4px 0;${past?'opacity:0.35':''}cursor:pointer;" onclick="openResModal('${today}','${key}')">
+          <span style="color:rgba(245,240,232,0.6);font-size:11px;min-width:40px;">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}</span>
+          <div style="flex:1;height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:${pct}%;background:${col};border-radius:3px;"></div>
+          </div>
+          <span style="color:${col};font-size:11px;font-weight:700;min-width:48px;text-align:right;">${cnt>=MAX_SLOT?'Voll':`${MAX_SLOT-cnt} frei`}</span>
+        </div>`;
+      });
+    }
+    html += `</div>`;
+    el.innerHTML = html;
+  }
+
+  function openResModal(dateStr, preSlot) {
+    modalDateStr = dateStr;
+    const parts = dateStr.split('-');
+    const d = new Date(parts[0], parts[1]-1, parts[2]);
+    document.getElementById('res-modal-sub').textContent = `${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+
+    const sel = document.getElementById('f-time');
+    sel.innerHTML = '<option value="">Bitte wählen *</option>';
+    for (let h = OPEN_H; h < CLOSE_H; h++) {
+      [0,30].forEach(m => {
+        const sk = slotKey(dateStr, h, m);
+        const free = MAX_SLOT - countSlot(sk);
+        const dis = free<=0?'disabled':'';
+        sel.innerHTML += `<option value="${sk}" ${dis}>${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} – ${free<=0?'Ausgebucht':`${free}/${MAX_SLOT} frei`}</option>`;
+      });
+    }
+    if (preSlot) for (const o of sel.options) { if (o.value===preSlot){o.selected=true;break;} }
+    updateCapInfo(sel.value);
+    sel.onchange = () => updateCapInfo(sel.value);
+
+    ['f-name','f-email','f-phone','f-wishes'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('f-persons').value='';
+    document.getElementById('res-overlay').classList.add('open');
+  }
+
+  function updateCapInfo(key) {
+    const el = document.getElementById('res-cap-info');
+    if (!key) { el.innerHTML=''; return; }
+    const free = MAX_SLOT - countSlot(key);
+    const t = key.split(' ')[1];
+    if (free<=0) {
+      el.className='res-cap-info full';
+      el.innerHTML=`❌ ${t} Uhr – Dieser Slot ist vollständig ausgebucht.`;
+      document.getElementById('res-submit-btn').disabled=true;
+    } else {
+      el.className='res-cap-info';
+      el.innerHTML=`🍺 ${t} Uhr – <strong>${free} von ${MAX_SLOT} Tischen</strong> noch verfügbar`;
+      document.getElementById('res-submit-btn').disabled=false;
+    }
+  }
+
+  function closeResModal() {
+    document.getElementById('res-overlay').classList.remove('open');
+  }
+
+  function submitReservation() {
+    const name=document.getElementById('f-name').value.trim();
+    const email=document.getElementById('f-email').value.trim();
+    const persons=document.getElementById('f-persons').value;
+    const slot=document.getElementById('f-time').value;
+    if (!name||!email||!persons||!slot){alert('Bitte alle Pflichtfelder (*) ausfüllen.');return;}
+    if (isFull(slot)){alert('Dieser Slot ist ausgebucht. Bitte andere Uhrzeit wählen.');return;}
+    const r={id:Date.now().toString(),slotKey:slot,name,email,phone:document.getElementById('f-phone').value,persons,wishes:document.getElementById('f-wishes').value,createdAt:new Date().toISOString()};
+    reservations.push(r); save(); closeResModal(); refreshCal();
+    const [date,time]=slot.split(' ');
+    const parts=date.split('-'); const d=new Date(parts[0],parts[1]-1,parts[2]);
+    alert(`✅ Reservierung bestätigt!\n\n🍺 ${name}\n📅 ${WDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} um ${time} Uhr\n👥 ${persons}\n\nWir freuen uns auf Sie!`);
+  }
+
+  document.getElementById('res-overlay').addEventListener('click', function(e){ if(e.target===this) closeResModal(); });
+  initCalendar();
+  </script>
+</body>
+</html>
